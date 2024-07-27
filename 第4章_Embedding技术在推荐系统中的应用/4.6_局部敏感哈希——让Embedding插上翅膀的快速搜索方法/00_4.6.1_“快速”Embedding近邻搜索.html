@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_4.6.1_“快速”Embedding近邻搜索</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_4.6.1 “快速”Embedding近邻搜索</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第4章 Embedding技术在推荐系统中的应用/4.6 局部敏感哈希——让Embedding插上翅膀的快速搜索方法
+Content: 00_4.6.1 “快速”Embedding近邻搜索
+&quot;&quot;&quot;</p>
+<h3>4.6.1 “快速”Embedding近邻搜索</h3>
+<h4>背景与概述</h4>
+<p>在推荐系统中，Embedding技术将高维稀疏特征向量转换为低维稠密特征向量，从而提高特征表示的效率和准确性。然而，随着推荐系统中物品数量的增加，传统的相似度计算方法（如内积运算）在计算复杂度和时间消耗上变得不可接受。为了解决这一问题，快速Embedding近邻搜索技术应运而生，将相似度计算转化为高维空间中的最近邻搜索问题。</p>
+<h4>传统方法及其局限性</h4>
+<h5>kd树</h5>
+<p>kd树（k-dimensional tree）是一种常用的快速最近邻搜索方法，通过递归划分空间，将高维空间中的点组织成树结构。kd树的构建和查询时间复杂度分别为O(n log n)和O(log n)，较适合低维数据。然而，kd树在高维数据中表现不佳，搜索效率显著下降，甚至接近线性扫描。</p>
+<h5>局部敏感哈希（LSH）</h5>
+<p>LSH（Locality Sensitive Hashing）是一种更加高效和简便的最近邻搜索方法，其核心思想是将相邻的点映射到同一个“桶”中，通过在桶内或相邻桶内进行搜索来实现快速近邻搜索。LSH利用哈希函数将高维数据映射到低维空间，保持相近点在低维空间中仍然相近，从而加快搜索速度。</p>
+<h4>LSH的基本原理</h4>
+<h5>低维空间映射</h5>
+<p>LSH通过构建多个哈希函数，将高维数据映射到低维空间。例如，基于欧氏距离的LSH利用随机投影方法，将数据点投影到一维或低维空间中。假设有一个d维数据点x和y，随机投影向量a，映射公式为：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mrow><mo fence="true">⌊</mo><mfrac><mrow><mi>a</mi><mo>⋅</mo><mi>x</mi><mo>+</mo><mi>b</mi></mrow><mrow><mi>w</mi></mrow></mfrac><mo fence="true">⌋</mo></mrow></mrow><annotation encoding="application/x-tex">h(x) = \left\lfloor \frac{a \cdot x + b}{w} \right\rfloor 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.45em;"></span><span class="strut bottom" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">h</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="minner displaystyle textstyle uncramped"><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">⌊</span></span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.02691em;">w</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathit">a</span><span class="mbin">⋅</span><span class="mord mathit">x</span><span class="mbin">+</span><span class="mord mathit">b</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">⌋</span></span></span></span></span></span></span></p>
+<p>其中，a为从标准正态分布中采样的随机向量，b为从[0, w)区间内均匀分布的随机数，w为窗口大小。通过上述映射，确保高维空间中相近的点在低维空间中也相近。</p>
+<h5>分桶</h5>
+<p>在低维空间中，通过固定间隔的超平面将空间分割成不同的哈希桶。例如，对于一维空间，可以将坐标轴按固定间隔分割，每个区间为一个桶。对于多维空间，可以通过多个随机超平面进行分割，形成多个桶。每个桶包含在低维空间中相近的点。</p>
+<h5>多哈希函数</h5>
+<p>为了提高准确率和召回率，LSH通常采用多个哈希函数同时进行分桶。假设有k个哈希函数，将高维数据映射到k个低维空间，生成k个哈希值。只有在所有哈希函数下都落入相同桶中的点，才被认为是相似点。通过这种方式，可以有效减少误判，提高搜索准确性。</p>
+<h4>LSH在推荐系统中的应用</h4>
+<p>在推荐系统中，LSH被广泛应用于快速搜索相似Embedding向量。以下是LSH在推荐系统中应用的具体步骤：</p>
+<ol>
+<li><strong>Embedding向量预处理</strong>：将用户和物品的高维稀疏特征向量转换为低维稠密特征向量。</li>
+<li><strong>构建哈希函数</strong>：根据实际需求选择哈希函数，将高维Embedding向量映射到低维空间。常用的哈希函数包括随机投影、P-stable分布等。</li>
+<li><strong>分桶</strong>：在低维空间中，通过固定间隔的超平面将向量空间分割成不同的桶。选择不同组的超平面，可以提高LSH的准确率或召回率。</li>
+<li><strong>多哈希函数组合</strong>：采用多个哈希函数同时进行分桶，通过多哈希函数组合，提高搜索的准确性和召回率。</li>
+<li><strong>近邻搜索</strong>：在多个哈希桶中搜索与目标向量相似的Embedding向量，通过快速相似性计算，筛选出候选物品集合。</li>
+</ol>
+<h5>示例</h5>
+<p>假设有一个包含数百万视频的推荐系统，为了提高推荐效率，系统利用LSH技术对视频Embedding向量进行快速近邻搜索。具体步骤如下：</p>
+<ol>
+<li><strong>Embedding向量预处理</strong>：通过预训练模型生成每个视频的Embedding向量。</li>
+<li><strong>构建哈希函数</strong>：选择多个随机投影哈希函数，将高维Embedding向量映射到低维空间。</li>
+<li><strong>分桶</strong>：在低维空间中，通过固定间隔的超平面将空间分割成多个桶。</li>
+<li><strong>多哈希函数组合</strong>：采用多个哈希函数同时进行分桶，生成多个哈希值。</li>
+<li><strong>近邻搜索</strong>：在多个哈希桶中搜索与用户Embedding向量相似的视频Embedding向量，筛选出候选视频集合。</li>
+</ol>
+<p>通过上述步骤，系统可以在大规模视频集合中快速找到与用户兴趣相似的视频，提高推荐准确性和效率。</p>
+<h4>优势与局限性</h4>
+<p><strong>优势</strong>：</p>
+<ol>
+<li><strong>高效性</strong>：LSH通过低维映射和分桶技术，将相似度计算的时间复杂度降低到常数级别，显著提高搜索效率。</li>
+<li><strong>灵活性</strong>：LSH可以根据实际需求选择不同的哈希函数和分桶策略，灵活适应不同的应用场景。</li>
+<li><strong>扩展性</strong>：LSH可以处理大规模高维数据，适用于推荐系统中海量用户和物品的相似性搜索。</li>
+</ol>
+<p><strong>局限性</strong>：</p>
+<ol>
+<li><strong>精度有限</strong>：LSH的搜索精度依赖于哈希函数的选择和参数设置，可能会出现误判和漏检的情况。</li>
+<li><strong>空间开销</strong>：LSH需要存储多个哈希函数和分桶结果，可能会增加系统的空间开销。</li>
+</ol>
+<h4>结论</h4>
+<p>LSH通过低维映射和分桶技术，有效解决了推荐系统中相似Embedding向量的快速搜索问题。相比于传统的相似度计算方法，LSH不仅提高了搜索效率，还具有较高的灵活性和扩展性。在实际应用中，通过优化哈希函数和分桶策略，可以进一步提高LSH的搜索精度和性能，是推荐系统中重要的技术手段。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_8.1.3_实时数据流架构</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_8.1.3 实时数据流架构</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.1 Facebook的深度学习推荐系统
+Content: 02_8.1.3 实时数据流架构
+&quot;&quot;&quot;</p>
+<h3>8.1.3 实时数据流架构</h3>
+<h4>背景与概述</h4>
+<p>Facebook作为全球最大的社交媒体平台，其推荐系统需要处理海量的数据，并且要求实时性高，以便能够快速响应用户行为并提供个性化的推荐服务。为了实现这一目标，Facebook构建了一个高效的实时数据流架构，称为“Online Data Joiner”，用来整合来自不同数据流的数据，形成用于模型训练的样本，并与点击数据整合形成完整的有标签样本。</p>
+<h4>架构设计与实现</h4>
+<h5>Online Data Joiner 模块</h5>
+<p><strong>1. 功能与作用</strong></p>
+<p>Online Data Joiner模块的主要功能是实时整合来自不同数据流的数据，形成训练样本，并最终与点击数据整合，形成完整的有标签样本。这一模块在整个推荐系统中至关重要，其作用如下：</p>
+<ul>
+<li><strong>数据整合</strong>：实时将曝光（impression）数据与点击（click）数据整合，形成有标签样本。</li>
+<li><strong>样本生成</strong>：根据用户的实时行为生成训练样本，用于模型的实时训练和更新。</li>
+</ul>
+<p><strong>2. 关键技术</strong></p>
+<ul>
+<li><strong>Scribe</strong>：Facebook开发并开源的日志收集系统，用于收集和传输海量的用户行为数据。</li>
+<li><strong>Flink/Spark Streaming</strong>：流计算框架，用于实时处理和计算数据流，支持复杂的数据整合和分析操作。</li>
+</ul>
+<h5>架构特点</h5>
+<p><strong>1. 等待窗口（Waiting Window）</strong></p>
+<ul>
+<li><strong>定义</strong>：在曝光（impression）发生后，需要等待一定时间，才能判定是否产生了点击（click）行为。等待窗口的大小直接影响数据的实时性和样本的准确性。</li>
+<li><strong>优化</strong>：通过合理设定等待窗口，可以在保证数据实时性的同时，尽可能减少点击数据的遗漏，提高样本的准确性。</li>
+</ul>
+<p><strong>2. 分布式架构与全局统一的行为ID</strong></p>
+<ul>
+<li><strong>分布式架构</strong>：采用分布式系统架构，确保系统的高可用性和高扩展性。</li>
+<li><strong>全局行为ID</strong>：为每个行为建立全局唯一的行为ID（action ID），用于整合曝光和点击数据，避免数据的遗漏和重复。</li>
+</ul>
+<p><strong>3. 数据流保护机制</strong></p>
+<ul>
+<li><strong>异常检测</strong>：建立实时数据流的异常检测机制，一旦发现数据分布异常，立即切断在线学习过程，防止错误数据影响模型的准确性。</li>
+<li><strong>数据回放</strong>：定期对历史数据进行全量处理和回放，校正和补充实时数据流中的遗漏，确保数据的一致性和准确性。</li>
+</ul>
+<h4>实际应用案例</h4>
+<p><strong>1. 广告推荐</strong></p>
+<p>在广告推荐系统中，Online Data Joiner模块通过实时整合用户的曝光和点击数据，生成用于训练的有标签样本，从而提高CTR（点击率）预估模型的准确性和实时性。</p>
+<p><strong>2. 新闻推荐</strong></p>
+<p>在新闻推荐系统中，通过实时收集和处理用户的阅读行为数据，生成训练样本，并与用户的点击数据整合，形成完整的有标签样本，从而提高新闻推荐的准确性和用户满意度。</p>
+<h4>优势与挑战</h4>
+<p><strong>优势</strong></p>
+<ul>
+<li><strong>实时性高</strong>：通过流计算框架实现数据的实时处理和整合，保证了推荐系统的高实时性和高响应速度。</li>
+<li><strong>数据整合能力强</strong>：能够高效整合来自不同数据流的数据，形成完整的有标签样本，提高模型训练的准确性和效果。</li>
+</ul>
+<p><strong>挑战</strong></p>
+<ul>
+<li><strong>等待窗口的优化</strong>：需要根据实际业务场景和数据分布，合理设定等待窗口的大小，平衡数据实时性和样本准确性。</li>
+<li><strong>异常检测与数据回放</strong>：建立健全的异常检测机制和数据回放机制，确保数据的一致性和准确性，避免对模型的负面影响。</li>
+</ul>
+<h4>结论</h4>
+<p>Facebook的实时数据流架构通过高效整合不同数据流，形成训练样本，并实现模型的准实时训练和更新，显著提高了推荐系统的性能和效果。这一架构在广告推荐、新闻推荐等多个应用场景中表现出色，为其他平台提供了宝贵的经验和参考。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

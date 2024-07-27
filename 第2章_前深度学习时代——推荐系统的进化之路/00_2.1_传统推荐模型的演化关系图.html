@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_2.1_传统推荐模型的演化关系图</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_2.1 传统推荐模型的演化关系图</h1>
+<p>&quot;&quot;&quot;
+Lecture: /第2章 前深度学习时代——推荐系统的进化之路
+Content: 00_2.1 传统推荐模型的演化关系图
+&quot;&quot;&quot;</p>
+<h3>2.1 传统推荐模型的演化关系图</h3>
+<h4>背景介绍</h4>
+<p>传统推荐模型是现代推荐系统的基础。尽管深度学习模型在推荐系统领域取得了显著进展，但传统推荐模型在很多场景中仍然具有不可替代的作用和价值。理解传统推荐模型的演化关系，有助于全面把握推荐系统的发展脉络，提升对现代推荐系统的理解和应用能力  。</p>
+<h4>传统推荐模型的主要演化关系</h4>
+<p>根据《深度学习推荐系统》中的描述，传统推荐模型的演化主要分为以下几个阶段和类别：</p>
+<ol>
+<li>
+<p><strong>协同过滤算法族</strong>：</p>
+<ul>
+<li><strong>用户协同过滤（UserCF）</strong>：基于用户相似度进行推荐，常见于社交网络、电影推荐等场景。</li>
+<li><strong>物品协同过滤（ItemCF）</strong>：基于物品相似度进行推荐，常用于电商平台、内容推荐等领域。</li>
+</ul>
+</li>
+<li>
+<p><strong>逻辑回归模型族</strong>：</p>
+<ul>
+<li><strong>逻辑回归（LR）</strong>：将用户、物品及上下文特征融合，通过逻辑回归模型进行预测。</li>
+<li><strong>大规模分片线性模型（LS-PLM）</strong>：增强了逻辑回归模型的非线性学习能力，通过分片处理和线性回归实现特征的自动化学习和组合。</li>
+</ul>
+</li>
+<li>
+<p><strong>因子分解机模型族</strong>：</p>
+<ul>
+<li><strong>因子分解机（FM）</strong>：通过引入隐向量实现特征的二阶组合，广泛应用于广告推荐、搜索排序等领域。</li>
+<li><strong>域感知因子分解机（FFM）</strong>：在FM基础上引入特征域的概念，进一步增强了特征交叉的能力。</li>
+</ul>
+</li>
+<li>
+<p><strong>组合模型</strong>：</p>
+<ul>
+<li><strong>GBDT+LR</strong>：通过梯度提升决策树（GBDT）进行特征选择和转换，再结合逻辑回归（LR）进行预测，实现了特征工程的自动化和模型的高效预测。</li>
+</ul>
+</li>
+</ol>
+<h4>详细分析</h4>
+<ol>
+<li>
+<p><strong>协同过滤算法的演化</strong>：</p>
+<ul>
+<li>协同过滤算法是推荐系统最早使用的模型之一，其核心思想是基于用户或物品的相似度进行推荐。用户协同过滤通过计算用户之间的相似度，为目标用户推荐其他相似用户喜欢的物品；物品协同过滤则通过计算物品之间的相似度，为用户推荐与其过去喜欢的物品相似的其他物品。这两种方法虽然简单，但在处理大规模稀疏数据时表现较差，因此衍生出矩阵分解等改进方法。</li>
+</ul>
+</li>
+<li>
+<p><strong>逻辑回归模型的演化</strong>：</p>
+<ul>
+<li>逻辑回归模型通过引入更多的特征（如用户特征、物品特征和上下文特征），克服了协同过滤模型只能利用用户-物品交互信息的局限。LS-PLM模型进一步发展了逻辑回归模型，通过将样本进行分片处理，结合分片后的线性回归模型，提高了模型对非线性关系的捕捉能力。这种方法有效地解决了传统逻辑回归模型在处理大规模稀疏数据时的不足。</li>
+</ul>
+</li>
+<li>
+<p><strong>因子分解机模型的演化</strong>：</p>
+<ul>
+<li>因子分解机（FM）模型通过引入隐向量，实现了特征的二阶组合，克服了逻辑回归模型在处理高维稀疏数据时的不足。FFM模型在FM的基础上进一步引入特征域的概念，使得模型能够更好地捕捉不同特征域之间的交互信息，提升了模型的预测性能。</li>
+</ul>
+</li>
+<li>
+<p><strong>组合模型的演化</strong>：</p>
+<ul>
+<li>GBDT+LR模型通过梯度提升决策树（GBDT）进行特征选择和转换，再结合逻辑回归（LR）进行预测，实现了特征工程的自动化和模型的高效预测。这种组合模型在工业界得到了广泛应用，特别是在广告推荐和搜索排序等场景中，表现尤为出色。</li>
+</ul>
+</li>
+</ol>
+<h4>总结</h4>
+<p>传统推荐模型的发展经历了从简单的协同过滤算法，到逻辑回归和因子分解机模型，再到组合模型的演化过程。这些模型为现代深度学习推荐系统奠定了坚实的理论和实践基础。通过理解传统推荐模型的演化关系，可以更好地把握推荐系统的发展脉络，提升对现代推荐系统的理解和应用能力。</p>
+<hr>
+<p>以下是一个详细的表格，展示了传统推荐模型的演化关系及其关键特性、优缺点和改进点。</p>
+<table>
+<thead>
+<tr>
+<th>模型类别</th>
+<th>模型名称</th>
+<th>关键特性</th>
+<th>优点</th>
+<th>缺点</th>
+<th>改进点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>协同过滤算法族</strong></td>
+<td><strong>用户协同过滤（UserCF）</strong></td>
+<td>- 基于用户相似度进行推荐&lt;br&gt;- 计算用户之间的相似度</td>
+<td>- 简单易实现&lt;br&gt;- 适用于社交网络、电影推荐等场景</td>
+<td>- 数据稀疏时效果差&lt;br&gt;- 难以处理新用户和新物品</td>
+<td>- 引入矩阵分解技术&lt;br&gt;- 利用隐向量表示用户和物品</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>物品协同过滤（ItemCF）</strong></td>
+<td>- 基于物品相似度进行推荐&lt;br&gt;- 计算物品之间的相似度</td>
+<td>- 简单直观&lt;br&gt;- 适用于电商平台、内容推荐等领域</td>
+<td>- 数据稀疏时效果差&lt;br&gt;- 难以捕捉用户的个性化需求</td>
+<td>- 利用隐向量进行特征表示&lt;br&gt;- 结合其他模型提升效果</td>
+</tr>
+<tr>
+<td><strong>逻辑回归模型族</strong></td>
+<td><strong>逻辑回归（LR）</strong></td>
+<td>- 融合用户、物品及上下文特征&lt;br&gt;- 通过逻辑回归模型进行预测</td>
+<td>- 处理高维稀疏数据&lt;br&gt;- 易于解释和实现</td>
+<td>- 难以捕捉非线性关系&lt;br&gt;- 特征工程复杂</td>
+<td>- 结合特征交叉技术&lt;br&gt;- 引入非线性变换</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>大规模分片线性模型（LS-PLM）</strong></td>
+<td>- 样本分片处理&lt;br&gt;- 分片后的线性回归模型</td>
+<td>- 强非线性学习能力&lt;br&gt;- 自动化特征工程</td>
+<td>- 计算复杂度高&lt;br&gt;- 训练难度大</td>
+<td>- 引入更多正则化手段&lt;br&gt;- 优化计算效率</td>
+</tr>
+<tr>
+<td><strong>因子分解机模型族</strong></td>
+<td><strong>因子分解机（FM）</strong></td>
+<td>- 引入隐向量&lt;br&gt;- 实现特征的二阶组合</td>
+<td>- 处理高维稀疏数据&lt;br&gt;- 能捕捉特征间的交互关系</td>
+<td>- 计算复杂度高&lt;br&gt;- 模型解释性较差</td>
+<td>- 优化算法效率&lt;br&gt;- 引入更多特征交互</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>域感知因子分解机（FFM）</strong></td>
+<td>- 引入特征域的概念&lt;br&gt;- 更细粒度的特征交互</td>
+<td>- 更强的特征交互能力&lt;br&gt;- 提升模型预测性能</td>
+<td>- 计算复杂度更高&lt;br&gt;- 需要更多计算资源</td>
+<td>- 优化计算和存储效率&lt;br&gt;- 结合深度学习技术</td>
+</tr>
+<tr>
+<td><strong>组合模型</strong></td>
+<td><strong>GBDT+LR</strong></td>
+<td>- GBDT进行特征选择和转换&lt;br&gt;- 逻辑回归进行预测</td>
+<td>- 自动化特征工程&lt;br- 高效预测</td>
+<td>- 计算资源需求高&lt;br&gt;- 模型训练复杂</td>
+<td>- 优化特征转换过程&lt;br&gt;- 提高训练效率</td>
+</tr>
+</tbody>
+</table>
+<h3>详细说明</h3>
+<ol>
+<li>
+<p><strong>协同过滤算法族</strong>：</p>
+<ul>
+<li>**用户协同过滤（UserCF）<strong>和</strong>物品协同过滤（ItemCF）**是最早应用于推荐系统的模型，基于相似度计算进行推荐，简单易实现，但在数据稀疏和处理新用户、新物品时表现较差。</li>
+</ul>
+</li>
+<li>
+<p><strong>逻辑回归模型族</strong>：</p>
+<ul>
+<li>**逻辑回归（LR）**通过引入更多的特征（如用户特征、物品特征和上下文特征）克服了协同过滤模型的局限，但在处理非线性关系时效果不佳。</li>
+<li>**大规模分片线性模型（LS-PLM）**通过样本分片处理，提高了模型对非线性关系的捕捉能力，实现了自动化特征工程。</li>
+</ul>
+</li>
+<li>
+<p><strong>因子分解机模型族</strong>：</p>
+<ul>
+<li>**因子分解机（FM）**通过引入隐向量实现特征的二阶组合，有效处理高维稀疏数据，提升了模型的预测能力。</li>
+<li>**域感知因子分解机（FFM）**在FM基础上引入特征域的概念，使得模型能够更细粒度地捕捉特征间的交互信息，进一步提升了模型性能。</li>
+</ul>
+</li>
+<li>
+<p><strong>组合模型</strong>：</p>
+<ul>
+<li><strong>GBDT+LR</strong>结合了梯度提升决策树（GBDT）和逻辑回归（LR）的优点，通过GBDT进行特征选择和转换，再结合LR进行预测，实现了特征工程的自动化和模型的高效预测。</li>
+</ul>
+</li>
+</ol>
+<h3>总结</h3>
+<p>传统推荐模型的发展经历了从简单的协同过滤算法，到逻辑回归和因子分解机模型，再到组合模型的演化过程。这些模型为现代深度学习推荐系统奠定了坚实的理论和实践基础。通过理解传统推荐模型的演化关系，可以更好地把握推荐系统的发展脉络，提升对现代推荐系统的理解和应用能力。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

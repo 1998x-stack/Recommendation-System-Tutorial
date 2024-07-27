@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_3.9.3_兴趣抽取层的结构</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_3.9.3 兴趣抽取层的结构</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第3章 浪潮之巅——深度学习在推荐系统中的应用/3.9 DIEN——序列模型与推荐系统的结合
+Content: 02_3.9.3 兴趣抽取层的结构
+&quot;&quot;&quot;</p>
+<h3>02_3.9.3 兴趣抽取层的结构</h3>
+<h4>1. 背景与动机</h4>
+<p>在推荐系统中，用户的兴趣往往会随着时间不断变化。因此，捕捉和模拟用户兴趣的动态变化是提高推荐准确性的重要手段。DIEN（Deep Interest Evolution Network）模型通过引入兴趣抽取层和兴趣进化层，能够有效捕捉用户的兴趣迁移过程。</p>
+<h4>2. GRU的基本结构</h4>
+<p>兴趣抽取层的核心是GRU（Gated Recurrent Unit，门控循环单元）网络。GRU通过门控机制解决了传统RNN（Recurrent Neural Network，循环神经网络）中的梯度消失问题。与LSTM（Long Short-Term Memory，长短期记忆网络）相比，GRU具有更少的参数，训练收敛速度更快，因此被选用为DIEN模型中的基本结构。</p>
+<h4>3. GRU的工作机制</h4>
+<p>GRU单元的工作机制由一系列公式定义：</p>
+<ol>
+<li><strong>更新门（Update Gate）</strong>：</li>
+</ol>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>z</mi><mi>t</mi></msub><mo>=</mo><mi>σ</mi><mo>(</mo><msub><mi>W</mi><mi>z</mi></msub><mo>⋅</mo><mo>[</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>x</mi><mi>t</mi></msub><mo>]</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">z_t = \sigma(W_z \cdot [h_{t-1}, x_t]) 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.04398em;">z</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.04398em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">W</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.04398em;">z</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mopen">[</span><span class="mord"><span class="mord mathit">h</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">t</span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">]</span><span class="mclose">)</span></span></span></span></span></p>
+<p>更新门决定了前一时刻的隐藏状态和当前输入的混合程度。</p>
+<ol start="2">
+<li><strong>重置门（Reset Gate）</strong>：</li>
+</ol>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>r</mi><mi>t</mi></msub><mo>=</mo><mi>σ</mi><mo>(</mo><msub><mi>W</mi><mi>r</mi></msub><mo>⋅</mo><mo>[</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>x</mi><mi>t</mi></msub><mo>]</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">r_t = \sigma(W_r \cdot [h_{t-1}, x_t]) 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">W</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mopen">[</span><span class="mord"><span class="mord mathit">h</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">t</span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">]</span><span class="mclose">)</span></span></span></span></span></p>
+<p>重置门控制了前一时刻的隐藏状态如何影响候选隐藏状态。</p>
+<ol start="3">
+<li><strong>候选隐藏状态（Candidate Hidden State）</strong>：</li>
+</ol>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mover accent="true"><mrow><mi>h</mi></mrow><mo>~</mo></mover><mi>t</mi></msub><mo>=</mo><mi>tanh</mi><mo>(</mo><mi>W</mi><mo>⋅</mo><mo>[</mo><msub><mi>r</mi><mi>t</mi></msub><mo>⋅</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>x</mi><mi>t</mi></msub><mo>]</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">\tilde{h}_t = \tanh(W \cdot [r_t \cdot h_{t-1}, x_t]) 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.9313em;"></span><span class="strut bottom" style="height:1.1813em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle cramped"><span class="mord mathit">h</span></span></span><span style="top:-0.61344em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>~</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mop">tanh</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.13889em;">W</span><span class="mbin">⋅</span><span class="mopen">[</span><span class="mord"><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mord"><span class="mord mathit">h</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">t</span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">]</span><span class="mclose">)</span></span></span></span></span></p>
+<p>候选隐藏状态是基于当前输入和前一时刻的隐藏状态计算得出的。</p>
+<ol start="4">
+<li><strong>隐藏状态（Hidden State）</strong>：</li>
+</ol>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><mo>(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>t</mi></msub><mo>)</mo><mo>⋅</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>z</mi><mi>t</mi></msub><mo>⋅</mo><msub><mover accent="true"><mrow><mi>h</mi></mrow><mo>~</mo></mover><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">h_t = (1 - z_t) \cdot h_{t-1} + z_t \cdot \tilde{h}_t 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.9313em;"></span><span class="strut bottom" style="height:1.1813em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit">h</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mopen">(</span><span class="mord mathrm">1</span><span class="mbin">−</span><span class="mord"><span class="mord mathit" style="margin-right:0.04398em;">z</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.04398em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mbin">⋅</span><span class="mord"><span class="mord mathit">h</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">t</span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord"><span class="mord mathit" style="margin-right:0.04398em;">z</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.04398em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle cramped"><span class="mord mathit">h</span></span></span><span style="top:-0.61344em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>~</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+<p>隐藏状态是当前时刻的最终输出，它结合了前一时刻的隐藏状态和当前的候选隐藏状态。</p>
+<h4>4. 兴趣抽取过程</h4>
+<p>兴趣抽取层通过GRU网络处理用户的行为序列，生成兴趣状态向量。具体过程如下：</p>
+<ol>
+<li>
+<p><strong>行为序列输入</strong>：
+用户的行为序列（如点击、浏览、购买等）作为输入，经过Embedding层转换为低维稠密向量。</p>
+</li>
+<li>
+<p><strong>GRU处理</strong>：
+行为序列向量依次输入GRU单元，生成隐藏状态向量。这些隐藏状态向量表示了用户在不同时间点的兴趣状态。</p>
+</li>
+<li>
+<p><strong>兴趣状态向量</strong>：
+经过GRU处理后，生成的隐藏状态向量即为兴趣状态向量，这些向量用于后续的兴趣进化层。</p>
+</li>
+</ol>
+<h4>5. 兴趣抽取层的优点</h4>
+<ol>
+<li>
+<p><strong>解决梯度消失问题</strong>：
+GRU通过门控机制，有效解决了传统RNN中的梯度消失问题，使得模型能够捕捉长期依赖关系。</p>
+</li>
+<li>
+<p><strong>参数少，训练快</strong>：
+相较于LSTM，GRU的参数更少，计算效率更高，训练收敛速度更快。</p>
+</li>
+<li>
+<p><strong>动态兴趣捕捉</strong>：
+通过GRU网络，兴趣抽取层能够动态地捕捉用户兴趣的变化，为推荐系统提供更加精准的用户兴趣表示。</p>
+</li>
+</ol>
+<h4>6. 实际应用与案例</h4>
+<p>DIEN模型通过兴趣抽取层和兴趣进化层的结合，显著提高了推荐系统的性能。在电商推荐、视频推荐等领域，DIEN模型的应用案例表明，其能够更好地捕捉用户的动态兴趣变化，提供更加个性化的推荐服务。</p>
+<h3>总结</h3>
+<p>兴趣抽取层是DIEN模型的核心组件之一，通过引入GRU网络，解决了传统RNN中的梯度消失问题，并能够高效地捕捉用户的动态兴趣变化。其在推荐系统中的应用，为提高推荐准确性和个性化水平提供了有力的支持。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

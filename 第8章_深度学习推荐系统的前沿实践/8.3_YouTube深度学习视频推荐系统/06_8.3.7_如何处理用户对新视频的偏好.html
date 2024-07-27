@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>06_8.3.7_如何处理用户对新视频的偏好</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>06_8.3.7 如何处理用户对新视频的偏好</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.3 YouTube深度学习视频推荐系统
+Content: 06_8.3.7 如何处理用户对新视频的偏好
+&quot;&quot;&quot;</p>
+<h3>8.3.7 如何处理用户对新视频的偏好</h3>
+<h4>引言</h4>
+<p>在UGC平台上，用户对新内容的偏好非常明显。对绝大多数内容来说，刚上线时会迎来流量高峰，随后快速衰减，然后趋于平稳。YouTube的内容也不例外，因此，如何处理用户对新视频的偏好，直接影响了推荐系统的预测准确率。</p>
+<h4>引入Example Age特征</h4>
+<p>为了拟合用户对新内容的偏好，YouTube推荐系统引入了Example Age这个特征。该特征定义为训练样本产生的时间距离当前时间的长度。例如，24小时前产生的训练样本，Example Age的特征值就是24。在模型服务时，不管候选视频是哪一个，这个特征值都可以设成0，甚至是一个很小的负值，因为这次的训练样本将在不久的未来产生这次推荐结果。</p>
+<h5>Example Age特征的定义与应用</h5>
+<ol>
+<li><strong>定义</strong>：Example Age特征值表示样本产生的时间距离当前时间的长度。</li>
+<li><strong>应用</strong>：
+<ul>
+<li><strong>训练样本</strong>：对于训练样本，Example Age特征值表示样本产生至今的时间长度。</li>
+<li><strong>推荐服务</strong>：在推荐服务时，将候选视频的Example Age特征值设为0或负值，以反映视频的新鲜度。</li>
+</ul>
+</li>
+</ol>
+<h4>特征交叉与时间戳</h4>
+<p>YouTube选择这样一个时间特征来反映内容新鲜程度的逻辑并不容易理解。这个特征本身并不包含任何信息，但在深度神经网络中与其他特征做交叉时，起到了时间戳的作用，通过这个时间戳和其他特征的交叉，保存了其他特征随时间变化的权重，使得最终的预测包含时间趋势的信息。</p>
+<h5>Example Age特征的重要性</h5>
+<ol>
+<li><strong>实验验证</strong>：YouTube通过实验验证了Example Age特征的重要性。图8-16中蓝色曲线是引入Example Age前的模型预估值，可以看出与时间没有显著关系，而引入Example Age后的模型预估十分接近经验分布。</li>
+<li><strong>时间趋势信息</strong>：Example Age特征与其他特征交叉，保存了时间变化的权重，让最终的预测包含时间趋势的信息。</li>
+</ol>
+<h4>其他时间特征对比</h4>
+<p>通常，“新鲜程度”特征会定义为视频距离上传时间的天数（Days since Upload）。例如，24小时前产生的样本，但样本的视频已经上传了90小时，该特征值应为90。在做线上预估时，这个特征值不是0，而是当前时间与每个视频上传时间的间隔。这种方法保存了时间信息，但效果不如Example Age好，可能是因为这种方法导致Example Age分布过于分散，在训练过程中包含刚上传的视频和上传已久的视频，无法集中描述近期的变化趋势。</p>
+<h4>总结</h4>
+<p>通过引入Example Age特征，YouTube推荐系统有效地处理了用户对新视频的偏好，提高了预测的准确性。这个特征通过与其他特征的交叉，保存了时间变化的权重，使得最终的预测结果能够反映用户对新内容的兴趣变化。通过这种方式，YouTube不仅提高了推荐系统的性能，也为其他视频推荐系统的开发提供了宝贵的经验和参考。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

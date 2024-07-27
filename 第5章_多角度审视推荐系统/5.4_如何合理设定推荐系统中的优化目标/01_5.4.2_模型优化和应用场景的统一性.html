@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01_5.4.2_模型优化和应用场景的统一性</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>01_5.4.2 模型优化和应用场景的统一性</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第5章 多角度审视推荐系统/5.4 如何合理设定推荐系统中的优化目标
+Content: 01_5.4.2 模型优化和应用场景的统一性
+&quot;&quot;&quot;</p>
+<h3>5.4.2 模型优化和应用场景的统一性</h3>
+<p>在推荐系统中，模型优化的目标应当与应用场景相一致，这是确保推荐系统有效性的关键。以下是对如何实现模型优化和应用场景统一性的详细分析。</p>
+<h4>一、模型优化和应用场景统一性的必要性</h4>
+<ol>
+<li>
+<p><strong>商业目标一致性</strong>：</p>
+<ul>
+<li>不同的应用场景有不同的商业目标，例如，电商平台关注的是转化率（CVR），而内容平台则可能关注用户的参与度或观看时长。因此，推荐系统的优化目标应当与商业目标一致，以实现最大的商业价值。</li>
+</ul>
+</li>
+<li>
+<p><strong>用户行为的一致性</strong>：</p>
+<ul>
+<li>用户在不同平台上的行为模式不同，优化目标需要反映这些行为模式。例如，用户在电商网站上的购买行为和在视频平台上的观看行为存在显著差异，这些差异需要在模型优化中得到体现。</li>
+</ul>
+</li>
+</ol>
+<h4>二、电商平台的优化目标：CVR</h4>
+<ol>
+<li>
+<p><strong>两步过程抽象</strong>：</p>
+<ul>
+<li>在电商平台如淘宝和天猫上，用户的购物过程可以抽象为两个步骤：产品曝光（用户浏览商品详情页）和用户产生购买行为。模型需要分别优化这两个步骤，以提高整体转化率。</li>
+</ul>
+</li>
+<li>
+<p><strong>训练和预估场景的一致性</strong>：</p>
+<ul>
+<li>电商平台的推荐系统需要确保训练模型的场景与实际预估的场景一致。例如，训练CVR模型时应当考虑用户在浏览商品详情页后的购买行为，而不是仅仅基于点击数据。</li>
+</ul>
+</li>
+</ol>
+<h4>三、解决训练和预测场景不一致的问题</h4>
+<ol>
+<li>
+<p><strong>分步模型优化</strong>：</p>
+<ul>
+<li>针对不同的用户行为阶段，可以构建分步模型。例如，针对产品曝光阶段构建点击率（CTR）模型，针对购买行为阶段构建CVR模型。这种方法能够更精确地反映不同阶段的用户行为，但可能导致优化目标的脱节。</li>
+</ul>
+</li>
+<li>
+<p><strong>多目标优化模型：ESMM</strong>：</p>
+<ul>
+<li>阿里巴巴提出的ESMM（Entire Space Multi-task Model）模型，通过同时模拟“曝光到点击”和“点击到转化”两个阶段，解决了训练空间和预测空间不一致的问题。ESMM模型共享底层的Embedding层，提高了模型的训练效果和预测准确性。</li>
+</ul>
+</li>
+</ol>
+<h4>四、阿里巴巴ESMM模型的实现</h4>
+<ol>
+<li>
+<p><strong>模型结构</strong>：</p>
+<ul>
+<li>ESMM模型的底层是共享的Embedding层，用于生成用户和物品的特征表达。中间层分别处理CVR和CTR的优化目标，最终通过将pCVR和pCTR相乘得到pCTCVR，从而实现对曝光后点击转化序列的概率预测。</li>
+</ul>
+</li>
+<li>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>解决了CVR任务正样本稀疏的问题，通过CTR数据生成更准确的特征表达。模型能够一次性得出所有优化目标的值，提高了整体系统的效率和效果。</li>
+</ul>
+</li>
+</ol>
+<h4>五、模型优化和应用场景统一性的实际应用</h4>
+<ol>
+<li>
+<p><strong>电商平台</strong>：</p>
+<ul>
+<li>在天猫和淘宝等电商平台上，通过ESMM模型优化推荐系统，不仅提高了点击率，还显著提升了购买转化率。模型的多目标优化使得推荐系统能够更好地服务于平台的商业目标。</li>
+</ul>
+</li>
+<li>
+<p><strong>内容平台</strong>：</p>
+<ul>
+<li>对于内容平台，如视频和新闻推荐系统，模型的优化目标可能包括用户的观看时长、参与度等。需要根据平台的具体应用场景设置相应的优化目标，以提高用户满意度和平台黏性。</li>
+</ul>
+</li>
+</ol>
+<h4>总结</h4>
+<p>模型优化和应用场景的统一性是推荐系统设计中的关键原则。通过明确优化目标与应用场景的一致性，可以确保推荐系统在不同商业场景中的有效性。阿里巴巴的ESMM模型为解决训练和预测场景不一致的问题提供了有效的解决方案，为其他平台提供了有价值的参考。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

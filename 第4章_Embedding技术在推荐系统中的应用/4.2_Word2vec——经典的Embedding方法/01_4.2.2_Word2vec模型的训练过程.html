@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01_4.2.2_Word2vec模型的训练过程</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>01_4.2.2 Word2vec模型的训练过程</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第4章 Embedding技术在推荐系统中的应用/4.2 Word2vec——经典的Embedding方法
+Content: 01_4.2.2 Word2vec模型的训练过程
+&quot;&quot;&quot;</p>
+<h3>4.2.2 Word2vec模型的训练过程</h3>
+<h4>一、基本概念和背景</h4>
+<p>Word2vec模型是由Google于2013年提出的一种用于生成词向量的模型。它通过将词语映射到一个低维稠密向量空间，使得语义相近的词在向量空间中的距离较近，而语义不相关的词距离较远。Word2vec模型的训练过程包括构建训练样本、定义优化目标和计算条件概率等步骤。</p>
+<h4>二、Word2vec模型的结构</h4>
+<p>Word2vec模型有两种主要的结构：连续词袋模型（CBOW）和跳跃模型（Skip-Gram）。</p>
+<ol>
+<li>
+<p><strong>CBOW模型</strong>：</p>
+<ul>
+<li>目标：通过上下文词预测中心词。</li>
+<li>示例：在句子&quot;The cat sits on the mat&quot;中，通过上下文词[&quot;The&quot;, &quot;cat&quot;, &quot;on&quot;, &quot;the&quot;]预测中心词&quot;sits&quot;。</li>
+</ul>
+</li>
+<li>
+<p><strong>Skip-Gram模型</strong>：</p>
+<ul>
+<li>目标：通过中心词预测上下文词。</li>
+<li>示例：在句子&quot;The cat sits on the mat&quot;中，通过中心词&quot;sits&quot;预测上下文词[&quot;The&quot;, &quot;cat&quot;, &quot;on&quot;, &quot;the&quot;]。</li>
+</ul>
+</li>
+</ol>
+<h4>三、训练样本的构建</h4>
+<p>训练Word2vec模型需要准备由一组句子组成的语料库。通过滑动窗口从语料库中抽取训练样本。假设窗口大小为2，则句子&quot;The cat sits on the mat&quot;会生成以下训练样本：[(&quot;The&quot;, &quot;cat&quot;), (&quot;cat&quot;, &quot;sits&quot;), (&quot;sits&quot;, &quot;on&quot;), (&quot;on&quot;, &quot;the&quot;), (&quot;the&quot;, &quot;mat&quot;)]。</p>
+<h4>四、优化目标的定义</h4>
+<p>Word2vec的优化目标是通过极大似然估计的方法，最大化所有训练样本的条件概率之积。具体公式为：![](https://latex.codecogs.com/png.latex?\sum_{t=1}^{T}\sum_{-c\leq j\leq c, j\neq 0}\log{p(w_{t+j}|w_t)})。</p>
+<h4>五、条件概率的计算</h4>
+<p>Word2vec模型使用softmax函数计算条件概率，具体公式为：![](https://latex.codecogs.com/png.latex?p(w_O|w_I)=\frac{exp(v_{w_O}^T\cdot v_{w_I})}{\sum_{w=1}^{W}exp(v_w^T\cdot v_{w_I})})，其中<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>v</mi><mrow><msub><mi>w</mi><mi>O</mi></msub></mrow></msub></mrow><annotation encoding="application/x-tex">v_{w_O}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.68556em;vertical-align:-0.255em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="vlist"><span style="top:0.15000000000000002em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">O</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>v</mi><mrow><msub><mi>w</mi><mi>I</mi></msub></mrow></msub></mrow><annotation encoding="application/x-tex">v_{w_I}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.68556em;vertical-align:-0.255em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="vlist"><span style="top:0.15000000000000002em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.07847em;">I</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>分别为输出词和输入词的向量表示。</p>
+<h4>六、负采样（Negative Sampling）</h4>
+<p>为了简化softmax计算的复杂度，Word2vec模型通常采用负采样的方法进行训练。负采样通过只计算采样出的负样本的预测误差，减少计算量。具体公式为：![](https://latex.codecogs.com/png.latex?L=\log{\sigma(v_{w_O}^T\cdot h)}+\sum_{i=1}^{k}E_{w_i\sim P_n(w)}[\log{\sigma(-v_{w_i}^T\cdot h)}])，其中<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">h</span></span></span></span>为隐层向量，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>v</mi><mrow><msub><mi>w</mi><mi>O</mi></msub></mrow></msub></mrow><annotation encoding="application/x-tex">v_{w_O}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.68556em;vertical-align:-0.255em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="vlist"><span style="top:0.15000000000000002em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">O</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>为输出词向量，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">w_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>为负样本。</p>
+<h4>七、层级softmax（Hierarchical Softmax）</h4>
+<p>层级softmax通过构建霍夫曼树加快softmax计算。在每次预测时，只需计算从根节点到目标词的路径上的节点概率。尽管这种方法计算效率高，但实现较为复杂，因此较少使用。</p>
+<h4>八、实际应用中的优化</h4>
+<p>为了进一步提高Word2vec模型的训练效率，可以采用以下策略：</p>
+<ol>
+<li><strong>采样策略</strong>：对高频词进行降采样处理，以减少高频词对模型训练的影响。</li>
+<li><strong>并行训练</strong>：利用多线程或分布式计算框架并行化训练过程，以提高训练速度。</li>
+</ol>
+<h3>总结</h3>
+<p>Word2vec模型通过将高维稀疏的文本数据转换为低维稠密的向量，使得计算机能够更高效地处理和理解文本。其模型结构、训练方法和优化目标对后续的Embedding研究具有重要的启发意义。掌握Word2vec模型的训练过程，对于理解和应用Embedding技术至关重要  。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

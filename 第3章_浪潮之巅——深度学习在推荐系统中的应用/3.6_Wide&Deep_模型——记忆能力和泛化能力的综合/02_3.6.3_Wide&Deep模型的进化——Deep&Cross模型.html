@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_3.6.3_Wide&Deep模型的进化——Deep&Cross模型</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_3.6.3 Wide&amp;Deep模型的进化——Deep&amp;Cross模型</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第3章 浪潮之巅——深度学习在推荐系统中的应用/3.6 Wide&amp;Deep 模型——记忆能力和泛化能力的综合
+Content: 02_3.6.3 Wide&amp;Deep模型的进化——Deep&amp;Cross模型
+&quot;&quot;&quot;</p>
+<h3>Wide &amp; Deep模型的进化——Deep &amp; Cross模型</h3>
+<h4>一、引言</h4>
+<p>Wide &amp; Deep模型结合了简单模型的记忆能力和深度神经网络的泛化能力，极大提升了推荐系统的性能。然而，Wide &amp; Deep模型仍存在一些不足之处，比如对特征交叉的处理不够灵活。为了解决这些问题，斯坦福大学和谷歌的研究人员于2017年提出了Deep &amp; Cross模型（Deep &amp; Cross Network, DCN），旨在通过引入Cross网络增强特征交互能力，从而进一步提升推荐系统的性能。</p>
+<h4>二、Deep &amp; Cross模型的结构</h4>
+<p>Deep &amp; Cross模型的基本结构如图3-15所示。DCN模型主要由两部分组成：Cross网络和Deep网络。</p>
+<h5>1. Cross网络</h5>
+<p>Cross网络的设计目的是增加特征之间的交互强度。与Wide &amp; Deep模型中的Wide部分不同，Cross网络通过多层交叉层（Cross layer）对输入向量进行特征交叉。假设第 $ l $ 层交叉层的输出向量为 $ x_l $，那么第 $ l+1 $ 层的输出向量可以表示为：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mrow><mi>l</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>x</mi><mn>0</mn></msub><mo>⋅</mo><mo>(</mo><msubsup><mi>w</mi><mi>l</mi><mi>T</mi></msubsup><msub><mi>x</mi><mi>l</mi></msub><mo>)</mo><mo>+</mo><msub><mi>b</mi><mi>l</mi></msub><mo>+</mo><msub><mi>x</mi><mi>l</mi></msub></mrow><annotation encoding="application/x-tex">x_{l+1} = x_0 \cdot (w_l^T x_l) + b_l + x_l 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8913309999999999em;"></span><span class="strut bottom" style="height:1.1413309999999999em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mbin">+</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.247em;margin-left:-0.02691em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span></span></span><span style="top:-0.4129999999999999em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mbin">+</span><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+<p>其中，$ w_l $ 是权重向量，$ b_l $ 是偏置向量，$ x_0 $ 是原始输入向量。</p>
+<p>通过这种方式，交叉层能够有效捕捉特征之间的二阶交互信息，类似于PNN模型中的外积操作。每一层交叉层仅增加了一个 $ n $ 维的权重向量 $ w_l $（ $ n $ 为输入向量的维度），并且每一层均保留了输入向量，因此输出与输入之间的变化不会特别明显。</p>
+<h5>2. Deep网络</h5>
+<p>Deep网络部分的设计思路没有本质变化，依然是通过Embedding层将类别型特征转换为稠密向量，然后通过多层全连接层（Fully Connected Layer）进行特征处理。Deep网络的主要作用是对特征进行深度挖掘，捕捉特征之间的高阶非线性关系。</p>
+<h5>3. 输出层</h5>
+<p>Cross网络和Deep网络的输出会在最终的输出层进行结合，通过逻辑回归层进行目标拟合。通过这种方式，DCN模型能够同时利用记忆能力和泛化能力，既能快速响应用户的历史行为，又能准确推荐新物品。</p>
+<h4>三、Cross网络的设计和实现</h4>
+<p>Cross网络的核心在于交叉层的设计。交叉层的操作如图3-16所示。每一层交叉层的输入为 $ x_l $，输出为 $ x_{l+1} $。具体操作如下：</p>
+<ol>
+<li><strong>二阶交叉操作</strong>：计算输入向量 $ x_l $ 和原始输入向量 $ x_0 $ 的二阶交互信息，即 $ x_0 \cdot (w_l^T x_l) $。</li>
+<li><strong>加权求和</strong>：将二阶交互信息与偏置向量 $ b_l $ 和输入向量 $ x_l $ 相加，得到输出向量 $ x_{l+1} $。</li>
+</ol>
+<p>这种设计能够有效增加特征之间的交互强度，捕捉特征之间的复杂关系。</p>
+<h4>四、Deep &amp; Cross模型的优势</h4>
+<ol>
+<li><strong>增强的特征交互能力</strong>：通过引入Cross网络，DCN模型能够更有效地捕捉特征之间的复杂交互关系，提高推荐系统的准确性。</li>
+<li><strong>端到端训练</strong>：DCN模型采用端到端的训练方式，使模型能够自动学习到最优的特征交叉方式和参数设置，避免了繁琐的人工特征工程。</li>
+<li><strong>计算复杂度相对较低</strong>：虽然引入了交叉层，但每一层仅增加一个 $ n $ 维的权重向量，因此计算复杂度相对较低，模型训练效率较高。</li>
+</ol>
+<h4>五、总结</h4>
+<p>Deep &amp; Cross模型通过引入Cross网络，有效增强了特征交互能力，结合了Wide &amp; Deep模型的记忆能力和泛化能力，进一步提升了推荐系统的性能。DCN模型的提出不仅解决了Wide &amp; Deep模型的一些不足，还为后续的推荐系统模型设计提供了新的思路。在实际应用中，DCN模型凭借其强大的特征交互能力和高效的计算性能，已被广泛应用于各类推荐系统中，成为业界主流模型之一   。</p>
+<hr>
+<h3>Deep &amp; Cross模型的结构</h3>
+<h4>一、引言</h4>
+<p>Deep &amp; Cross模型（DCN）是Wide &amp; Deep模型的进化版本，由斯坦福大学和谷歌的研究人员于2017年提出。该模型通过引入Cross网络来增强特征交互能力，从而提高推荐系统的性能。DCN模型主要由两个部分组成：Cross网络和Deep网络。</p>
+<h4>二、DCN模型的结构</h4>
+<h5>1. Cross网络</h5>
+<p>Cross网络的设计目的是增加特征之间的交互强度。与Wide &amp; Deep模型中的Wide部分不同，Cross网络通过多层交叉层（Cross layer）对输入向量进行特征交叉。每一层交叉层的操作如下：</p>
+<p>1.1. <strong>Cross网络的基本操作</strong>：
+假设第 $ l $ 层交叉层的输出向量为 $ x_l $，那么第 $ l+1 $ 层的输出向量可以表示为：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mrow><mi>l</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>x</mi><mn>0</mn></msub><mo>⋅</mo><mo>(</mo><msubsup><mi>w</mi><mi>l</mi><mi>T</mi></msubsup><msub><mi>x</mi><mi>l</mi></msub><mo>)</mo><mo>+</mo><msub><mi>b</mi><mi>l</mi></msub><mo>+</mo><msub><mi>x</mi><mi>l</mi></msub></mrow><annotation encoding="application/x-tex">x_{l+1} = x_0 \cdot (w_l^T x_l) + b_l + x_l 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8913309999999999em;"></span><span class="strut bottom" style="height:1.1413309999999999em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mbin">+</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.247em;margin-left:-0.02691em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span></span></span><span style="top:-0.4129999999999999em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mbin">+</span><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+<p>其中，$ w_l $ 是权重向量，$ b_l $ 是偏置向量，$ x_0 $ 是原始输入向量。</p>
+<p>1.2. <strong>操作详解</strong>：</p>
+<ul>
+<li><strong>二阶交叉操作</strong>：计算输入向量 $ x_l $ 和原始输入向量 $ x_0 $ 的二阶交互信息，即 $ x_0 \cdot (w_l^T x_l) $。</li>
+<li><strong>加权求和</strong>：将二阶交互信息与偏置向量 $ b_l $ 和输入向量 $ x_l $ 相加，得到输出向量 $ x_{l+1} $。</li>
+</ul>
+<p>通过这种方式，交叉层能够有效捕捉特征之间的二阶交互信息，类似于PNN模型中的外积操作。每一层交叉层仅增加了一个 $ n $ 维的权重向量 $ w_l $（ $ n $ 为输入向量的维度），并且每一层均保留了输入向量，因此输出与输入之间的变化不会特别明显。</p>
+<p>1.3. <strong>Cross网络示意图</strong>：
+<img src="https://raw.githubusercontent.com/jiachen0212/images/main/dcn_cross.png" alt="Cross网络示意图"></p>
+<h5>2. Deep网络</h5>
+<p>Deep网络部分的设计思路没有本质变化，依然是通过Embedding层将类别型特征转换为稠密向量，然后通过多层全连接层（Fully Connected Layer）进行特征处理。Deep网络的主要作用是对特征进行深度挖掘，捕捉特征之间的高阶非线性关系。</p>
+<p>2.1. <strong>Embedding层</strong>：</p>
+<ul>
+<li><strong>类别型特征转换</strong>：Embedding层将类别型特征（如用户ID、商品ID等）转换为稠密向量。</li>
+<li><strong>特征组合</strong>：通过多层全连接层对Embedding向量进行组合，挖掘特征之间的高阶非线性关系。</li>
+</ul>
+<p>2.2. <strong>多层全连接层（Dense Layers）</strong>：</p>
+<ul>
+<li><strong>激活函数</strong>：全连接层通常使用ReLU（Rectified Linear Unit）激活函数，以增强模型的非线性表达能力。</li>
+<li><strong>特征交叉</strong>：通过多层全连接层对特征进行深度交叉和处理，捕捉特征背后的数据模式。</li>
+</ul>
+<p>2.3. <strong>Deep网络示意图</strong>：
+<img src="https://raw.githubusercontent.com/jiachen0212/images/main/dcn_deep.png" alt="Deep网络示意图"></p>
+<h5>3. 输出层</h5>
+<p>Cross网络和Deep网络的输出会在最终的输出层进行结合，通过逻辑回归层进行目标拟合。具体而言，Cross网络的输出和Deep网络的输出会被拼接起来，作为最终输出层的输入，进行最终的预测。通过这种方式，DCN模型能够同时利用记忆能力和泛化能力，既能快速响应用户的历史行为，又能准确推荐新物品。</p>
+<p>3.1. <strong>输出层示意图</strong>：
+<img src="https://raw.githubusercontent.com/jiachen0212/images/main/dcn_output.png" alt="输出层示意图"></p>
+<h4>三、DCN模型的优势</h4>
+<ol>
+<li>
+<p><strong>增强的特征交互能力</strong>：
+通过引入Cross网络，DCN模型能够更有效地捕捉特征之间的复杂交互关系，提高推荐系统的准确性。</p>
+</li>
+<li>
+<p><strong>端到端训练</strong>：
+DCN模型采用端到端的训练方式，使模型能够自动学习到最优的特征交叉方式和参数设置，避免了繁琐的人工特征工程。</p>
+</li>
+<li>
+<p><strong>计算复杂度相对较低</strong>：
+虽然引入了交叉层，但每一层仅增加一个 $ n $ 维的权重向量，因此计算复杂度相对较低，模型训练效率较高。</p>
+</li>
+</ol>
+<h4>四、总结</h4>
+<p>Deep &amp; Cross模型通过引入Cross网络，有效增强了特征交互能力，结合了Wide &amp; Deep模型的记忆能力和泛化能力，进一步提升了推荐系统的性能。DCN模型的提出不仅解决了Wide &amp; Deep模型的一些不足，还为后续的推荐系统模型设计提供了新的思路。在实际应用中，DCN模型凭借其强大的特征交互能力和高效的计算性能，已被广泛应用于各类推荐系统中，成为业界主流模型之一。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

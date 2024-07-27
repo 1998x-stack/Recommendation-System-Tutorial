@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>08_8.1.9_Facebook深度学习推荐系统总结</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>08_8.1.9 Facebook深度学习推荐系统总结</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.1 Facebook的深度学习推荐系统
+Content: 08_8.1.9 Facebook深度学习推荐系统总结
+&quot;&quot;&quot;</p>
+<h3>8.1.9 Facebook深度学习推荐系统总结</h3>
+<h4>背景与概述</h4>
+<p>Facebook在推荐系统领域一直是行业的领先者，其从最初的GBDT+LR组合模型到后来的深度学习推荐模型DLRM，经历了从传统机器学习到深度学习的全面转型。通过这些模型，Facebook不仅提升了推荐系统的准确性和实时性，还为业界提供了大量宝贵的经验和实践方法。</p>
+<h4>GBDT+LR模型的回顾</h4>
+<ol>
+<li>
+<p><strong>模型结构</strong>：</p>
+<ul>
+<li>GBDT（Gradient Boosting Decision Tree）用于特征筛选和组合，生成新的离散特征向量。</li>
+<li>LR（Logistic Regression）模型则利用这些特征向量进行CTR（点击率）预估。</li>
+</ul>
+</li>
+<li>
+<p><strong>创新点</strong>：</p>
+<ul>
+<li>特征工程模型化：通过GBDT自动进行特征组合和筛选，开启了特征工程自动化的新阶段。</li>
+<li>实时数据整合和在线学习：Facebook在2014年就采用了在线学习和在线数据整合技术，这些技术至今仍然具有重要的工程意义  。</li>
+</ul>
+</li>
+</ol>
+<h4>DLRM模型的创新</h4>
+<ol>
+<li>
+<p><strong>模型结构</strong>：</p>
+<ul>
+<li>DLRM（Deep Learning Recommender Model）模型采用经典的深度学习架构，通过Embedding层处理稀疏特征，并通过多层感知机（MLP）进行特征交互和目标拟合。</li>
+</ul>
+</li>
+<li>
+<p><strong>训练平台</strong>：</p>
+<ul>
+<li>DLRM模型在Facebook自研的Big Basin AI平台上进行训练，该平台由Dual Socket Intel Xeon 6138 CPU和8个Nvidia Tesla V100 16GB GPUs组成 。</li>
+</ul>
+</li>
+<li>
+<p><strong>效果评估</strong>：</p>
+<ul>
+<li>在与Google的DCN模型对比中，DLRM在准确率上稍有优势，但模型的性能与数据集选择和参数调优关系密切 。</li>
+</ul>
+</li>
+</ol>
+<h4>Facebook推荐系统的工程实践</h4>
+<ol>
+<li>
+<p><strong>特征工程模型化</strong>：</p>
+<ul>
+<li>通过模型进行特征自动组合和筛选，减少了人工调参的工作量，提高了特征工程的效率和效果。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型复杂性和实效性的平衡</strong>：</p>
+<ul>
+<li>采用不同的更新频率来平衡GBDT和LR模型的复杂性和实时性，这种策略最大化了组合模型的优点 。</li>
+</ul>
+</li>
+<li>
+<p><strong>数据驱动的决策</strong>：</p>
+<ul>
+<li>Facebook强调通过数据验证直觉结论，确保每一个决策都有数据支撑，这种严谨的工作态度和方法保证了模型的可靠性和有效性 。</li>
+</ul>
+</li>
+</ol>
+<h4>实际应用与挑战</h4>
+<ol>
+<li><strong>实际应用</strong>：
+<ul>
+<li>Facebook的推荐系统通过GB</li>
+</ul>
+</li>
+</ol>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

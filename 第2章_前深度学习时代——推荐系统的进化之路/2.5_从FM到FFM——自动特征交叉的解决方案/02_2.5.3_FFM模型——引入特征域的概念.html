@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_2.5.3_FFM模型——引入特征域的概念</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_2.5.3 FFM模型——引入特征域的概念</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第2章 前深度学习时代——推荐系统的进化之路/2.5 从FM到FFM——自动特征交叉的解决方案
+Content: 02_2.5.3 FFM模型——引入特征域的概念
+&quot;&quot;&quot;</p>
+<h3>2.5.3 FFM模型——引入特征域的概念</h3>
+<h4>背景介绍</h4>
+<p>在推荐系统的发展过程中，为了捕捉特征之间的相互影响，特征交叉是必不可少的环节。然而，传统的特征交叉方法，如POLY2和FM模型，存在计算复杂度高和数据稀疏问题。为了进一步提高模型的表达能力，Pan等人在2014年提出了域感知因子分解机（Field-aware Factorization Machine, FFM）模型。</p>
+<h4>FFM模型的基本原理</h4>
+<p>FFM模型在FM模型的基础上引入了特征域（field）的概念。具体来说，FFM模型为每个特征在不同特征域中分别学习一个隐向量。在进行特征交叉时，不同特征域的特征使用不同的隐向量，从而提高模型的表达能力。</p>
+<p>其数学表达式如下：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi><mo>=</mo><msub><mi>w</mi><mn>0</mn></msub><mo>+</mo><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msub><mi>w</mi><mi>i</mi></msub><msub><mi>x</mi><mi>i</mi></msub><mo>+</mo><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mi>i</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo>⟨</mo><msub><mrow><mi mathvariant="bold">v</mi></mrow><mrow><mi>i</mi><mo separator="true">,</mo><msub><mi>f</mi><mi>j</mi></msub></mrow></msub><mo separator="true">,</mo><msub><mrow><mi mathvariant="bold">v</mi></mrow><mrow><mi>j</mi><mo separator="true">,</mo><msub><mi>f</mi><mi>i</mi></msub></mrow></msub><mo>⟩</mo><msub><mi>x</mi><mi>i</mi></msub><msub><mi>x</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">y = w_0 + \sum_{i=1}^{n} w_i x_i + \sum_{i=1}^{n} \sum_{j=i+1}^{n} \langle \mathbf{v}_{i,f_j}, \mathbf{v}_{j,f_i} \rangle x_i x_j 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.6513970000000007em;"></span><span class="strut bottom" style="height:3.0651740000000007em;vertical-align:-1.4137769999999998em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span><span class="mrel">=</span><span class="mord mathit">i</span><span class="mbin">+</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000254801em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000005em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">⟨</span><span class=""><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf" style="margin-right:0.01597em;">v</span></span><span class="vlist"><span style="top:0.14999999999999997em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mpunct">,</span><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="vlist"><span style="top:0.15000000000000002em;margin-right:0.07142857142857144em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class=""><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf" style="margin-right:0.01597em;">v</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span><span class="mpunct">,</span><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">⟩</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+<p>其中，$ y $ 为输出，$ w_0 $ 为偏置，$ w_i $ 为特征 $ x_i $ 的权重，$ \mathbf{v}<em>{i,f_j} $ 表示特征 $ x_i $ 在特征域 $ f_j $ 中的隐向量，$ \langle \mathbf{v}</em>{i,f_j}, \mathbf{v}_{j,f_i} \rangle $ 为两个隐向量之间的内积。</p>
+<h4>特征域的定义</h4>
+<p>特征域（field）是对特征进行分组的概念。在FFM模型中，每个特征根据其所属的域，分别学习不同的隐向量。举例来说，在广告点击率预测的场景中，特征可以分为广告域（如广告ID、广告类型）、用户域（如用户ID、性别）等。在进行特征交叉时，不同域的特征使用各自域的隐向量，从而捕捉更细粒度的特征交互信息。</p>
+<h4>FFM模型的优点</h4>
+<ol>
+<li><strong>细粒度的特征交叉</strong>：相比于FM模型，FFM模型通过引入特征域的概念，使得模型能够在更细粒度上捕捉特征之间的交互信息。这种细粒度的特征交叉可以更准确地描述复杂的特征关系，提高模型的表达能力。</li>
+<li><strong>更强的表达能力</strong>：由于每个特征在不同特征域中都有独立的隐向量，FFM模型能够捕捉到特征之间更为复杂的交互信息，使得模型的表达能力进一步增强。例如，在用户点击率预测中，不同广告和用户特征之间的复杂交互关系可以通过FFM模型更准确地建模。</li>
+</ol>
+<h4>FFM模型的缺陷</h4>
+<p>尽管FFM模型在特征交叉方面具有显著优势，但其也存在一些缺陷：</p>
+<ol>
+<li><strong>计算复杂度高</strong>：相比于FM模型的 $ O(nk) $ 复杂度，FFM模型的计算复杂度上升到 $ O(nkf) $（其中 $ n $ 为特征数量，$ k $ 为隐向量维度，$ f $ 为特征域数量）。这种高复杂度使得FFM模型在大规模数据集上的训练和预测变得更加困难。</li>
+<li><strong>存储需求大</strong>：由于每个特征在不同特征域中都有独立的隐向量，FFM模型的参数数量大大增加。这导致模型在存储和计算时需要更多的资源，对于计算和存储资源有限的场景而言，是一个重要的挑战。</li>
+</ol>
+<h4>实际应用中的问题与解决方案</h4>
+<p>在实际应用中，FFM模型的高计算复杂度和存储需求问题常常带来挑战。为了解决这些问题，研究者们提出了多种改进方法：</p>
+<ol>
+<li><strong>特征选择与降维</strong>：通过特征选择技术，可以筛选出对模型有显著贡献的特征交叉项，减少无效特征的数量。降维技术（如PCA）也可以帮助降低特征空间的维度，缓解数据稀疏问题。</li>
+<li><strong>模型正则化</strong>：通过引入正则化项（如L1正则化和L2正则化），可以限制模型参数的规模，防止过拟合，同时提高模型的泛化能力。正则化技术能够有效抑制高维特征带来的噪声，提高模型的稳定性。</li>
+<li><strong>分块训练</strong>：对于大规模数据集，可以采用分块训练的方式，将数据分成多个小块，分别进行训练，最后对模型参数进行融合。这种方法可以有效减小训练数据的规模，降低计算复杂度。</li>
+</ol>
+<h4>总结</h4>
+<p>FFM模型通过引入特征域的概念，实现了更细粒度的特征交叉，进一步提高了模型的表达能力。尽管FFM模型在处理复杂特征交互方面具有显著优势，但其高计算复杂度和存储需求也是不容忽视的挑战。在实际应用中，需要结合具体场景，对模型进行优化，以充分发挥其优势。</p>
+<p>通过以上详细的分析，了解了FFM模型的基本原理、优缺点及其在特征交叉中的应用。尽管FFM模型具有更强的表达能力，但在实际工程中仍需结合具体场景进行优化，以充分发挥其优势。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

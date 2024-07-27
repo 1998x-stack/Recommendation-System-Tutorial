@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03_8.3.4_候选集生成模型独特的线上服务方法</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>03_8.3.4 候选集生成模型独特的线上服务方法</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.3 YouTube深度学习视频推荐系统
+Content: 03_8.3.4 候选集生成模型独特的线上服务方法
+&quot;&quot;&quot;</p>
+<h3>8.3.4 候选集生成模型独特的线上服务方法</h3>
+<h4>引言</h4>
+<p>YouTube的视频推荐系统需要在海量的视频中筛选出用户可能感兴趣的候选视频集合，这是推荐系统的关键一步。为了实现这一目标，YouTube设计了一套独特的线上服务方法，通过高效的技术手段提升推荐效果和系统性能。</p>
+<h4>线上服务方法的挑战</h4>
+<p>在模型服务过程中，如果对每次推荐请求都端到端地运行一遍候选集生成网络的推断过程，由于网络结构复杂，参数数量特别是输出层的参数数量非常巨大，整个推断过程的开销会非常大。因此，YouTube需要一种高效的线上服务方法来应对这一挑战。</p>
+<h4>采用最近邻搜索的方法</h4>
+<p>为了提高模型服务的效率，YouTube采用了最近邻搜索的方法。具体步骤如下：</p>
+<ol>
+<li>
+<p><strong>用户和视频Embedding的生成</strong>：</p>
+<ul>
+<li><strong>视频Embedding的生成</strong>：通过候选集生成模型训练得到的softmax层参数矩阵，该矩阵本质上是一个m×n维的矩阵，其中m是最后一层ReLU层的维度，n是分类的总数，即YouTube所有视频的总数。视频Embedding就是这个m×n维矩阵的各列向量。</li>
+<li><strong>用户Embedding的生成</strong>：用户Embedding是通过用户的特征向量输入模型后，最后一层ReLU层的输出向量生成的。在模型训练完成后，逐个输入所有用户的特征向量到模型中，就可以得到所有用户的Embedding向量。</li>
+</ul>
+</li>
+<li>
+<p><strong>Embedding的存储和检索</strong>：</p>
+<ul>
+<li><strong>存储</strong>：将用户Embedding和视频Embedding存储到Redis等内存数据库或者服务器内存中。</li>
+<li><strong>检索</strong>：通过局部敏感哈希（Locality Sensitive Hashing, LSH）等方法进行快速搜索，找到与用户Embedding最相似的Top K视频Embedding。这种方法的计算复杂度可以降至常数级别，极大提高了候选集生成的效率。</li>
+</ul>
+</li>
+</ol>
+<h4>局部敏感哈希（LSH）技术</h4>
+<p>局部敏感哈希是一种用于高维数据快速近似最近邻搜索的方法。具体原理如下：</p>
+<ol>
+<li><strong>哈希函数的选择</strong>：选择一组哈希函数，将高维空间的数据点投影到低维空间，使得相似的数据点在低维空间中更有可能落在相同的哈希桶中。</li>
+<li><strong>哈希桶的构建</strong>：通过多个哈希函数对数据点进行多次投影，构建多个哈希桶。</li>
+<li><strong>查询过程</strong>：在查询时，将查询点通过相同的哈希函数进行投影，找到其对应的哈希桶，然后在这些哈希桶中进行精确搜索，找到Top K个最相似的数据点。</li>
+</ol>
+<h4>优势与效果</h4>
+<p>通过采用上述方法，YouTube的候选集生成模型在实际应用中取得了显著效果：</p>
+<ol>
+<li><strong>高效性</strong>：通过将复杂的深度学习模型推断过程简化为Embedding的最近邻搜索，显著提高了推荐系统的响应速度。</li>
+<li><strong>扩展性</strong>：这种方法能够处理百万量级的候选视频生成过程，具有很好的扩展性。</li>
+<li><strong>准确性</strong>：尽管采用了简化的方法，但由于Embedding的高质量生成，推荐结果依然能够保持较高的准确性。</li>
+</ol>
+<h4>总结</h4>
+<p>YouTube通过独特的线上服务方法，在候选集生成模型中采用了Embedding技术和最近邻搜索的结合，实现了高效、准确的候选视频生成。这种方法不仅提高了推荐系统的性能，也为其他视频推荐系统的开发提供了宝贵的经验和参考。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

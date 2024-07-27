@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_4.2.3_Word2vec的“负采样”训练方法</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_4.2.3 Word2vec的“负采样”训练方法</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第4章 Embedding技术在推荐系统中的应用/4.2 Word2vec——经典的Embedding方法
+Content: 02_4.2.3 Word2vec的“负采样”训练方法
+&quot;&quot;&quot;</p>
+<h3>4.2.3 Word2vec的“负采样”训练方法</h3>
+<h4>一、背景与基本概念</h4>
+<p>Word2vec模型在自然语言处理领域取得了广泛应用，它通过将词语映射到低维稠密向量空间，使得语义相近的词在向量空间中的距离较近。然而，Word2vec模型在实际训练过程中面临着计算复杂度高的问题。为了解决这个问题，负采样（Negative Sampling）技术应运而生。</p>
+<h4>二、负采样的基本原理</h4>
+<p>在Word2vec模型中，假设语料库中的词的数量为10000，这意味着在每次迭代更新隐层到输出层神经元的权重时，都需要计算所有字典中的所有10000个词的预测误差。这种巨大的计算量在实际训练过程中几乎无法承受。为了减轻训练负担，负采样方法通过只计算采样出的少量负样本的预测误差，减少计算量。</p>
+<h4>三、负采样的具体实现</h4>
+<ol>
+<li>
+<p><strong>多分类问题的简化</strong>：</p>
+<ul>
+<li>在原始Word2vec模型中，计算条件概率时需要对所有词进行softmax计算，这相当于一个多分类问题。负采样通过简化为近似的二分类问题，极大地降低了计算复杂度。</li>
+</ul>
+</li>
+<li>
+<p><strong>优化目标函数</strong>：</p>
+<ul>
+<li>负采样方法将原始的优化目标函数转化为如下形式：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>L</mi><mo>=</mo><mi>log</mi><mrow><mi>σ</mi><mo>(</mo><msubsup><mi>v</mi><mrow><msub><mi>w</mi><mi>O</mi></msub></mrow><mi>T</mi></msubsup><mo>⋅</mo><mi>h</mi><mo>)</mo></mrow><mo>+</mo><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>k</mi></mrow></msubsup><msub><mi>E</mi><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>∼</mo><msub><mi>P</mi><mi>n</mi></msub><mo>(</mo><mi>w</mi><mo>)</mo></mrow></msub><mo>[</mo><mi>log</mi><mrow><mi>σ</mi><mo>(</mo><mo>−</mo><msubsup><mi>v</mi><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow><mi>T</mi></msubsup><mo>⋅</mo><mi>h</mi><mo>)</mo></mrow><mo>]</mo></mrow><annotation encoding="application/x-tex">L = \log{\sigma(v_{w_O}^T \cdot h)} + \sum_{i=1}^{k}E_{w_i \sim P_n(w)}[\log{\sigma(-v_{w_i}^T \cdot h)}]
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.8361130000000003em;"></span><span class="strut bottom" style="height:3.1137820000000005em;vertical-align:-1.277669em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">L</span><span class="mrel">=</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="vlist"><span style="top:0.247em;margin-left:-0.03588em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">O</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span style="top:-0.4129999999999999em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mord mathit">h</span><span class="mclose">)</span></span><span class="mbin">+</span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="vlist"><span style="top:0.18019999999999992em;margin-right:0.05em;margin-left:-0.05764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">∼</span><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit">n</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="mclose">)</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">[</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class="mord">−</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="vlist"><span style="top:0.247em;margin-left:-0.03588em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span style="top:-0.4129999999999999em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mord mathit">h</span><span class="mclose">)</span></span><span class="mclose">]</span></span></span></span></span></p>
+其中，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">h</span></span></span></span>为隐层向量，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>v</mi><mrow><msub><mi>w</mi><mi>O</mi></msub></mrow></msub></mrow><annotation encoding="application/x-tex">v_{w_O}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.68556em;vertical-align:-0.255em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="vlist"><span style="top:0.15000000000000002em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">O</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>为正样本的输出词向量，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">w_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>为负样本，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>P</mi><mi>n</mi></msub><mo>(</mo><mi>w</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">P_n(w)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">n</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="mclose">)</span></span></span></span>为负样本的分布。</li>
+</ul>
+</li>
+<li>
+<p><strong>负样本的选择</strong>：</p>
+<ul>
+<li>负采样的关键在于如何选择负样本。通常情况下，负样本是从整个词汇表中随机选择的，但选择的概率可以按照词频分布进行调整，以提高训练效果。</li>
+</ul>
+</li>
+<li>
+<p><strong>计算复杂度的降低</strong>：</p>
+<ul>
+<li>通过负采样，每次迭代只需计算少量负样本的预测误差，而不是整个词汇表的预测误差。这样，计算复杂度可以显著降低。例如，在每轮梯度下降迭代中，计算复杂度至少可以缩小为原来的1/1000（假设词汇表大小为10000）。</li>
+</ul>
+</li>
+</ol>
+<h4>四、负采样的应用案例</h4>
+<ol>
+<li>
+<p><strong>YouTube推荐系统</strong>：</p>
+<ul>
+<li>YouTube在视频推荐系统中使用了负采样技术，以减少每次预测的分类数量，从而加快模型的收敛速度。具体方法在Word2vec的基础上进行了改进。</li>
+</ul>
+</li>
+<li>
+<p><strong>Airbnb的房源推荐</strong>：</p>
+<ul>
+<li>Airbnb在房源推荐中通过负采样技术，将用户点击序列中的房源作为正样本，从语料库中随机选取房源作为负样本，生成用户和房源的Embedding向量，推荐符合用户兴趣的房源。</li>
+</ul>
+</li>
+</ol>
+<h4>五、负采样的优势和局限性</h4>
+<ol>
+<li>
+<p><strong>优势</strong>：</p>
+<ul>
+<li><strong>计算效率高</strong>：通过减少需要计算的样本数量，负采样大大提高了训练效率。</li>
+<li><strong>实现简单</strong>：相对于层级softmax（Hierarchical Softmax），负采样的实现更为简单，且效果显著。</li>
+</ul>
+</li>
+<li>
+<p><strong>局限性</strong>：</p>
+<ul>
+<li><strong>采样偏差</strong>：负采样过程中，如果负样本选择不当，可能会引入采样偏差，影响模型的训练效果。</li>
+<li><strong>超参数选择</strong>：负采样的效果对负样本数量等超参数较为敏感，需要仔细调试以达到最佳效果。</li>
+</ul>
+</li>
+</ol>
+<h4>六、负采样在实际应用中的优化</h4>
+<ol>
+<li><strong>动态采样策略</strong>：
+<ul>
+<li>根据词频动态调整负样本的选择概率，提高模型的训练效果。</li>
+</ul>
+</li>
+<li><strong>并行计算</strong>：
+<ul>
+<li>利用多线程或分布式计算框架，进一步提高负采样训练的效率。</li>
+</ul>
+</li>
+</ol>
+<h3>总结</h3>
+<p>负采样作为Word2vec模型的一种重要训练方法，通过简化计算过程，大大提高了模型的训练效率。它的引入不仅解决了计算复杂度高的问题，还在多个实际应用中取得了显著效果。掌握负采样的基本原理和实现方法，对于深入理解和应用Word2vec模型具有重要意义。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_5.4.1_YouTube以观看时长为优化目标的合理性</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_5.4.1 YouTube以观看时长为优化目标的合理性</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第5章 多角度审视推荐系统/5.4 如何合理设定推荐系统中的优化目标
+Content: 00_5.4.1 YouTube以观看时长为优化目标的合理性
+&quot;&quot;&quot;</p>
+<h3>5.4.1 YouTube以观看时长为优化目标的合理性</h3>
+<p>YouTube作为全球最大的UGC（User Generated Content，用户生成内容）视频分享平台，其推荐系统的优化目标直接影响着用户体验和公司的商业利益。以下是对YouTube以观看时长为优化目标的合理性进行的详细分析。</p>
+<h4>一、观看时长作为优化目标的背景</h4>
+<ol>
+<li>
+<p><strong>商业模式</strong>：</p>
+<ul>
+<li>YouTube的主要收入来源是广告收入，其视频广告通常出现在视频播放之前和播放过程中。广告收入与用户的观看时长成正比，即用户观看时长越长，广告的曝光机会越多，公司收入越高 。</li>
+</ul>
+</li>
+<li>
+<p><strong>用户体验</strong>：</p>
+<ul>
+<li>增加用户的观看时长也直接提升了用户的体验。用户愿意花更多时间在平台上，意味着他们找到了感兴趣和有价值的内容，这提高了用户的满意度和平台黏性 。</li>
+</ul>
+</li>
+</ol>
+<h4>二、观看时长与其他优化目标的比较</h4>
+<ol>
+<li>
+<p><strong>点击率（CTR）与观看时长的区别</strong>：</p>
+<ul>
+<li>点击率（CTR）是一个常见的推荐系统优化目标，但仅仅以点击率为优化目标会导致推荐系统倾向于推荐那些吸引眼球的短视频和“标题党”内容，而这些内容可能无法保持用户的长期兴趣 。</li>
+<li>观看时长作为优化目标，则要求推荐系统考虑视频的长度和质量，推荐高质量、长时段的内容，如电影或电视剧，这样不仅能提高用户的观看体验，还能增加广告收入 。</li>
+</ul>
+</li>
+<li>
+<p><strong>点击率与观看时长的相关性</strong>：</p>
+<ul>
+<li>虽然点击率和观看时长之间存在一定的相关性，但点击率更侧重于短期用户行为，而观看时长则更能反映用户的长期兴趣和平台黏性 。</li>
+</ul>
+</li>
+</ol>
+<h4>三、观看时长作为优化目标的实现</h4>
+<ol>
+<li>
+<p><strong>技术实现</strong>：</p>
+<ul>
+<li>在YouTube的推荐系统中，观看时长被巧妙地转换为模型训练中的正样本权重，通过加权逻辑回归（Weighted Logistic Regression）进行训练，使得模型能够学习到用户观看时长的信息  。</li>
+<li>具体来说，YouTube的排序模型将观看时长作为正样本的权重，使得每个正样本的权重等于其对应的观看时长。在模型服务阶段，通过计算样本的Odds（机会比），将其转换为观看时长的预测值，从而优化推荐结果 。</li>
+</ul>
+</li>
+<li>
+<p><strong>优化效果</strong>：</p>
+<ul>
+<li>通过以观看时长为优化目标，YouTube能够有效地提升用户的观看体验和平台的广告收入。这种优化目标不仅符合公司的商业利益，也提升了用户的满意度和平台黏性 。</li>
+</ul>
+</li>
+</ol>
+<h4>四、实际应用案例</h4>
+<ol>
+<li>
+<p><strong>YouTube的成功实践</strong>：</p>
+<ul>
+<li>YouTube在其推荐系统中成功应用了以观看时长为优化目标的方法，极大地提升了用户的观看时长和平台的广告收入。这一成功实践为其他视频平台和推荐系统提供了有价值的参考  。</li>
+</ul>
+</li>
+<li>
+<p><strong>电商平台的不同优化目标</strong>：</p>
+<ul>
+<li>与视频平台不同，电商平台如阿里巴巴更注重用户的购买转化率（CVR）。因此，电商推荐系统的优化目标通常是点击后转化率（pCVR）和曝光后点击率（pCTR），通过多目标优化模型（如阿里巴巴的ESMM模型）实现对推荐系统的全面优化 。</li>
+</ul>
+</li>
+</ol>
+<h4>总结</h4>
+<p>YouTube以观看时长为优化目标的合理性体现在其商业模式和用户体验的提升上。通过将观看时长引入推荐系统的优化目标，YouTube不仅实现了公司利润的增长，还提升了用户的满意度和平台黏性。其他平台可以根据自身的商业模式和用户需求，设定合适的优化目标，从而实现推荐系统的最佳效果。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

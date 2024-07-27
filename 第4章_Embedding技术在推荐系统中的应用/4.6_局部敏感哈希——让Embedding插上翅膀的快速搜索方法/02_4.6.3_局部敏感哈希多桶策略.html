@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_4.6.3_局部敏感哈希多桶策略</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_4.6.3 局部敏感哈希多桶策略</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第4章 Embedding技术在推荐系统中的应用/4.6 局部敏感哈希——让Embedding插上翅膀的快速搜索方法
+Content: 02_4.6.3 局部敏感哈希多桶策略
+&quot;&quot;&quot;</p>
+<h3>4.6.3 局部敏感哈希多桶策略</h3>
+<h4>背景与概述</h4>
+<p>局部敏感哈希（Locality Sensitive Hashing, LSH）是一种高效的近邻搜索方法，通过将高维数据映射到低维空间并利用哈希函数将相近的数据点放入同一个桶中，实现快速的相似性搜索。传统的LSH方法使用单一哈希函数进行分桶，但这种方法可能会出现误判和漏检的情况。为了解决这个问题，LSH引入了多桶策略，通过多个哈希函数组合来提高搜索的准确性和效率。</p>
+<h4>基本原理</h4>
+<p>多桶策略通过多个哈希函数同时对数据进行分桶，从而构建多个哈希表。每个哈希函数独立生成一个哈希值，最终多个哈希值组合决定数据点落入哪个桶。具体步骤如下：</p>
+<ol>
+<li>
+<p><strong>构建多个哈希函数</strong>：</p>
+<ul>
+<li>每个哈希函数独立地将数据点映射到低维空间，并生成一个哈希值。</li>
+<li>例如，使用k个哈希函数，每个哈希函数生成一个长度为m的二进制哈希值。</li>
+</ul>
+</li>
+<li>
+<p><strong>哈希函数组合</strong>：</p>
+<ul>
+<li>多个哈希函数生成的哈希值组合在一起，形成一个联合哈希值。</li>
+<li>联合哈希值可以通过“与”（AND）或“或”（OR）操作进行组合。</li>
+</ul>
+</li>
+<li>
+<p><strong>分桶策略</strong>：</p>
+<ul>
+<li>“与”（AND）操作：只有当数据点在所有哈希函数下都落入同一个桶时，才认为它们是相似的。这种方式可以提高搜索的准确性，但可能会漏掉一些相似点。</li>
+<li>“或”（OR）操作：只要数据点在任意一个哈希函数下落入同一个桶，就认为它们是相似的。这种方式可以提高搜索的召回率，但可能会增加计算开销。</li>
+</ul>
+</li>
+</ol>
+<h4>实际应用</h4>
+<p>在推荐系统中，多桶策略的应用可以显著提高相似性搜索的效率和准确性。例如，在YouTube推荐系统中，可以通过多桶策略对用户和视频的Embedding向量进行快速搜索，从而提高推荐的准确性和实时性。</p>
+<h5>具体步骤</h5>
+<ol>
+<li>
+<p><strong>Embedding向量预处理</strong>：</p>
+<ul>
+<li>将用户和视频的高维稀疏特征向量转换为低维稠密特征向量。</li>
+</ul>
+</li>
+<li>
+<p><strong>构建多个哈希函数</strong>：</p>
+<ul>
+<li>使用随机投影等方法构建多个哈希函数，将高维向量映射到低维空间。</li>
+<li>例如，选择k个随机向量进行投影，生成k个哈希值。</li>
+</ul>
+</li>
+<li>
+<p><strong>分桶策略选择</strong>：</p>
+<ul>
+<li>根据具体需求选择“与”操作或“或”操作来组合哈希值。</li>
+<li>通过实验和评估确定最佳的组合策略。</li>
+</ul>
+</li>
+<li>
+<p><strong>近邻搜索</strong>：</p>
+<ul>
+<li>在多个哈希表中搜索与目标向量相似的Embedding向量。</li>
+<li>通过快速相似性计算，筛选出候选物品集合。</li>
+</ul>
+</li>
+</ol>
+<h4>优势与局限性</h4>
+<p><strong>优势</strong>：</p>
+<ol>
+<li><strong>高效性</strong>：多桶策略通过并行化哈希函数，提高了搜索的效率。</li>
+<li><strong>灵活性</strong>：可以根据实际需求选择不同的哈希函数和组合策略，灵活适应不同的应用场景。</li>
+<li><strong>准确性</strong>：通过多哈希函数组合，提高了搜索的准确性和召回率。</li>
+</ol>
+<p><strong>局限性</strong>：</p>
+<ol>
+<li><strong>计算开销</strong>：多桶策略需要计算多个哈希函数的值，可能增加计算开销。</li>
+<li><strong>参数选择</strong>：需要在准确性和召回率之间权衡，选择最佳的哈希函数数量和组合策略。</li>
+</ol>
+<h4>结论</h4>
+<p>局部敏感哈希多桶策略通过构建多个哈希函数，并使用“与”或“或”操作组合哈希值，实现了高效的相似性搜索。相比于单一哈希函数，多桶策略显著提高了搜索的准确性和效率，是推荐系统中重要的技术手段。在实际应用中，通过优化哈希函数和组合策略，可以进一步提高LSH的搜索性能和效果    。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

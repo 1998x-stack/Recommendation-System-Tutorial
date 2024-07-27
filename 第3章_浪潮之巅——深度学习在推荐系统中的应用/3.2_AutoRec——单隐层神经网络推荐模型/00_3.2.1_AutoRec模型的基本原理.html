@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_3.2.1_AutoRec模型的基本原理</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_3.2.1 AutoRec模型的基本原理</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第3章 浪潮之巅——深度学习在推荐系统中的应用/3.2 AutoRec——单隐层神经网络推荐模型
+Content: 00_3.2.1 AutoRec模型的基本原理
+&quot;&quot;&quot;</p>
+<h3>AutoRec模型的基本原理</h3>
+<h4>一、引言</h4>
+<p>AutoRec模型是一种基于自编码器（AutoEncoder）的推荐系统模型。它由澳大利亚国立大学的研究人员在2015年提出，主要用于解决推荐系统中的评分预测问题。通过将推荐系统中的评分矩阵视为自编码器的输入，AutoRec模型可以有效地学习用户和物品之间的隐含关系，从而进行评分预测。</p>
+<h4>二、自编码器的基本原理</h4>
+<p>自编码器是一种无监督学习模型，通常用于数据降维和特征学习。自编码器由编码器和解码器两部分组成：</p>
+<ol>
+<li><strong>编码器（Encoder）：</strong> 将输入数据$ \mathbf{x} 映射到隐含表示（编码） \mathbf{h} $。</li>
+<li><strong>解码器（Decoder）：</strong> 将隐含表示$ \mathbf{h} 重新映射回输入数据的空间，重建出原始数据 \mathbf{x'} $。</li>
+</ol>
+<p>编码器和解码器通常是对称的，即编码器的输出维度等于解码器的输入维度。自编码器的目标是使得重建误差最小化，即$ | \mathbf{x} - \mathbf{x'} | $最小。</p>
+<h4>三、AutoRec模型的核心思想</h4>
+<p>AutoRec模型的核心思想是将用户-物品评分矩阵视为自编码器的输入，通过自编码器的重建能力来预测评分。</p>
+<ol>
+<li><strong>输入和输出向量：</strong> 对于物品AutoRec来说，输入向量是所有用户对某一物品的评分向量；对于用户AutoRec来说，输入向量是某一用户对所有物品的评分向量。</li>
+<li><strong>重建函数：</strong> 假设有m个用户，n个物品，用户对物品的评分形成一个$ m \times n 的评分矩阵。对于物品AutoRec，某物品i的评分向量为 r(i) ，目标是构建一个重建函数 h(r; \theta) $，使得重建后的评分向量与原评分向量的平方残差和最小。</li>
+</ol>
+<p>重建函数可以表示为：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi><mo>(</mo><mi>r</mi><mo separator="true">;</mo><mi>θ</mi><mo>)</mo><mo>=</mo><mi>f</mi><mo>(</mo><msub><mi>W</mi><mn>2</mn></msub><mo>⋅</mo><mi>g</mi><mo>(</mo><msub><mi>W</mi><mn>1</mn></msub><mo>⋅</mo><mi>r</mi><mo>+</mo><msub><mi>b</mi><mn>1</mn></msub><mo>)</mo><mo>+</mo><msub><mi>b</mi><mn>2</mn></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">h(r; \theta) = f(W_2 \cdot g(W_1 \cdot r + b_1) + b_2) 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">h</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mpunct">;</span><span class="mord mathit" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">W</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">W</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mbin">+</span><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mbin">+</span><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span></span></p>
+<p>其中，$ W_1 和 W_2 是权重矩阵， b_1 和 b_2 是偏置向量， g 和 f $是激活函数。</p>
+<h4>四、AutoRec模型的损失函数</h4>
+<p>AutoRec模型的目标是最小化重建误差，其损失函数可以表示为：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>L</mi><mo>=</mo><msub><mo>∑</mo><mrow><mi>r</mi><mo>∈</mo><mi>S</mi></mrow></msub><mi mathvariant="normal">∥</mi><mi>r</mi><mo>−</mo><mi>h</mi><mo>(</mo><mi>r</mi><mo separator="true">;</mo><mi>θ</mi><mo>)</mo><msup><mi mathvariant="normal">∥</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">L = \sum_{r \in S} \| r - h(r; \theta) \|^2 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.050005em;"></span><span class="strut bottom" style="height:2.3717110000000003em;vertical-align:-1.321706em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">L</span><span class="mrel">=</span><span class="mop op-limits"><span class="vlist"><span style="top:1.194336em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mrel">∈</span><span class="mord mathit" style="margin-right:0.05764em;">S</span></span></span></span><span style="top:-0.000005000000000032756em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathrm">∥</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mbin">−</span><span class="mord mathit">h</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mpunct">;</span><span class="mord mathit" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span><span class="mord"><span class="mord mathrm">∥</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+<p>其中，S是所有数据向量的集合，$ h(r; \theta) $是自编码器的重建函数。这个损失函数的目标是最小化重建评分向量与原评分向量之间的误差。</p>
+<h4>五、AutoRec模型的训练过程</h4>
+<p>AutoRec模型的训练过程可以分为以下几个步骤：</p>
+<ol>
+<li><strong>数据预处理：</strong> 将用户-物品评分矩阵进行归一化处理，通常将评分标准化到[0, 1]或[-1, 1]范围内。</li>
+<li><strong>模型初始化：</strong> 随机初始化模型的参数，包括权重矩阵和偏置向量。</li>
+<li><strong>前向传播：</strong> 通过编码器和解码器进行前向传播，计算重建评分向量。</li>
+<li><strong>计算损失：</strong> 使用前述损失函数计算重建误差。</li>
+<li><strong>反向传播：</strong> 通过反向传播算法更新模型参数，以最小化损失函数。</li>
+<li><strong>模型评估：</strong> 在验证集上评估模型性能，调整超参数。</li>
+</ol>
+<h4>六、AutoRec模型的优点和局限性</h4>
+<h5>优点</h5>
+<ol>
+<li><strong>结构简单：</strong> AutoRec仅使用了单隐层神经网络，使得模型结构非常简单，便于理解和实现。</li>
+<li><strong>泛化能力：</strong> AutoRec通过自编码器的泛化过程，可以有效地处理评分矩阵中的缺失值，从而具有一定的泛化能力。</li>
+</ol>
+<h5>局限性</h5>
+<ol>
+<li><strong>表达能力有限：</strong> 由于模型结构简单，AutoRec在处理复杂推荐场景时的表达能力可能不足。</li>
+<li><strong>数据稀疏性：</strong> 在用户评分数据稀疏的情况下，AutoRec模型的效果可能受到影响。对于评分矩阵非常稀疏的数据集，AutoRec的重建能力可能不足，导致预测准确性下降。</li>
+</ol>
+<h4>七、AutoRec模型的改进方向</h4>
+<ol>
+<li><strong>多层自编码器：</strong> 通过增加编码器和解码器的层数，构建更深层次的自编码器，以提升模型的表达能力。</li>
+<li><strong>融合外部信息：</strong> 结合用户的其他行为数据（如浏览历史、点击记录等）和物品的属性信息（如类别、标签等），增强模型的预测能力。</li>
+<li><strong>正则化技术：</strong> 使用L2正则化、Dropout等技术，防止模型过拟合，提高泛化能力。</li>
+</ol>
+<h3>总结</h3>
+<p>AutoRec模型通过结合自编码器和协同过滤，提出了一种结构简单、原理清晰的推荐模型。其核心在于利用自编码器对评分矩阵进行重建，从而进行评分预测和推荐。尽管AutoRec在处理复杂场景和数据稀疏性方面存在一定的局限性，但作为深度学习推荐模型的入门模型，AutoRec提供了一个简洁有效的解决方案，为后续更复杂的深度学习推荐模型研究打下了基础。</p>
+<h3>附录：AutoRec模型的数学推导</h3>
+<ol>
+<li>
+<p><strong>输入向量：</strong>
+设用户对物品的评分矩阵为 $ R \in \mathbb{R}^{m \times n} $，其中 $ R_{ij} $ 表示用户 $ i $ 对物品 $ j $ 的评分。</p>
+</li>
+<li>
+<p><strong>编码器：</strong>
+编码器将输入评分向量 $ r_i $ 映射到隐含表示 $ h_i $：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>h</mi><mi>i</mi></msub><mo>=</mo><mi>g</mi><mo>(</mo><msub><mi>W</mi><mn>1</mn></msub><mo>⋅</mo><msub><mi>r</mi><mi>i</mi></msub><mo>+</mo><msub><mi>b</mi><mn>1</mn></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">h_i = g(W_1 \cdot r_i + b_1) 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit">h</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">W</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mord"><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>解码器：</strong>
+解码器将隐含表示 $ h_i $ 重建为评分向量 $ \hat{r}_i $：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mover accent="true"><mrow><mi>r</mi></mrow><mo>^</mo></mover><mi>i</mi></msub><mo>=</mo><mi>f</mi><mo>(</mo><msub><mi>W</mi><mn>2</mn></msub><mo>⋅</mo><msub><mi>h</mi><mi>i</mi></msub><mo>+</mo><msub><mi>b</mi><mn>2</mn></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">\hat{r}_i = f(W_2 \cdot h_i + b_2) 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span style="top:0em;margin-left:0.11112em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">W</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mord"><span class="mord mathit">h</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>损失函数：</strong>
+重建误差的平方和为：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>L</mi><mo>=</mo><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>m</mi></mrow></msubsup><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msub><mi>I</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>(</mo><msub><mi>R</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>−</mo><msub><mover accent="true"><mrow><mi>R</mi></mrow><mo>^</mo></mover><mrow><mi>i</mi><mi>j</mi></mrow></msub><msup><mo>)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">L = \sum_{i=1}^{m} \sum_{j=1}^{n} I_{ij} (R_{ij} - \hat{R}_{ij})^2 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.6513970000000007em;"></span><span class="strut bottom" style="height:3.0651740000000007em;vertical-align:-1.4137769999999998em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">L</span><span class="mrel">=</span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">m</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000254801em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000005em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.07847em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.00773em;">R</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.00773em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">−</span><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle cramped"><span class="mord mathit" style="margin-right:0.00773em;">R</span></span></span><span style="top:-0.25233em;margin-left:0.16668em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose"><span class="mclose">)</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+<p>其中， $ I_{ij} $ 是指示函数，当用户 $ i $ 对物品 $ j $ 有评分时 $ I_{ij} = 1 $，否则 $ I_{ij} = 0 $。</p>
+</li>
+</ol>
+<p>通过上述推导和公式，可以更清晰地理解AutoRec模型的工作原理及其实现细节。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

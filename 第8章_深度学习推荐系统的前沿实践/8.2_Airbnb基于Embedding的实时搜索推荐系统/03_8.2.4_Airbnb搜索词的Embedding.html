@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03_8.2.4_Airbnb搜索词的Embedding</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>03_8.2.4 Airbnb搜索词的Embedding</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.2 Airbnb基于Embedding的实时搜索推荐系统
+Content: 03_8.2.4 Airbnb搜索词的Embedding
+&quot;&quot;&quot;</p>
+<h3>8.2.4 Airbnb搜索词的Embedding</h3>
+<h4>引言</h4>
+<p>Airbnb的推荐系统不仅关注用户和房源的Embedding，还在搜索推荐系统中对搜索词（query）进行了Embedding。通过将搜索词和房源置于同一个向量空间进行Embedding，可以更好地理解和捕捉用户的搜索意图，从而提供更加精准的推荐结果。</p>
+<h4>搜索词Embedding的必要性</h4>
+<p>在传统的搜索系统中，搜索结果仅基于输入的关键词进行匹配，往往无法准确捕捉用户的真实意图。例如，当用户输入“France Skiing”（法国滑雪）时，传统搜索系统可能会返回包含“France”和“Skiing”字样的结果，但这些结果未必符合用户寻找滑雪胜地的意图。通过对搜索词进行Embedding，可以捕捉到搜索词的语义信息，从而提供更加贴近用户意图的搜索结果。</p>
+<h4>Embedding方法</h4>
+<p>Airbnb采用了与用户和房源Embedding相似的方法来生成搜索词的Embedding：</p>
+<ol>
+<li><strong>数据准备</strong>：收集大量用户的搜索日志数据，这些数据包括用户的搜索词和点击行为。通过这些数据，可以构建用户的搜索会话序列。</li>
+<li><strong>模型选择</strong>：使用Word2vec的skip-gram模型进行训练。具体步骤如下：
+<ul>
+<li><strong>点击序列转换为“句子”样本</strong>：将用户的搜索会话序列当作一个“句子”样本，输入到Word2vec模型中进行Embedding。</li>
+<li><strong>目标函数</strong>：与用户和房源Embedding类似，使用Word2vec的目标函数，通过负采样的方法进行训练，使得搜索词Embedding能够捕捉到搜索词之间的相似性和语义信息。</li>
+</ul>
+</li>
+</ol>
+<h4>搜索词Embedding的效果</h4>
+<p>通过Embedding方法生成的搜索结果，与传统的基于关键词匹配的方法相比，具有明显的优势。以下是两个例子：</p>
+<ol>
+<li>
+<p><strong>搜索“Greek Islands”（希腊群岛）</strong>：</p>
+<ul>
+<li><strong>传统方法</strong>：返回的结果仅包含“Greek”和“Islands”字样的房源。</li>
+<li><strong>Embedding方法</strong>：返回的结果不仅包含“Greek Islands”，还包括其他与希腊群岛相关的热门旅游目的地。</li>
+</ul>
+</li>
+<li>
+<p><strong>搜索“France Skiing”（法国滑雪）</strong>：</p>
+<ul>
+<li><strong>传统方法</strong>：返回的结果可能只是包含“France”和“Skiing”字样的房源，但未必是滑雪胜地。</li>
+<li><strong>Embedding方法</strong>：返回的结果能够捕捉到“France Skiing”的语义信息，推荐的都是法国著名的滑雪胜地。</li>
+</ul>
+</li>
+</ol>
+<p>图8-12和图8-13显示了引入Embedding前后搜索“Greek Islands”和“France Skiing”的搜索结果对比。可以看出，Embedding方法生成的搜索结果更加贴近用户的真实意图，提供了更加精准和个性化的推荐。</p>
+<h4>实施细节</h4>
+<ol>
+<li><strong>向量空间的构建</strong>：将搜索词和房源置于同一个向量空间，使得搜索词和房源之间的相似性可以通过向量计算直接得到。这种方法不仅能够捕捉搜索词的语义信息，还能够利用搜索词和房源之间的相似性进行排序。</li>
+<li><strong>实时排序</strong>：在实际应用中，系统根据用户的实时搜索行为和Embedding结果，生成推荐列表。这种实时排序方法能够快速响应用户的搜索请求，提高搜索结果的相关性和用户体验。</li>
+</ol>
+<h4>总结</h4>
+<p>Airbnb通过对搜索词进行Embedding，成功捕捉了用户搜索词的语义信息，从而提供了更加精准和个性化的搜索推荐结果。这一方法不仅提高了搜索系统的效率和准确性，也增强了用户的使用体验。通过这种创新的Embedding方法，Airbnb在实时搜索推荐系统中展现了深度学习的强大应用潜力，为其他搜索推荐系统的开发提供了宝贵的经验和参考。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

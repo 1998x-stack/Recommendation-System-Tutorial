@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_8.2.3_基于长期兴趣的用户Embedding和房源Embedding</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_8.2.3 基于长期兴趣的用户Embedding和房源Embedding</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.2 Airbnb基于Embedding的实时搜索推荐系统
+Content: 02_8.2.3 基于长期兴趣的用户Embedding和房源Embedding
+&quot;&quot;&quot;</p>
+<h3>8.2.3 基于长期兴趣的用户Embedding和房源Embedding</h3>
+<h4>引言</h4>
+<p>在Airbnb的推荐系统中，除了捕捉用户的短期兴趣，还需要考虑用户的长期兴趣。这些长期兴趣通常包含用户在过去预订过的房源信息，从而能够反映用户对房屋价格、房屋类型等属性的偏好。通过构建基于长期兴趣的用户Embedding和房源Embedding，可以在最终的推荐结果中更好地满足用户的长期偏好。</p>
+<h4>用户长期兴趣的捕捉</h4>
+<ol>
+<li><strong>预订会话序列</strong>：
+<ul>
+<li><strong>定义</strong>：预订会话序列（booking session sequence）指的是用户在一段时间内预订的房源序列。举例来说，用户在过去1年内依次预订了5个房源，那么其预订会话序列就是：$ s_j = (l_{j1}, l_{j2}, l_{j3}, l_{j4}, l_{j5}) $。</li>
+<li><strong>目的</strong>：通过捕捉用户的预订会话序列，可以获得用户的长期兴趣信息，这些信息在传统的基于点击数据的短期兴趣模型中是缺失的。</li>
+</ul>
+</li>
+</ol>
+<h4>数据稀疏问题</h4>
+<p>在实际应用中，预订会话序列存在数据稀疏问题，这主要表现在以下几个方面：</p>
+<ol>
+<li><strong>预订行为的总体数量少于点击行为</strong>：预订行为相对于点击行为而言，数量要少得多，导致预订会话序列的规模远小于点击会话。</li>
+<li><strong>单一用户的预订行为较少</strong>：许多用户在过去一年中可能只预订过一个房源，这使得预订会话序列的长度往往很短。</li>
+<li><strong>房源的预订次数少</strong>：大部分房源的预订次数较少，无法满足Word2vec模型训练所需的最低出现次数，从而难以生成有效的Embedding。</li>
+</ol>
+<h4>解决数据稀疏问题的方法</h4>
+<p>为了解决数据稀疏问题，Airbnb采用了基于属性规则的相似用户和相似房源聚合方法：</p>
+<ol>
+<li><strong>房源属性标识</strong>：通过房源的属性名称和分桶ID（例如国家、类型、价格范围等）组成房源属性标识。例如，一个房源的属性标识可以是US_lt1_pn3，表示该房源位于美国（US）、类型是娱乐（lt1）、价格范围是56-59美元（pn3）。</li>
+<li><strong>用户属性标识</strong>：用户属性包括设备类型、是否填写简介、是否有头像照片、历史预订次数等，通过与房源属性类似的方法生成用户属性标识（user type）。</li>
+<li><strong>预订序列生成</strong>：利用用户属性替代原来的user id，生成一个由所有该用户属性预订历史组成的预订序列。这种方法有效解决了用户预订数据稀疏的问题。</li>
+</ol>
+<h4>用户Embedding和房源Embedding的生成</h4>
+<ol>
+<li><strong>定义Embedding目标函数</strong>：将用户属性和房源属性置于同一个向量空间中。训练过程中，用户属性和房源属性被同等对待。具体的Embedding目标函数沿用Word2vec的目标函数，通过负采样方法进行训练。</li>
+<li><strong>Embedding训练</strong>：在训练过程中，通过滑动窗口技术，将用户属性和房源属性作为词对进行训练。最终得到的用户和房源Embedding向量可以在同一向量空间中进行相似度计算，从而反映用户对某房源的长期兴趣偏好。</li>
+</ol>
+<h4>冷启动问题的解决</h4>
+<ol>
+<li><strong>相似房源平均</strong>：对于新的房源，由于缺乏足够的预订数据，无法生成有效的Embedding。Airbnb采用相似房源平均的方法，通过找到附近的3个同类型、相似价格的房源向量进行平均，生成新的Embedding向量。</li>
+</ol>
+<h4>总结</h4>
+<p>Airbnb通过构建基于长期兴趣的用户Embedding和房源Embedding，有效捕捉用户的长期兴趣信息，解决了数据稀疏和冷启动问题，提高了推荐系统的准确性和个性化水平。该方法的成功应用展示了深度学习在推荐系统中的强大潜力，为其他推荐系统的开发提供了宝贵的经验和参考。</p>
+<hr>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

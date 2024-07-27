@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_3.4.1_从深度学习的视角重新审视矩阵分解模型</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_3.4.1 从深度学习的视角重新审视矩阵分解模型</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第3章 浪潮之巅——深度学习在推荐系统中的应用/3.4 NeuralCF模型——CF与深度学习的结合
+Content: 00_3.4.1 从深度学习的视角重新审视矩阵分解模型
+&quot;&quot;&quot;</p>
+<h3>从深度学习的视角重新审视矩阵分解模型</h3>
+<h4>一、引言</h4>
+<p>矩阵分解（Matrix Factorization, MF）作为推荐系统的经典技术，通过将用户-物品评分矩阵分解为用户和物品的隐向量，实现了高效的评分预测。然而，随着深度学习的发展，研究人员开始从新的视角重新审视矩阵分解模型，并提出了Neural Collaborative Filtering（NeuralCF）模型，将矩阵分解与深度学习相结合，进一步提升推荐系统的性能。</p>
+<h4>二、矩阵分解模型的基本原理</h4>
+<p>矩阵分解的核心思想是将用户-物品评分矩阵R分解为两个低维矩阵：用户矩阵U和物品矩阵V。对于任意一个用户u和物品i，预测评分可以通过用户u的隐向量和物品i的隐向量的内积来实现：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mover accent="true"><mrow><mi>r</mi></mrow><mo>^</mo></mover><mrow><mi>u</mi><mi>i</mi></mrow></msub><mo>=</mo><msub><mrow><mi mathvariant="bold">u</mi></mrow><mi>u</mi></msub><mo>⋅</mo><msub><mrow><mi mathvariant="bold">v</mi></mrow><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\hat{r}_{ui} = \mathbf{u}_u \cdot \mathbf{v}_i 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span style="top:0em;margin-left:0.11112em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">u</span><span class="mord mathit">i</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class=""><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf">u</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">u</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class=""><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf" style="margin-right:0.01597em;">v</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+<p>其中，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mrow><mi mathvariant="bold">u</mi></mrow><mi>u</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{u}_u</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.44444em;"></span><span class="strut bottom" style="height:0.59444em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class=""><span class="mord textstyle uncramped"><span class="mord mathbf">u</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">u</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>表示用户u的隐向量，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mrow><mi mathvariant="bold">v</mi></mrow><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{v}_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.44444em;"></span><span class="strut bottom" style="height:0.59444em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class=""><span class="mord textstyle uncramped"><span class="mord mathbf" style="margin-right:0.01597em;">v</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>表示物品i的隐向量。</p>
+<h4>三、矩阵分解模型的局限性</h4>
+<ol>
+<li>
+<p><strong>表达能力有限：</strong></p>
+<ul>
+<li>矩阵分解模型仅通过线性内积来表示用户和物品之间的关系，无法捕捉更复杂的非线性特征交互。这导致模型在处理复杂的推荐场景时，表现能力受限。</li>
+</ul>
+</li>
+<li>
+<p><strong>欠拟合问题：</strong></p>
+<ul>
+<li>由于模型结构较为简单，特别是输出层（Scoring层）无法对优化目标进行有效拟合，导致模型容易处于欠拟合状态。这样模型在训练数据上无法获得较好的表现，从而影响推荐效果。</li>
+</ul>
+</li>
+</ol>
+<h4>四、从深度学习的视角审视矩阵分解模型</h4>
+<h5>1. Embedding层的引入</h5>
+<p>在深度学习中，Embedding层被广泛用于将高维稀疏特征转换为低维稠密向量。这一过程与矩阵分解中的用户隐向量和物品隐向量的生成过程非常相似，因此可以将矩阵分解视作一种Embedding方法。具体来说，用户隐向量和物品隐向量可以看作是用户和物品的Embedding。</p>
+<h5>2. Scoring层的改进</h5>
+<p>在传统矩阵分解模型中，用户隐向量和物品隐向量的内积被用于预测评分。这一操作相当于一种线性变换，缺乏对复杂特征交互的表达能力。深度学习模型可以通过多层神经网络来替代简单的内积操作，从而实现更高阶、更复杂的特征交互。</p>
+<h5>3. NeuralCF模型的提出</h5>
+<p>基于以上对矩阵分解模型的重新审视，新加坡国立大学的研究人员提出了NeuralCF模型。NeuralCF模型通过将用户隐向量和物品隐向量输入到多层神经网络中，实现了非线性特征交互和更强的表达能力。其核心思想是：</p>
+<ul>
+<li><strong>多层神经网络：</strong> 用多层神经网络替代简单的内积操作，使得模型能够捕捉到更复杂的特征交互信息。</li>
+<li><strong>非线性激活函数：</strong> 在每一层神经网络中引入非线性激活函数，如ReLU，使得模型具备更强的非线性表达能力。</li>
+<li><strong>端到端训练：</strong> 通过深度学习网络的端到端训练，模型能够自动学习到最优的特征表示和交互方式，避免了人工特征工程的繁琐过程。</li>
+</ul>
+<h4>五、总结</h4>
+<p>从深度学习的视角重新审视矩阵分解模型，可以发现其本质上是一种Embedding方法。通过引入多层神经网络和非线性激活函数，NeuralCF模型实现了矩阵分解模型的改进，提升了模型的表达能力和推荐效果。NeuralCF模型的提出，不仅推动了推荐系统的发展，也为其他领域的研究提供了新的思路和方法。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

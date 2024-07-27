@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_3.2.3_基于AutoRec模型的推荐过程</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_3.2.3 基于AutoRec模型的推荐过程</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第3章 浪潮之巅——深度学习在推荐系统中的应用/3.2 AutoRec——单隐层神经网络推荐模型
+Content: 02_3.2.3 基于AutoRec模型的推荐过程
+&quot;&quot;&quot;</p>
+<h3>基于AutoRec模型的推荐过程</h3>
+<h4>一、引言</h4>
+<p>AutoRec模型是一种基于单隐层神经网络的推荐系统模型，通过自编码器的结构重建用户评分向量，从而实现推荐过程。本文将详细探讨基于AutoRec模型的推荐过程，包括输入、预测、排序等步骤，以及物品和用户向量在不同推荐策略中的应用  。</p>
+<h4>二、推荐过程的基本步骤</h4>
+<ol>
+<li>
+<p><strong>输入向量的构建</strong></p>
+<ul>
+<li><strong>物品评分向量（I-AutoRec）</strong>：当输入物品i的评分向量为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mo>(</mo><mi>i</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">r(i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathit">i</span><span class="mclose">)</span></span></span></span>时，模型的输出向量<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi><mo>(</mo><mi>r</mi><mo>(</mo><mi>i</mi><mo>)</mo><mo separator="true">;</mo><mi>θ</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">h(r(i); \theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">h</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathit">i</span><span class="mclose">)</span><span class="mpunct">;</span><span class="mord mathit" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span></span></span>即为所有用户对物品i的评分预测。其中第u维即为用户u对物品i的评分预测。</li>
+<li><strong>用户评分向量（U-AutoRec）</strong>：当输入用户u的评分向量为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mo>(</mo><mi>u</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">r(u)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathit">u</span><span class="mclose">)</span></span></span></span>时，模型的输出向量<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi><mo>(</mo><mi>r</mi><mo>(</mo><mi>u</mi><mo>)</mo><mo separator="true">;</mo><mi>θ</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">h(r(u); \theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">h</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathit">u</span><span class="mclose">)</span><span class="mpunct">;</span><span class="mord mathit" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span></span></span>即为用户u对所有物品的评分预测。通过一次模型推断即可得到用户的推荐列表，适用于推荐系统的实际应用场景 。</li>
+</ul>
+</li>
+<li>
+<p><strong>评分预测</strong></p>
+<ul>
+<li><strong>前向传播</strong>：通过前向传播算法，输入向量经过AutoRec模型的编码器和解码器，生成重建的评分向量。</li>
+<li><strong>预测结果</strong>：模型输出向量中的每一维即为对应用户或物品的评分预测。对于I-AutoRec，输出的每一维表示不同用户对物品i的评分预测；对于U-AutoRec，输出的每一维表示用户u对不同物品的评分预测 。</li>
+</ul>
+</li>
+<li>
+<p><strong>排序和推荐</strong></p>
+<ul>
+<li><strong>评分排序</strong>：通过遍历输入向量，得到所有用户或物品的评分预测，并对这些评分进行排序，生成推荐列表。通常按照评分从高到低的顺序推荐前N个物品或用户 。</li>
+<li><strong>推荐列表</strong>：最终生成的推荐列表根据用户或物品的评分预测进行排序，为用户提供个性化的推荐内容。</li>
+</ul>
+</li>
+</ol>
+<h4>三、I-AutoRec和U-AutoRec的区别</h4>
+<ol>
+<li>
+<p><strong>I-AutoRec（Item-based AutoRec）</strong></p>
+<ul>
+<li><strong>输入向量</strong>：物品评分向量，表示某一物品的所有用户评分。</li>
+<li><strong>适用场景</strong>：适用于物品评分数据较为丰富且完整的情况。</li>
+<li><strong>优点</strong>：通过重建物品评分向量，可以更好地捕捉用户对单一物品的评分模式。</li>
+</ul>
+</li>
+<li>
+<p><strong>U-AutoRec（User-based AutoRec）</strong></p>
+<ul>
+<li><strong>输入向量</strong>：用户评分向量，表示某一用户对所有物品的评分。</li>
+<li><strong>适用场景</strong>：适用于用户评分数据较为丰富且完整的情况。</li>
+<li><strong>优点</strong>：通过重建用户评分向量，可以更好地捕捉用户对所有物品的评分模式，只需一次模型推断即可生成推荐列表 。</li>
+</ul>
+</li>
+</ol>
+<h4>四、模型评估与性能优化</h4>
+<ol>
+<li>
+<p><strong>模型评估</strong></p>
+<ul>
+<li><strong>评估指标</strong>：通常使用均方误差（MSE）作为评估指标，衡量模型预测评分与实际评分之间的误差。</li>
+<li><strong>验证集</strong>：使用验证集评估模型的泛化能力，通过调整模型参数（如隐层维度、正则化参数等）优化模型性能 。</li>
+</ul>
+</li>
+<li>
+<p><strong>性能优化</strong></p>
+<ul>
+<li><strong>正则化</strong>：通过L2正则化防止模型过拟合，提高模型的泛化能力。</li>
+<li><strong>参数调优</strong>：调整隐层维度、学习率、批次大小等超参数，以达到最佳模型性能。</li>
+</ul>
+</li>
+</ol>
+<h4>五、总结</h4>
+<p>基于AutoRec模型的推荐过程通过输入用户或物品评分向量，利用单隐层神经网络进行评分预测和排序，生成个性化的推荐列表。I-AutoRec和U-AutoRec分别适用于不同的数据场景，各有优缺点。通过模型评估与性能优化，可以进一步提升推荐系统的效果  。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

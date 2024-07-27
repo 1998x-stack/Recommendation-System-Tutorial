@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_3.6.1_模型的记忆能力与泛化能力</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_3.6.1 模型的记忆能力与泛化能力</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第3章 浪潮之巅——深度学习在推荐系统中的应用/3.6 Wide&amp;Deep 模型——记忆能力和泛化能力的综合
+Content: 00_3.6.1 模型的记忆能力与泛化能力
+&quot;&quot;&quot;</p>
+<h3>模型的记忆能力与泛化能力</h3>
+<h4>一、引言</h4>
+<p>Wide &amp; Deep 模型是 Google 于 2016 年提出的一种混合模型，旨在结合记忆能力和泛化能力，从而提升推荐系统的性能。以下将详细解释模型的记忆能力与泛化能力。</p>
+<h4>二、记忆能力</h4>
+<p>记忆能力是指模型直接学习并利用历史数据中物品或者特征的共现频率的能力。协同过滤和逻辑回归等简单模型通常具有较强的记忆能力。这些模型结构简单，原始数据往往可以直接影响推荐结果，生成类似于“如果用户点击过 A，那么推荐 B”这类规则式的推荐。</p>
+<h5>1. 记忆能力的定义</h5>
+<ul>
+<li><strong>共现频率</strong>：模型通过学习用户行为中的共现频率来进行推荐。例如，如果用户 A 和用户 B 都点击过相同的项目，则推荐系统会记住这种行为模式，并在未来的推荐中利用这种信息。</li>
+<li><strong>简单模型</strong>：如协同过滤、逻辑回归等，通过直接记住和利用历史数据中的共现频率进行推荐。</li>
+</ul>
+<h5>2. 实例解释</h5>
+<p>假设在 Google Play 的推荐系统中，用户已安装 Netflix 应用且曾在应用商店中看到 Pandora 应用。如果用户安装 Pandora 的频率高于平均水平，则系统会记住这种特征组合，并在未来推荐中利用这条规则。这种记忆能力在简单模型中尤为突出 。</p>
+<h4>三、泛化能力</h4>
+<p>泛化能力是指模型能够传递特征的相关性，并发掘稀疏甚至从未出现过的稀有特征与标签相关性的能力。深度神经网络和矩阵分解模型通常具有较强的泛化能力。</p>
+<h5>1. 泛化能力的定义</h5>
+<ul>
+<li><strong>特征相关性</strong>：模型能够学习和传递特征之间的相关性，即使是稀疏的特征也能生成稳定的推荐结果。</li>
+<li><strong>隐向量</strong>：如矩阵分解模型中，通过引入隐向量，使数据稀少的用户或物品也能生成有效的推荐评分。</li>
+</ul>
+<h5>2. 实例解释</h5>
+<p>矩阵分解模型通过引入隐向量结构，即使对于数据稀疏的用户或物品也能生成有效的推荐评分。深度神经网络通过多次自动组合特征，可以深度发掘数据中潜在的模式，即使输入的是非常稀疏的特征向量，也能得到较稳定的推荐概率 。</p>
+<h4>四、Wide &amp; Deep 模型</h4>
+<p>Wide &amp; Deep 模型的设计初衷是结合简单模型的记忆能力和深度神经网络的泛化能力，形成一个具有两者优势的混合模型。</p>
+<h5>1. Wide 部分</h5>
+<ul>
+<li><strong>单层结构</strong>：Wide 部分由单层网络组成，主要处理大规模稀疏的特征，如用户的历史行为数据。</li>
+<li><strong>逻辑回归</strong>：利用逻辑回归模型快速处理并记忆大量历史行为特征。</li>
+</ul>
+<h5>2. Deep 部分</h5>
+<ul>
+<li><strong>多层神经网络</strong>：Deep 部分由多层神经网络组成，通过深层的特征交叉，挖掘特征背后的数据模式。</li>
+<li><strong>特征组合</strong>：利用 Embedding 层将类别型特征转换为稠密向量，再通过多层 ReLU 全连接层，增强模型的泛化能力。</li>
+</ul>
+<h4>五、总结</h4>
+<p>Wide &amp; Deep 模型通过结合 Wide 部分的记忆能力和 Deep 部分的泛化能力，形成了一个强大的混合模型。这种设计使模型能够快速处理并记忆大量历史行为特征，同时具有强大的表达能力，能够深度发掘数据中的潜在模式。因此，Wide &amp; Deep 模型在各种推荐系统中表现出色，成为业界主流模型之一 。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

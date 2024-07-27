@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_5.2.3_基于Embedding的召回方法</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_5.2.3 基于Embedding的召回方法</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第5章 多角度审视推荐系统/5.2 推荐系统召回层的主要策略
+Content: 02_5.2.3 基于Embedding的召回方法
+&quot;&quot;&quot;</p>
+<h3>5.2.3 基于Embedding的召回方法</h3>
+<p>在推荐系统中，基于Embedding的召回方法是近年来逐渐流行的一种技术手段。相较于传统的基于规则或简单模型的召回方法，基于Embedding的召回方法具有更高的灵活性和更强的表达能力。以下是对基于Embedding召回方法的详细分析。</p>
+<h4>一、Embedding的基本概念</h4>
+<ol>
+<li>
+<p><strong>定义</strong>：</p>
+<ul>
+<li>Embedding是一种将高维稀疏向量映射到低维稠密向量的技术，旨在捕捉数据中的潜在结构和关系。常见的Embedding技术包括Word2Vec、Item2Vec、Graph Embedding等  。</li>
+</ul>
+</li>
+<li>
+<p><strong>应用场景</strong>：</p>
+<ul>
+<li>在推荐系统中，Embedding可以用于用户和物品的表示，通过计算用户和物品Embedding向量之间的相似度，实现高效的召回 。</li>
+</ul>
+</li>
+</ol>
+<h4>二、基于Embedding的召回方法</h4>
+<ol>
+<li>
+<p><strong>YouTube推荐系统的案例</strong>：</p>
+<ul>
+<li>YouTube推荐系统使用深度学习网络生成的Embedding作为召回层的方法，通过局部敏感哈希（LSH）进行快速的Embedding最近邻计算，在效果和速度上均表现出色  。</li>
+</ul>
+</li>
+<li>
+<p><strong>多种信息融合</strong>：</p>
+<ul>
+<li>多路召回策略中使用的“兴趣标签”、“热度”、“流行趋势”、“物品属性”等信息都可以作为Embedding召回方法中的附加信息（side information）融合进最终的Embedding向量中。例如，EGES Embedding方法就是典型的应用  。</li>
+</ul>
+</li>
+<li>
+<p><strong>评分的连续性</strong>：</p>
+<ul>
+<li>基于Embedding的召回方法具有评分连续性的优势。传统多路召回策略中的相似度、热度等分值不具备可比性，而Embedding向量之间的相似度计算则能够提供连续的评分，有助于统一候选物品的排序标准 。</li>
+</ul>
+</li>
+</ol>
+<h4>三、Embedding召回的优势</h4>
+<ol>
+<li>
+<p><strong>综合性强</strong>：</p>
+<ul>
+<li>Embedding技术能够将用户和物品的多种信息综合起来，生成一个高维向量表示，捕捉复杂的潜在关系，提高推荐的准确性和多样性  。</li>
+</ul>
+</li>
+<li>
+<p><strong>计算效率高</strong>：</p>
+<ul>
+<li>通过局部敏感哈希等技术，基于Embedding的召回方法能够实现高效的最近邻搜索，显著降低计算复杂度，提高召回效率  。</li>
+</ul>
+</li>
+<li>
+<p><strong>适应性强</strong>：</p>
+<ul>
+<li>Embedding技术能够适应不同类型的数据和场景，通过预训练和在线学习，不断更新和优化Embedding向量，提高推荐系统的响应速度和效果  。</li>
+</ul>
+</li>
+</ol>
+<h4>四、基于Embedding召回的实际应用</h4>
+<ol>
+<li>
+<p><strong>物品推荐</strong>：</p>
+<ul>
+<li>在电商推荐系统中，通过用户的浏览历史和购买记录生成Embedding向量，结合商品的属性信息，实现高效的候选集召回 。</li>
+</ul>
+</li>
+<li>
+<p><strong>内容推荐</strong>：</p>
+<ul>
+<li>在新闻推荐系统中，通过用户的阅读历史、兴趣标签等信息生成Embedding向量，快速召回用户可能感兴趣的新闻内容 。</li>
+</ul>
+</li>
+<li>
+<p><strong>社交推荐</strong>：</p>
+<ul>
+<li>在社交网络推荐系统中，通过用户的社交关系和互动行为生成Embedding向量，实现好友推荐、内容推荐等 。</li>
+</ul>
+</li>
+</ol>
+<h4>五、基于Embedding召回的技术实现</h4>
+<ol>
+<li>
+<p><strong>局部敏感哈希（LSH）</strong>：</p>
+<ul>
+<li>传统的Embedding相似度计算方法是Embedding向量间的内积运算，这在大规模数据中计算复杂度较高。通过局部敏感哈希，可以实现高效的最近邻搜索，将时间复杂度降低到O(log2n)，大幅提升计算效率 。</li>
+</ul>
+</li>
+<li>
+<p><strong>预训练与在线学习</strong>：</p>
+<ul>
+<li>Embedding的预训练能够利用离线数据生成高质量的向量表示，而在线学习能够根据最新的数据不断更新Embedding向量，保持模型的实时性和准确性 。</li>
+</ul>
+</li>
+</ol>
+<h4>总结</h4>
+<p>基于Embedding的召回方法在推荐系统中具有显著的优势，通过将多种信息融合在高维向量中，能够捕捉复杂的用户和物品关系，实现高效、准确的推荐。在实际应用中，通过局部敏感哈希等技术进一步优化计算效率，使其成为一种兼具效果和速度的召回策略。未来，随着深度学习和Embedding技术的不断发展，基于Embedding的召回方法将在推荐系统中发挥越来越重要的作用。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

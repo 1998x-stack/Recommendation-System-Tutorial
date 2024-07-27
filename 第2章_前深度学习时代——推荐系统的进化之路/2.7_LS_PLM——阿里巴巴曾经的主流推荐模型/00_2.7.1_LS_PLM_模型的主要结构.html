@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_2.7.1_LS_PLM_模型的主要结构</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_2.7.1 LS-PLM 模型的主要结构</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第2章 前深度学习时代——推荐系统的进化之路/2.7 LS-PLM——阿里巴巴曾经的主流推荐模型
+Content: 00_2.7.1 LS-PLM 模型的主要结构
+&quot;&quot;&quot;</p>
+<h3>2.7.1 LS-PLM 模型的主要结构</h3>
+<h4>背景介绍</h4>
+<p>LS-PLM（Large Scale Piece-wise Linear Model），又称为混合逻辑回归（Mixed Logistic Regression，MLR）模型，是阿里巴巴曾经的主流推荐模型。该模型早在2012年就已经应用于阿里巴巴的广告推荐场景，并在2017年被正式公布。LS-PLM的出现连接了传统推荐模型和深度学习推荐模型两个时代，是特征工程自动化和模型端到端训练的重要尝试。</p>
+<h4>模型结构概述</h4>
+<p>LS-PLM的结构与三层神经网络极其相似，主要由以下几个部分组成：</p>
+<ol>
+<li>
+<p><strong>输入层</strong>：</p>
+<ul>
+<li>输入层是样本的特征向量，包括用户特征、物品特征以及上下文特征。</li>
+</ul>
+</li>
+<li>
+<p><strong>中间层（隐层）</strong>：</p>
+<ul>
+<li>中间层是由多个神经元（即分片）组成的隐层，每个分片对应一个逻辑回归模型。LS-PLM通过分而治之的思路，先对样本进行分片，然后在每个分片中应用逻辑回归模型进行点击率（CTR）预估。</li>
+</ul>
+</li>
+<li>
+<p><strong>输出层</strong>：</p>
+<ul>
+<li>输出层是由单一神经元组成的输出层，用于生成最终的CTR预测结果。LS-PLM通过将每个分片的预测结果加权求和，得到最终的预测值。</li>
+</ul>
+</li>
+</ol>
+<h4>数学形式</h4>
+<p>LS-PLM的数学形式如下：</p>
+<ol>
+<li>
+<p><strong>样本分片</strong>：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi><mo>=</mo><mtext><mi mathvariant="normal">s</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mtext><mo>(</mo><msub><mi>w</mi><mrow><mi>π</mi></mrow></msub><mo>⋅</mo><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\pi = \text{softmax}(w_{\pi} \cdot x)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.03588em;">π</span><span class="mrel">=</span><span class="text mord displaystyle textstyle uncramped"><span class="mord mathrm">s</span><span class="mord mathrm">o</span><span class="mord mathrm" style="margin-right:0.07778em;">f</span><span class="mord mathrm">t</span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">π</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span></span></p>
+<p>其中，$ \pi $ 表示样本分片的概率，$ w_{\pi} $ 是分片的权重，$ x $ 是样本的特征向量，softmax函数用于对样本进行多分类。</p>
+</li>
+<li>
+<p><strong>逻辑回归</strong>：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mover accent="true"><mrow><mi>y</mi></mrow><mo>^</mo></mover><mi>i</mi></msub><mo>=</mo><mi>σ</mi><mo>(</mo><msub><mi>w</mi><mi>i</mi></msub><mo>⋅</mo><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\hat{y}_i = \sigma(w_i \cdot x)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span style="top:0em;margin-left:0.11112em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span></span></p>
+<p>其中，$ \hat{y}_i $ 是分片 $ i $ 的预测值，$ w_i $ 是逻辑回归模型的权重，$ x $ 是样本的特征向量，$ \sigma $ 是sigmoid函数。</p>
+</li>
+<li>
+<p><strong>最终预测</strong>：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>y</mi></mrow><mo>^</mo></mover><mo>=</mo><msub><mo>∑</mo><mrow><mi>i</mi></mrow></msub><msub><mi>π</mi><mi>i</mi></msub><mo>⋅</mo><msub><mover accent="true"><mrow><mi>y</mi></mrow><mo>^</mo></mover><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\hat{y} = \sum_{i} \pi_i \cdot \hat{y}_i
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.0500050000000003em;"></span><span class="strut bottom" style="height:2.327674em;vertical-align:-1.277669em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span style="top:0em;margin-left:0.11112em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">π</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span style="top:0em;margin-left:0.11112em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+<p>其中，$ \hat{y} $ 是最终的CTR预测结果，$ \pi_i $ 是样本属于分片 $ i $ 的概率，$ \hat{y}_i $ 是分片 $ i $ 的预测值。</p>
+</li>
+</ol>
+<h4>优缺点分析</h4>
+<ol>
+<li>
+<p><strong>优点</strong>：</p>
+<ul>
+<li><strong>非线性学习能力</strong>：LS-PLM具有样本分片的能力，可以挖掘出数据中蕴藏的非线性模式，省去了大量的人工样本处理和特征工程过程，使得模型可以端到端地完成训练。</li>
+<li><strong>模型的稀疏性</strong>：LS-PLM在建模时引入了L1和L2正则化，使最终训练出来的模型具有较高的稀疏度，模型部署更加轻量级，在线推断效率更高。</li>
+</ul>
+</li>
+<li>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li><strong>计算复杂度高</strong>：由于LS-PLM需要对样本进行分片和分别训练多个逻辑回归模型，计算复杂度较高，特别是在大规模数据集上训练时，需要大量的计算资源。</li>
+<li><strong>模型训练难度大</strong>：LS-PLM的训练过程涉及多个逻辑回归模型的训练和分片策略的优化，需要对模型进行细致的调优和参数选择。</li>
+</ul>
+</li>
+</ol>
+<h4>应用与优化</h4>
+<ol>
+<li>
+<p><strong>应用场景</strong>：</p>
+<ul>
+<li>LS-PLM适用于工业级的推荐系统、广告系统等大规模稀疏数据场景，特别是在需要进行点击率预估和用户行为预测的场景中，具有广泛的应用前景。</li>
+</ul>
+</li>
+<li>
+<p><strong>优化策略</strong>：</p>
+<ul>
+<li><strong>超参数调节</strong>：在实践中，可以通过调节分片数 $ m $ 来平衡模型的拟合能力与推广能力。经验值表明， $ m $ 取12时，模型表现较优。</li>
+<li><strong>正则化</strong>：通过引入L1和L2正则化项，可以提高模型的稀疏性，减少过拟合风险，提升模型的泛化能力。</li>
+</ul>
+</li>
+</ol>
+<h4>总结</h4>
+<p>LS-PLM模型通过将逻辑回归与样本分片相结合，实现了非线性特征学习和特征工程自动化，是连接传统推荐模型和深度学习推荐模型的重要节点。尽管存在一定的计算复杂度和训练难度，但其在实际应用中表现出了强大的特征学习和预测能力，为推荐系统的发展做出了重要贡献。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05_8.1.6_Facebook的深度学习模型DLRM</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>05_8.1.6 Facebook的深度学习模型DLRM</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.1 Facebook的深度学习推荐系统
+Content: 05_8.1.6 Facebook的深度学习模型DLRM
+&quot;&quot;&quot;</p>
+<h3>8.1.6 Facebook的深度学习模型DLRM</h3>
+<h4>背景与概述</h4>
+<p>2019年，Facebook公布了其最新的深度学习推荐模型DLRM（Deep Learning Recommender Model）。相较于之前的GBDT+LR组合模型，DLRM是一次彻底的应用深度学习模型的尝试。DLRM模型旨在通过深度学习的方式，更好地捕捉用户行为和广告特征之间的复杂关系，提高推荐系统的点击率预估精度。</p>
+<h4>DLRM模型结构</h4>
+<p>DLRM模型的整体结构如图8-5所示，主要包括以下几个关键部分：</p>
+<ol>
+<li>
+<p><strong>特征工程</strong>：</p>
+<ul>
+<li>特征被分为两类：类别型特征和数值型连续特征。</li>
+<li>类别型特征通过one-hot编码生成稀疏特征（sparse features），数值型特征直接作为连续特征（dense features）。</li>
+</ul>
+</li>
+<li>
+<p><strong>Embedding层</strong>：</p>
+<ul>
+<li>将类别型特征转换成one-hot向量后，通过Embedding层将其转换为维度为n的Embedding向量。</li>
+<li>连续型特征连接成一个特征向量，输入到MLP（多层感知机）中，被转化成同样维度为n的向量。</li>
+<li>经过Embedding层后，所有特征都被转换为n维的Embedding向量。</li>
+</ul>
+</li>
+<li>
+<p><strong>神经网络层（NNs层）</strong>：</p>
+<ul>
+<li>Embedding层之上是由多层神经网络组成的NNs层，对Embedding向量进行进一步处理。</li>
+<li>这一步根据调参和性能评估情况决定是否引入。</li>
+</ul>
+</li>
+<li>
+<p><strong>特征交互层（interactions层）</strong>：</p>
+<ul>
+<li>将Embedding向量两两内积，再与之前的连续特征Embedding连接，输入后续的MLP中。</li>
+<li>目的是让特征之间进行充分的交叉组合，提高模型的表达能力。</li>
+</ul>
+</li>
+<li>
+<p><strong>目标拟合层</strong>：</p>
+<ul>
+<li>最上层的全连接多层神经网络，最终输出层使用sigmoid函数，给出点击率预估。</li>
+</ul>
+</li>
+</ol>
+<h4>训练方法与并行训练</h4>
+<ol>
+<li>
+<p><strong>模型并行与数据并行</strong>：</p>
+<ul>
+<li>Embedding部分采用模型并行，每个设备只保存一部分Embedding层参数，进行并行mini-batch梯度更新。</li>
+<li>MLP部分采用数据并行，每个设备利用部分数据计算梯度，再通过全量规约（AllReduce）方法汇总所有梯度进行参数更新。</li>
+</ul>
+</li>
+<li>
+<p><strong>训练平台</strong>：</p>
+<ul>
+<li>DLRM的训练在Facebook自研的AI平台Big Basin platform上进行，该平台由Dual Socket Intel Xeon 6138 CPU和8个Nvidia Tesla V100 16GB GPUs组成。</li>
+</ul>
+</li>
+</ol>
+<h4>模型评估与效果</h4>
+<ol>
+<li>
+<p><strong>性能对比</strong>：</p>
+<ul>
+<li>DLRM与Google提出的DCN模型进行对比，DLRM在准确率指标上表现稍优。</li>
+<li>测试使用Criteo Ad Kaggle数据集，DLRM在Adagrad训练方式下的优势较小。</li>
+</ul>
+</li>
+<li>
+<p><strong>效果总结</strong>：</p>
+<ul>
+<li>尽管DLRM在学术创新性上不如其他复杂模型，但其简单直接的设计在工业应用中表现出色，在处理海量数据时能发挥良好效果。</li>
+</ul>
+</li>
+</ol>
+<h4>实际应用案例</h4>
+<ol>
+<li>
+<p><strong>广告推荐</strong>：</p>
+<ul>
+<li>DLRM模型通过对用户行为和广告特征的深度学习，提高了点击率预估的准确性，优化了广告投放策略。</li>
+</ul>
+</li>
+<li>
+<p><strong>推荐系统优化</strong>：</p>
+<ul>
+<li>通过对DLRM模型的不断优化，Facebook实现了推荐系统的持续改进，为用户提供了更精准的个性化推荐服务。</li>
+</ul>
+</li>
+</ol>
+<h4>优势与挑战</h4>
+<p><strong>优势</strong>：</p>
+<ol>
+<li><strong>高效的特征处理</strong>：通过Embedding层和特征交互层，DLRM能够高效地处理类别型和连续型特征。</li>
+<li><strong>模型并行与数据并行</strong>：采用模型并行与数据并行结合的训练方法，提高了模型训练的效率和效果。</li>
+</ol>
+<p><strong>挑战</strong>：</p>
+<ol>
+<li><strong>模型复杂度</strong>：尽管DLRM在处理大规模数据时表现出色，但其模型结构较为复杂，参数调优和训练需要大量计算资源。</li>
+<li><strong>特征交互优化</strong>：如何进一步优化特征交互层，使其在更多应用场景中表现出色，是一个持续研究的问题。</li>
+</ol>
+<h4>结论</h4>
+<p>Facebook的DLRM模型通过深度学习技术的应用，在推荐系统的点击率预估中取得了显著成效。通过特征工程、Embedding层、特征交互层和目标拟合层的有机结合，DLRM实现了对用户行为和广告特征的深度学习，为推荐系统提供了强有力的技术支持。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

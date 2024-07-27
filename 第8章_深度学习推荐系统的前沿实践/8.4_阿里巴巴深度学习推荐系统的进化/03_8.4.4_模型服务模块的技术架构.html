@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03_8.4.4_模型服务模块的技术架构</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>03_8.4.4 模型服务模块的技术架构</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.4 阿里巴巴深度学习推荐系统的进化
+Content: 03_8.4.4 模型服务模块的技术架构
+&quot;&quot;&quot;</p>
+<h3>8.4.4 模型服务模块的技术架构</h3>
+<h4>引言</h4>
+<p>在推荐系统中，模型服务模块的技术架构至关重要。阿里巴巴在应对复杂模型的服务上遇到了许多挑战，特别是在处理带有序列结构的模型时，如DIEN和MIMN。本文将详细分析阿里巴巴在模型服务模块中的技术架构及其解决方案  。</p>
+<h4>模型服务架构的挑战</h4>
+<ol>
+<li><strong>复杂模型服务的延迟</strong>：复杂模型，如DIEN和MIMN，因其序列结构需要串行推断，无法并行加速，导致服务延迟较高，影响用户体验。</li>
+<li><strong>简化模型导致效果受损</strong>：使用近似方法简化模型虽然能降低延迟，但会损害模型效果  。</li>
+</ol>
+<h4>阿里巴巴的解决方案</h4>
+<p>阿里巴巴提出了两种模型服务架构，以应对上述挑战，如图8-21所示。</p>
+<h5>架构A和架构B的比较</h5>
+<ul>
+<li><strong>架构A</strong>：传统方法，直接处理用户行为特征，在线推断时需要运行复杂的序列模型。</li>
+<li><strong>架构B</strong>：引入用户兴趣中心（User Interest Center, UIC），将用户行为特征转换为用户兴趣表达向量，在线推断时跳过序列模型阶段，直接进入MLP计算  。</li>
+</ul>
+<h4>用户兴趣表达模块和用户兴趣中心（UIC）</h4>
+<ol>
+<li>
+<p><strong>用户兴趣表达模块</strong>：</p>
+<ul>
+<li>架构B将用户行为特征数据库替换为用户兴趣表达数据库，简化实时预估服务器的计算过程。</li>
+<li><strong>优点</strong>：减少序列模型的运算，降低延迟。</li>
+<li><strong>缺点</strong>：需要离线计算和存储用户兴趣表达向量  。</li>
+</ul>
+</li>
+<li>
+<p><strong>用户兴趣中心（UIC）</strong>：</p>
+<ul>
+<li>架构B增加了UIC模块，根据用户行为序列生成用户兴趣向量。</li>
+<li><strong>优点</strong>：实时更新用户兴趣向量，提高模型的响应速度。</li>
+<li><strong>缺点</strong>：增加了系统的复杂度和计算资源需求  。</li>
+</ul>
+</li>
+</ol>
+<h4>离线和在线部分的运作</h4>
+<ol>
+<li>
+<p><strong>离线部分</strong>：</p>
+<ul>
+<li><strong>学习模块</strong>：定期利用系统日志训练和更新模型。</li>
+<li><strong>模型部署</strong>：架构A直接部署新模型，架构B将部分模型部署在UIC，其余部分部署在实时预估服务器  。</li>
+</ul>
+</li>
+<li>
+<p><strong>在线部分</strong>：</p>
+<ul>
+<li><strong>流量请求</strong>：携带用户ID和候选商品ID。</li>
+<li><strong>特征获取</strong>：实时预估服务器获取用户和商品特征。</li>
+<li><strong>预估和排序</strong>：使用用户和商品特征进行预估和排序，返回结果  。</li>
+</ul>
+</li>
+</ol>
+<h4>实际应用效果</h4>
+<ul>
+<li><strong>延迟降低</strong>：架构B大幅降低了模型服务的延迟。在500 QPS的压力下，DIEN模型的预估时间从200毫秒降至19毫秒。</li>
+<li><strong>性能提升</strong>：通过工程优化，架构B有效解决了复杂模型服务的瓶颈问题，提高了用户体验和系统性能  。</li>
+</ul>
+<h3>总结</h3>
+<p>阿里巴巴通过引入用户兴趣表达模块和用户兴趣中心，提出了有效的模型服务架构，显著降低了复杂模型的服务延迟，提升了推荐系统的性能和用户体验。这些技术架构为其他电商平台的推荐系统开发提供了宝贵的经验和参考  。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

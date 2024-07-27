@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01_3.8.2_DIN——引入注意力机制的深度学习网络</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>01_3.8.2 DIN——引入注意力机制的深度学习网络</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第3章 浪潮之巅——深度学习在推荐系统中的应用/3.8 注意力机制在推荐模型中的应用
+Content: 01_3.8.2 DIN——引入注意力机制的深度学习网络
+&quot;&quot;&quot;</p>
+<h3>3.8.2 DIN——引入注意力机制的深度学习网络</h3>
+<h4>1. 背景和动机</h4>
+<p>在推荐系统中，用户的行为数据是非常宝贵的资源，如何有效地利用这些数据来提升推荐效果是研究的重点。阿里巴巴提出的DIN（Deep Interest Network）模型，通过引入注意力机制，解决了用户行为数据利用不足的问题，使得推荐系统能够更精准地捕捉用户的兴趣点，从而提高推荐效果。</p>
+<h4>2. DIN模型概述</h4>
+<p>DIN模型的应用场景是阿里巴巴的电商广告推荐。模型的输入特征分为两部分：用户特征和候选广告特征。用户特征包括用户的历史行为序列（如点击过的商品和店铺），而候选广告特征包括广告对应的商品和店铺信息。</p>
+<h4>3. 引入注意力机制</h4>
+<p>DIN模型的核心创新点在于引入了注意力机制，通过注意力得分来对用户历史行为进行加权，从而更好地捕捉用户对当前广告的兴趣。具体步骤如下：</p>
+<ol>
+<li><strong>特征构建</strong>：将用户的历史行为序列和候选广告特征进行Embedding操作，生成相应的Embedding向量。</li>
+<li><strong>注意力激活单元</strong>：使用一个小型神经网络（注意力激活单元），计算每个历史行为与候选广告之间的注意力得分。这个注意力得分反映了用户对某个历史行为在当前广告上下文中的关注程度。</li>
+<li><strong>加权池化</strong>：将用户的历史行为Embedding向量与注意力得分相乘，然后进行加权池化，生成一个加权后的用户兴趣向量。</li>
+<li><strong>输出层</strong>：将加权后的用户兴趣向量和候选广告特征向量拼接起来，输入到多层神经网络中，进行最终的预测。</li>
+</ol>
+<h4>4. DIN模型的优势</h4>
+<p>DIN模型相比于传统的深度学习推荐模型，具有以下优势：</p>
+<ol>
+<li><strong>个性化兴趣捕捉</strong>：通过注意力机制，DIN模型能够捕捉用户对不同历史行为的不同关注程度，从而更准确地反映用户的兴趣点。</li>
+<li><strong>提高推荐效果</strong>：注意力机制使得模型能够对用户的行为进行加权处理，提高了推荐结果的精准度。</li>
+<li><strong>灵活性强</strong>：DIN模型的结构灵活，可以根据不同的应用场景和数据特点进行调整和优化。</li>
+</ol>
+<h4>5. 实验结果与分析</h4>
+<p>在阿里巴巴的电商平台上，DIN模型被广泛应用于广告推荐系统中。实验结果表明，DIN模型在点击率预测等任务中的表现显著优于传统的深度学习模型。具体实验结果显示，DIN模型能够更好地捕捉用户的兴趣变化，提升了推荐系统的整体效果。</p>
+<h4>6. 总结</h4>
+<p>DIN模型通过引入注意力机制，改进了传统深度学习推荐模型在用户行为数据利用上的不足。其创新点在于通过注意力激活单元对用户的历史行为进行加权处理，使得模型能够更准确地捕捉用户的兴趣点，从而提高推荐效果。在实际应用中，DIN模型展示了强大的性能优势，为推荐系统的发展提供了新的思路和方法。</p>
+<p>通过上述分析，我们可以更深入地理解DIN模型的结构和其在推荐系统中的应用价值，为进一步的研究和实践提供了坚实的理论基础。</p>
+<hr>
+<h3>3. 引入注意力机制</h3>
+<p>在DIN（Deep Interest Network）模型中，注意力机制的引入是其核心创新点。通过注意力机制，DIN模型能够对用户的历史行为进行加权处理，从而更精准地捕捉用户对当前广告的兴趣。以下是对这一过程的详细分析：</p>
+<h4>3.1 特征构建</h4>
+<p>特征构建是DIN模型的第一步。该步骤主要包括将用户的历史行为序列和候选广告特征进行Embedding操作，生成相应的Embedding向量。</p>
+<ol>
+<li>
+<p><strong>用户历史行为序列</strong>：</p>
+<ul>
+<li>用户的历史行为序列可以包括用户点击、购买、浏览的商品、店铺等。</li>
+<li>这些历史行为通过Embedding层转化为低维稠密向量，表示为$$ \mathbf{e}_1, \mathbf{e}_2, \ldots, \mathbf{e}_n $$，其中$$ n $$是历史行为的数量，每个$$ \mathbf{e}_i $$是对应行为的Embedding向量。</li>
+</ul>
+</li>
+<li>
+<p><strong>候选广告特征</strong>：</p>
+<ul>
+<li>候选广告特征包括广告本身的信息，如商品ID、店铺ID等。</li>
+<li>同样地，这些特征通过Embedding层转化为低维稠密向量，表示为$$ \mathbf{a} $$。</li>
+</ul>
+</li>
+</ol>
+<h4>3.2 注意力激活单元</h4>
+<p>注意力激活单元的设计是DIN模型的关键，通过计算每个历史行为与候选广告之间的注意力得分，来反映用户对某个历史行为在当前广告上下文中的关注程度。</p>
+<ol>
+<li>
+<p><strong>计算注意力得分</strong>：</p>
+<ul>
+<li>使用一个小型神经网络（注意力激活单元），将每个历史行为的Embedding向量$$ \mathbf{e}_i $$与候选广告的Embedding向量$$ \mathbf{a} $$进行拼接，得到输入向量$$ \mathbf{h}_i = [\mathbf{e}_i; \mathbf{a}] $$。</li>
+<li>通过全连接层和激活函数（如ReLU或tanh），计算出注意力得分$$ \alpha_i $$：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><mtext><mi mathvariant="normal">s</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mtext><mo>(</mo><mrow><mi mathvariant="bold">W</mi></mrow><mo>⋅</mo><msub><mrow><mi mathvariant="bold">h</mi></mrow><mi>i</mi></msub><mo>+</mo><mrow><mi mathvariant="bold">b</mi></mrow><mo>)</mo></mrow><annotation encoding="application/x-tex">\alpha_i = \text{softmax}(\mathbf{W} \cdot \mathbf{h}_i + \mathbf{b}) 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.0037em;">α</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.0037em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="text mord displaystyle textstyle uncramped"><span class="mord mathrm">s</span><span class="mord mathrm">o</span><span class="mord mathrm" style="margin-right:0.07778em;">f</span><span class="mord mathrm">t</span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span><span class="mopen">(</span><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf" style="margin-right:0.01597em;">W</span></span><span class="mbin">⋅</span><span class=""><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf">h</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf">b</span></span><span class="mclose">)</span></span></span></span></span></p>
+其中，$$ \mathbf{W} $$是权重矩阵，$$ \mathbf{b} $$是偏置向量。</li>
+</ul>
+</li>
+<li>
+<p><strong>softmax归一化</strong>：</p>
+<ul>
+<li>为了使得所有历史行为的注意力得分和为1，对每个注意力得分进行softmax归一化：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><mfrac><mrow><mi>exp</mi><mo>(</mo><msub><mi>α</mi><mi>i</mi></msub><mo>)</mo></mrow><mrow><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mi>exp</mi><mo>(</mo><msub><mi>α</mi><mi>j</mi></msub><mo>)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\alpha_i = \frac{\exp(\alpha_i)}{\sum_{j=1}^{n} \exp(\alpha_j)} 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.427em;"></span><span class="strut bottom" style="height:2.549118em;vertical-align:-1.122118em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.0037em;">α</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.0037em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.6859999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mop"><span class="op-symbol small-op mop" style="top:-0.0000050000000000050004em;">∑</span><span class="vlist"><span style="top:0.30001em;margin-left:0em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.364em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mop">exp</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.0037em;">α</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.0037em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mop">exp</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.0037em;">α</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.0037em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
+</li>
+</ul>
+</li>
+</ol>
+<h4>3.3 加权池化</h4>
+<p>加权池化是通过将用户的历史行为Embedding向量与注意力得分相乘，然后进行加权求和，生成一个加权后的用户兴趣向量。</p>
+<ol>
+<li>
+<p><strong>加权处理</strong>：</p>
+<ul>
+<li>将每个历史行为的Embedding向量$$ \mathbf{e}_i $$与对应的注意力得分$$ \alpha_i $$相乘：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mrow><mi mathvariant="bold">e</mi></mrow><mi>i</mi><mrow><mi mathvariant="normal">′</mi></mrow></msubsup><mo>=</mo><msub><mi>α</mi><mi>i</mi></msub><mo>⋅</mo><msub><mrow><mi mathvariant="bold">e</mi></mrow><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{e}_i&#x27; = \alpha_i \cdot \mathbf{e}_i 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8018919999999999em;"></span><span class="strut bottom" style="height:1.048892em;vertical-align:-0.247em;"></span><span class="base displaystyle textstyle uncramped"><span class=""><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf">e</span></span><span class="vlist"><span style="top:0.247em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span style="top:-0.4129999999999999em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord"><span class="mord mathit" style="margin-right:0.0037em;">α</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.0037em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class=""><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf">e</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>池化操作</strong>：</p>
+<ul>
+<li>将所有加权后的Embedding向量进行求和，得到加权后的用户兴趣向量$$ \mathbf{u} $$：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi mathvariant="bold">u</mi></mrow><mo>=</mo><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msubsup><mrow><mi mathvariant="bold">e</mi></mrow><mi>i</mi><mrow><mi mathvariant="normal">′</mi></mrow></msubsup></mrow><annotation encoding="application/x-tex">\mathbf{u} = \sum_{i=1}^{n} \mathbf{e}_i&#x27; 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.6513970000000002em;"></span><span class="strut bottom" style="height:2.929066em;vertical-align:-1.277669em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf">u</span></span><span class="mrel">=</span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class=""><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf">e</span></span><span class="vlist"><span style="top:0.247em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span style="top:-0.4129999999999999em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+</li>
+</ul>
+</li>
+</ol>
+<h4>3.4 输出层</h4>
+<p>在输出层，DIN模型将加权后的用户兴趣向量$$ \mathbf{u} $$和候选广告特征向量$$ \mathbf{a} $$拼接起来，输入到多层神经网络中，进行最终的预测。</p>
+<ol>
+<li>
+<p><strong>特征拼接</strong>：</p>
+<ul>
+<li>将加权后的用户兴趣向量$$ \mathbf{u} $$与候选广告特征向量$$ \mathbf{a} $$进行拼接：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi mathvariant="bold">v</mi></mrow><mo>=</mo><mo>[</mo><mrow><mi mathvariant="bold">u</mi></mrow><mo separator="true">;</mo><mrow><mi mathvariant="bold">a</mi></mrow><mo>]</mo></mrow><annotation encoding="application/x-tex">\mathbf{v} = [\mathbf{u}; \mathbf{a}] 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf" style="margin-right:0.01597em;">v</span></span><span class="mrel">=</span><span class="mopen">[</span><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf">u</span></span><span class="mpunct">;</span><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf">a</span></span><span class="mclose">]</span></span></span></span></span></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>多层神经网络</strong>：</p>
+<ul>
+<li>通过多层全连接神经网络对拼接后的向量$$ \mathbf{v} $$进行处理，最终输出预测结果$$ \hat{y} $$。</li>
+</ul>
+</li>
+<li>
+<p><strong>目标函数</strong>：</p>
+<ul>
+<li>根据具体的任务（如点击率预测、评分预测等），定义相应的损失函数（如交叉熵损失、均方误差损失等），进行模型的训练和优化。</li>
+</ul>
+</li>
+</ol>
+<h3>总结</h3>
+<p>通过引入注意力机制，DIN模型能够对用户的历史行为进行加权处理，从而更精准地捕捉用户对当前广告的兴趣。这一创新不仅提升了模型的表达能力和预测精度，还使得模型能够更好地适应复杂的推荐场景。在实际应用中，DIN模型展示了强大的性能优势，为推荐系统的发展提供了新的思路和方法。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

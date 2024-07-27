@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04_8.3.5_排序模型</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>04_8.3.5 排序模型</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.3 YouTube深度学习视频推荐系统
+Content: 04_8.3.5 排序模型
+&quot;&quot;&quot;</p>
+<h3>8.3.5 排序模型</h3>
+<h4>引言</h4>
+<p>在YouTube的推荐系统中，候选集生成模型从海量视频中筛选出几百个候选视频后，需要进一步利用排序模型对这些候选视频进行精排。排序模型通过引入更多特征，结合复杂的深度学习算法，生成最终的推荐视频列表。</p>
+<h4>模型架构</h4>
+<p>排序模型的架构与候选集生成模型类似，主要区别在于输入层和输出层的特征工程和优化目标。排序模型需要对几百个候选视频进行精细排序，因此可以引入更多的特征进行精排。</p>
+<h5>输入层特征</h5>
+<ol>
+<li><strong>当前候选视频的Embedding</strong>：这是候选视频的高维特征向量，通过之前的Embedding技术生成。</li>
+<li><strong>用户观看过的最后N个视频Embedding的平均值</strong>：反映用户近期的观看偏好。</li>
+<li><strong>用户语言的Embedding和当前候选视频语言的Embedding</strong>：捕捉用户和视频的语言偏好。</li>
+<li><strong>用户自上次观看同频道视频的时间</strong>：即time since last watch，反映用户对某个频道视频的持续兴趣。</li>
+<li><strong>该视频已被曝光给该用户的次数</strong>：即#previous impressions，避免同一个视频对同一用户的持续无效曝光。</li>
+</ol>
+<h5>特征工程</h5>
+<p>特征工程在排序模型中至关重要。除了上述特征，排序模型还引入了其他高级特征，例如：</p>
+<ul>
+<li><strong>特征平方和开方处理</strong>：对原特征值进行平方和开方处理，引入特征的非线性，提高模型对特征的表达能力。</li>
+<li><strong>多特征交叉组合</strong>：将不同特征进行交叉组合，生成新的复合特征，进一步提高模型的表现力。</li>
+</ul>
+<h5>模型选择与优化</h5>
+<ol>
+<li><strong>模型选择</strong>：排序模型选择了加权逻辑回归（Weighted Logistic Regression）作为模型输出层。</li>
+<li><strong>优化目标</strong>：为了能直接预估观看时长，YouTube将正样本的观看时长作为其样本权重，用加权逻辑回归进行训练，让模型学到用户观看时长的信息。</li>
+<li><strong>输出层函数</strong>：训练阶段选择加权逻辑回归，服务阶段选择e（Wx+b）函数，从而更好地预测用户的观看时长。</li>
+</ol>
+<h5>模型训练与验证</h5>
+<ol>
+<li><strong>训练数据</strong>：从用户的历史观看数据和候选视频集合中提取特征向量，作为训练数据。</li>
+<li><strong>训练方法</strong>：通过深度神经网络进行端到端训练，优化模型参数，提高模型的泛化能力。</li>
+<li><strong>模型验证</strong>：利用验证数据集对模型进行验证，确保模型在实际应用中的表现。</li>
+</ol>
+<h4>实际应用效果</h4>
+<p>通过引入更多的特征和复杂的深度学习模型，YouTube的排序模型在实际应用中取得了显著效果：</p>
+<ol>
+<li><strong>推荐精准度提升</strong>：精细的排序和多特征的引入，使得推荐结果更加精准，用户更容易找到感兴趣的视频内容。</li>
+<li><strong>用户体验提升</strong>：个性化推荐和实时反馈，显著提升了用户的观看体验和平台的粘性。</li>
+<li><strong>平台收益增加</strong>：通过优化观看时长的目标，YouTube不仅提高了用户的观看时长，还增加了平台的广告收益。</li>
+</ol>
+<h4>总结</h4>
+<p>YouTube的排序模型通过引入更多的特征和复杂的深度学习算法，实现了对候选视频的精细排序。模型在特征工程和优化目标上的创新，使得推荐结果更加精准，用户体验显著提升。这种方法不仅提高了推荐系统的性能，也为其他视频推荐系统的开发提供了宝贵的经验和参考。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

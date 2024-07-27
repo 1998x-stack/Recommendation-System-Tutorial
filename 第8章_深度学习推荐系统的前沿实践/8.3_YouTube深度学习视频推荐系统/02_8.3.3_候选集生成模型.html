@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_8.3.3_候选集生成模型</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_8.3.3 候选集生成模型</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.3 YouTube深度学习视频推荐系统
+Content: 02_8.3.3 候选集生成模型
+&quot;&quot;&quot;</p>
+<h3>8.3.3 候选集生成模型</h3>
+<h4>引言</h4>
+<p>YouTube的视频推荐系统需要在海量的视频中筛选出用户可能感兴趣的候选视频集合，这是推荐系统的关键一步。为了实现这一目标，YouTube设计了一套基于深度学习的候选集生成模型，该模型通过用户的历史行为数据和搜索数据，生成一个高质量的候选视频集合。</p>
+<h4>模型架构</h4>
+<p>候选集生成模型的架构如图8-15所示，模型的底层输入是用户的历史观看视频Embedding向量和搜索词Embedding向量。模型架构主要包括以下几个部分：</p>
+<ol>
+<li>
+<p><strong>输入层</strong>：</p>
+<ul>
+<li><strong>用户历史观看视频Embedding</strong>：将用户过去观看过的视频转换为高维向量，这些向量捕捉了用户的观看偏好。</li>
+<li><strong>搜索词Embedding</strong>：将用户搜索过的关键词转换为高维向量，这些向量反映了用户的即时需求。</li>
+</ul>
+</li>
+<li>
+<p><strong>中间层</strong>：</p>
+<ul>
+<li><strong>Embedding层</strong>：模型中包含了一个Embedding层，用于将视频和搜索词进行预训练，生成高质量的特征向量。</li>
+<li><strong>ReLU神经网络</strong>：使用三层ReLU神经网络，对输入特征进行非线性变换，提高模型的表达能力。</li>
+</ul>
+</li>
+<li>
+<p><strong>输出层</strong>：</p>
+<ul>
+<li><strong>Softmax层</strong>：输出层使用softmax函数，将模型的输出转换为在所有候选视频上的概率分布。该模型将选择候选视频集的问题视为一个多分类问题，模型的最终输出是用户观看下一个视频的概率分布。</li>
+</ul>
+</li>
+</ol>
+<h4>Embedding技术的应用</h4>
+<p>为了生成视频Embedding和搜索词Embedding，YouTube采用了与Airbnb相似的方法。具体步骤如下：</p>
+<ol>
+<li>
+<p><strong>数据准备</strong>：</p>
+<ul>
+<li><strong>观看序列</strong>：收集用户的历史观看序列数据。</li>
+<li><strong>搜索序列</strong>：收集用户的历史搜索序列数据。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型训练</strong>：</p>
+<ul>
+<li><strong>Word2vec方法</strong>：使用Word2vec方法对视频和搜索词进行Embedding，生成高维向量。</li>
+<li><strong>预训练Embedding层</strong>：在深度学习网络中增加Embedding层，与上层的DNN一起进行端到端训练。</li>
+</ul>
+</li>
+</ol>
+<h4>特征设计</h4>
+<p>候选集生成模型的特征设计包括以下几个方面：</p>
+<ol>
+<li>
+<p><strong>用户特征</strong>：</p>
+<ul>
+<li><strong>地理属性特征</strong>：将用户的地理位置、年龄、性别等信息进行Embedding，捕捉用户的背景信息。</li>
+<li><strong>历史行为特征</strong>：将用户的历史观看和搜索行为进行Embedding，反映用户的长期和短期兴趣。</li>
+</ul>
+</li>
+<li>
+<p><strong>视频特征</strong>：</p>
+<ul>
+<li><strong>视频内容特征</strong>：将视频的标题、描述、标签等信息进行Embedding，捕捉视频的语义信息。</li>
+<li><strong>视频属性特征</strong>：将视频的上传时间、观看次数、点赞数等信息进行Embedding，反映视频的受欢迎程度。</li>
+</ul>
+</li>
+</ol>
+<h4>模型训练与服务</h4>
+<ol>
+<li>
+<p><strong>模型训练</strong>：</p>
+<ul>
+<li><strong>负采样方法</strong>：在训练过程中，YouTube使用了负采样的方法，减少每次预测的分类数量，加快模型的收敛速度。</li>
+<li><strong>训练过程</strong>：通过深度神经网络进行端到端训练，优化模型参数，提高模型的泛化能力。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型服务</strong>：</p>
+<ul>
+<li><strong>最近邻搜索方法</strong>：在实际应用中，YouTube采用了最近邻搜索的方法，通过内积运算和排序，生成候选视频集合。</li>
+<li><strong>在线服务效率</strong>：通过将用户和视频的Embedding存储在内存数据库中，使用局部敏感哈希等方法进行快速搜索，极大提高了推荐效率。</li>
+</ul>
+</li>
+</ol>
+<h4>总结</h4>
+<p>YouTube的候选集生成模型通过Embedding技术和深度神经网络的结合，实现了高效、精准的候选视频生成。模型的特征设计全面考虑了用户的历史行为和视频的语义信息，确保了推荐结果的准确性和个性化。通过这种方式，YouTube不仅提高了推荐系统的性能，也为其他视频推荐系统的开发提供了宝贵的经验和参考。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

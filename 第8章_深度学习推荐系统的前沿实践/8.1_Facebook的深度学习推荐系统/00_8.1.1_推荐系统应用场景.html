@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_8.1.1_推荐系统应用场景</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_8.1.1 推荐系统应用场景</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.1 Facebook的深度学习推荐系统
+Content: 00_8.1.1 推荐系统应用场景
+&quot;&quot;&quot;</p>
+<h3>8.1.1 推荐系统应用场景</h3>
+<h4>背景与概述</h4>
+<p>推荐系统是一种通过分析用户行为和兴趣，向用户推荐他们可能感兴趣的内容或商品的系统。Facebook作为全球最大的社交媒体平台，其推荐系统在推动用户参与和提升用户体验方面发挥了重要作用。本节详细探讨了Facebook推荐系统的应用场景。</p>
+<h4>主要应用场景</h4>
+<h5>新闻推荐</h5>
+<ul>
+<li><strong>背景</strong>：用户每天通过Facebook获取大量新闻和信息。为了提升用户体验，Facebook需要根据用户的兴趣和行为向其推荐个性化的新闻内容。</li>
+<li><strong>实现</strong>：Facebook的新闻推荐系统通过分析用户的阅读历史、点赞、评论和分享行为，结合用户的社交关系和兴趣标签，生成个性化的新闻推荐列表。这一系统能够实时更新，根据用户的最新行为调整推荐内容，从而提高推荐的准确性和用户满意度。</li>
+</ul>
+<h5>广告推荐</h5>
+<ul>
+<li><strong>背景</strong>：广告是Facebook的重要收入来源。为了提高广告的点击率和转化率，Facebook需要向用户推荐最相关的广告内容。</li>
+<li><strong>实现</strong>：Facebook的广告推荐系统通过分析用户的浏览历史、搜索记录、点赞和分享行为，结合用户的兴趣标签和社交关系，生成个性化的广告推荐列表。系统使用多种机器学习算法，如GBDT和LR组合模型，对广告点击率（CTR）进行预估，从而优化广告投放策略，提高广告效果。</li>
+</ul>
+<h5>视频推荐</h5>
+<ul>
+<li><strong>背景</strong>：随着视频内容在社交媒体上的普及，视频推荐成为提升用户粘性和平台活跃度的重要手段。</li>
+<li><strong>实现</strong>：Facebook的视频推荐系统通过分析用户的观看历史、点赞、评论和分享行为，结合用户的兴趣标签和社交关系，生成个性化的视频推荐列表。系统利用深度学习模型对用户的观看行为进行建模，实时调整推荐内容，从而提高推荐的准确性和用户满意度。</li>
+</ul>
+<h5>社交推荐</h5>
+<ul>
+<li><strong>背景</strong>：Facebook作为社交平台，其核心是连接用户并促进社交互动。社交推荐通过向用户推荐可能认识的人，增强用户的社交网络。</li>
+<li><strong>实现</strong>：Facebook的社交推荐系统通过分析用户的好友关系、共同兴趣和社交互动行为，生成个性化的好友推荐列表。系统使用图嵌入技术对社交关系进行建模，通过多种算法计算用户之间的相似性，从而提高推荐的准确性和社交互动的机会。</li>
+</ul>
+<h4>实际应用案例</h4>
+<ul>
+<li><strong>新闻推荐</strong>：用户每天登录Facebook时，首页会显示根据其兴趣推荐的新闻内容。这些内容通过复杂的推荐算法生成，确保用户获取最相关的信息。</li>
+<li><strong>广告推荐</strong>：在用户浏览Facebook的过程中，系统会实时推荐个性化的广告内容。这些广告通过精确的用户画像和行为分析进行匹配，提高了广告的点击率和转化率。</li>
+<li><strong>视频推荐</strong>：用户在观看视频时，系统会根据其观看历史和兴趣标签推荐相关视频，提升用户的观看体验和平台活跃度。</li>
+<li><strong>社交推荐</strong>：用户在浏览好友列表时，系统会推荐可能认识的人，通过图嵌入技术和相似性计算，增强用户的社交网络。</li>
+</ul>
+<h4>结论</h4>
+<p>推荐系统在Facebook的各个应用场景中发挥着重要作用，通过个性化的内容推荐，提升了用户体验和平台活跃度。通过不断优化推荐算法和引入新的技术，Facebook的推荐系统在新闻、广告、视频和社交推荐等方面取得了显著成效，为其他平台提供了宝贵的参考经验。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

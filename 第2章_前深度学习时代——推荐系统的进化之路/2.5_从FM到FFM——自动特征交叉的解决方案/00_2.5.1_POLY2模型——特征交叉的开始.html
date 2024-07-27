@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_2.5.1_POLY2模型——特征交叉的开始</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_2.5.1 POLY2模型——特征交叉的开始</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第2章 前深度学习时代——推荐系统的进化之路/2.5 从FM到FFM——自动特征交叉的解决方案
+Content: 00_2.5.1 POLY2模型——特征交叉的开始
+&quot;&quot;&quot;</p>
+<h3>2.5.1 POLY2模型——特征交叉的开始</h3>
+<h4>背景介绍</h4>
+<p>在推荐系统中，特征交叉是一个重要的过程，它能够捕捉特征之间的相互影响，从而提高模型的表达能力。传统的逻辑回归模型仅对单个特征进行加权，无法生成高维组合特征，因而表达能力较弱。为了弥补这一不足，工程师们通常会手动组合特征，但这一方法效率低下，且依赖于工程师的经验。为了解决这一问题，POLY2模型应运而生。</p>
+<h4>POLY2模型的基本原理</h4>
+<p>POLY2模型是一种通过暴力组合特征来实现特征交叉的模型。其数学形式如公式(2-20)所示，对所有特征进行了两两交叉，并对所有特征组合赋予权重。具体来说，POLY2模型会生成特征 $ x_i $ 和 $ x_j $ 的所有二次组合 $ x_i \cdot x_j $，并为这些组合特征分配相应的权重 $ w_{ij} $。</p>
+<p>公式 (2-20):</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi><mo>=</mo><msub><mi>w</mi><mn>0</mn></msub><mo>+</mo><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msub><mi>w</mi><mi>i</mi></msub><msub><mi>x</mi><mi>i</mi></msub><mo>+</mo><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mi>i</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msub><mi>w</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>⋅</mo><msub><mi>x</mi><mi>j</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">y = w_0 + \sum_{i=1}^{n} w_i x_i + \sum_{i=1}^{n} \sum_{j=i+1}^{n} w_{ij} (x_i \cdot x_j) 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.6513970000000007em;"></span><span class="strut bottom" style="height:3.0651740000000007em;vertical-align:-1.4137769999999998em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span><span class="mrel">=</span><span class="mord mathit">i</span><span class="mbin">+</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000254801em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000005em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">⋅</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span></span></p>
+<p>其中，$ y $ 为输出，$ w_0 $ 为偏置，$ w_i $ 为特征 $ x_i $ 的权重，$ w_{ij} $ 为特征交叉项的权重。</p>
+<h4>特征交叉的必要性</h4>
+<p>特征交叉的主要目的是通过引入高阶特征来捕捉特征之间的交互信息。对于复杂的推荐系统场景，单一特征往往无法充分表达用户行为和物品特性之间的关系。例如，在电商推荐中，用户的购买行为可能受到性别、年龄、历史购买记录等多个因素的共同影响。如果不进行特征交叉，模型可能无法充分捕捉这些因素之间的相互作用，导致推荐效果不佳。</p>
+<h4>POLY2模型的优点</h4>
+<ol>
+<li><strong>自动化特征交叉</strong>：POLY2模型通过自动化方式生成所有可能的特征组合，避免了人工选择特征组合的低效过程。人工选择特征组合不仅耗时，而且容易受到工程师经验的限制，无法覆盖所有潜在的重要特征交互。</li>
+<li><strong>兼容性强</strong>：POLY2模型本质上仍是线性模型，其训练方法与逻辑回归类似，因而在工程上具有良好的兼容性。现有的许多优化算法和工具可以直接用于POLY2模型的训练和调优。</li>
+</ol>
+<h4>POLY2模型的缺陷</h4>
+<p>尽管POLY2模型在特征交叉方面具有一定优势，但它也存在以下显著缺陷：</p>
+<ol>
+<li><strong>数据稀疏问题</strong>：在处理互联网数据时，通常采用one-hot编码的方式处理类别型数据，导致特征向量极度稀疏。POLY2模型在进行无选择的特征交叉后，原本就稀疏的特征向量更加稀疏，导致大部分交叉特征的权重缺乏有效的数据进行训练，无法收敛。特征稀疏导致模型训练过程中出现大量零值特征，增加了计算复杂度和存储需求。</li>
+<li><strong>训练复杂度高</strong>：权重参数的数量由 $ n $ 直接上升到 $ n^2 $，极大地增加了训练的复杂度，使得模型在大规模数据集上的应用变得困难。随着特征数量的增加，模型参数的数量呈平方级增长，导致训练时间和内存需求急剧增加，特别是在大规模推荐系统中，这一问题尤为突出。</li>
+</ol>
+<h4>基础知识——什么是one-hot编码</h4>
+<p>One-hot编码是一种将类别型特征转换成向量的编码方式。由于类别型特征不具备数值化意义，如果不进行one-hot编码，无法将其直接作为特征向量的一个维度使用。例如，某样本有三个特征，分别是星期、性别和城市，用 [Weekday=Tuesday，Gender=Male，City=London] 表示。通过one-hot编码，可以将星期特征转换成一个7维向量，其中Tuesday对应的位置为1，其余为0。同理，性别特征和城市特征也可以用类似方式编码。</p>
+<p>例如，对于“星期”这个类别特征，其取值范围为{周一, 周二, ..., 周日}。通过one-hot编码，可以将这个特征转换为一个7维向量，周一对应[1, 0, 0, 0, 0, 0, 0]，周二对应[0, 1, 0, 0, 0, 0, 0]，以此类推。这种编码方式使得类别特征能够直接参与模型的计算。</p>
+<h4>实际应用中的问题与解决方案</h4>
+<p>在实际应用中，POLY2模型的高维特征交叉和数据稀疏问题常常带来挑战。为了解决这些问题，研究者们提出了多种改进方法：</p>
+<ol>
+<li><strong>特征选择与降维</strong>：通过特征选择技术，可以筛选出对模型有显著贡献的特征交叉项，减少无效特征的数量。降维技术（如PCA）也可以帮助降低特征空间的维度，缓解数据稀疏问题。</li>
+<li><strong>模型正则化</strong>：通过引入正则化项（如L1正则化和L2正则化），可以限制模型参数的规模，防止过拟合，同时提高模型的泛化能力。正则化技术能够有效抑制高维特征带来的噪声，提高模型的稳定性。</li>
+<li><strong>分块训练</strong>：对于大规模数据集，可以采用分块训练的方式，将数据分成多个小块，分别进行训练，最后对模型参数进行融合。这种方法可以有效减小训练数据的规模，降低计算复杂度。</li>
+</ol>
+<h4>总结</h4>
+<p>POLY2模型在特征交叉方面迈出了重要一步，通过自动化的特征组合方式提高了模型的表达能力。然而，其在处理稀疏数据和训练复杂度方面存在较大挑战，需要进一步的改进和优化。后续模型（如FM和FFM）在此基础上进行了改进，通过引入隐向量和特征域的概念，逐步解决了这些问题，推动了推荐系统的不断发展。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

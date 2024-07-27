@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01_7.2.2_ROC曲线</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>01_7.2.2 ROC曲线</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第7章 推荐系统的评估/7.2 直接评估推荐序列的离线指标
+Content: 01_7.2.2 ROC曲线
+&quot;&quot;&quot;</p>
+<h3>7.2.2 ROC曲线</h3>
+<h4>概述</h4>
+<p>ROC曲线，即受试者工作特征曲线（Receiver Operating Characteristic Curve），是评估二分类模型性能的重要工具。ROC曲线展示了在不同阈值下，分类模型的真阳性率（TPR）和假阳性率（FPR）之间的变化关系。通过分析ROC曲线，可以全面了解模型在不同条件下的表现，从而优化分类算法。</p>
+<h4>真阳性率和假阳性率</h4>
+<ol>
+<li>
+<p><strong>真阳性率（True Positive Rate, TPR）</strong>：</p>
+<ul>
+<li><strong>定义</strong>：真阳性率是指实际为正类的样本中，被正确分类为正类的比例。</li>
+<li><strong>计算公式</strong>：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mi>P</mi><mi>R</mi><mo>=</mo><mfrac><mrow><mi>T</mi><mi>P</mi></mrow><mrow><mi>T</mi><mi>P</mi><mo>+</mo><mi>F</mi><mi>N</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">TPR = \frac{TP}{TP + FN}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.36033em;"></span><span class="strut bottom" style="height:2.1296600000000003em;vertical-align:-0.7693300000000001em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.00773em;">R</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mbin">+</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit" style="margin-right:0.10903em;">N</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mord mathit" style="margin-right:0.13889em;">P</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
+其中，TP为真正例数，FN为假负例数。</li>
+<li><strong>作用</strong>：反映模型对正类样本的识别能力。</li>
+</ul>
+</li>
+<li>
+<p><strong>假阳性率（False Positive Rate, FPR）</strong>：</p>
+<ul>
+<li><strong>定义</strong>：假阳性率是指实际为负类的样本中，被错误分类为正类的比例。</li>
+<li><strong>计算公式</strong>：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>F</mi><mi>P</mi><mi>R</mi><mo>=</mo><mfrac><mrow><mi>F</mi><mi>P</mi></mrow><mrow><mi>F</mi><mi>P</mi><mo>+</mo><mi>T</mi><mi>N</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">FPR = \frac{FP}{FP + TN}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.36033em;"></span><span class="strut bottom" style="height:2.1296600000000003em;vertical-align:-0.7693300000000001em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.00773em;">R</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mbin">+</span><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mord mathit" style="margin-right:0.10903em;">N</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit" style="margin-right:0.13889em;">P</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
+其中，FP为假正例数，TN为真负例数。</li>
+<li><strong>作用</strong>：反映模型对负类样本的误识别情况。</li>
+</ul>
+</li>
+</ol>
+<h4>ROC曲线的绘制</h4>
+<ol>
+<li>
+<p><strong>数据准备</strong>：</p>
+<ul>
+<li><strong>预测评分</strong>：分类模型对所有样本进行预测评分。</li>
+<li><strong>实际标签</strong>：实际的样本标签数据，表示哪些样本为正类，哪些为负类。</li>
+</ul>
+</li>
+<li>
+<p><strong>计算TPR和FPR</strong>：</p>
+<ul>
+<li>设定不同的评分阈值，对每个阈值计算相应的TPR和FPR。</li>
+<li>生成一组TPR和FPR的点，作为ROC曲线的坐标点。</li>
+</ul>
+</li>
+<li>
+<p><strong>绘制ROC曲线</strong>：</p>
+<ul>
+<li>将所有坐标点绘制在二维平面上，横轴为假阳性率（FPR），纵轴为真阳性率（TPR）。</li>
+<li>连接这些点，形成ROC曲线。</li>
+</ul>
+</li>
+</ol>
+<h4>ROC曲线的分析</h4>
+<ol>
+<li>
+<p><strong>曲线形状</strong>：</p>
+<ul>
+<li>曲线越接近左上角，表示模型的性能越好，即在低假阳性率的同时，能够保持高真阳性率。</li>
+<li>曲线的变化反映了模型在不同阈值下的性能表现，帮助识别最佳的评分阈值。</li>
+</ul>
+</li>
+<li>
+<p><strong>AUC值</strong>：</p>
+<ul>
+<li>ROC曲线下的面积（Area Under Curve, AUC）可以量化分类模型的整体性能。</li>
+<li>AUC值越大，表示分类模型的综合性能越好。</li>
+</ul>
+</li>
+<li>
+<p><strong>对比分析</strong>：</p>
+<ul>
+<li>不同分类模型的ROC曲线可以放在一起对比，评估不同模型的优劣。</li>
+<li>通过对比，可以选择性能最优的分类模型。</li>
+</ul>
+</li>
+</ol>
+<h4>实际应用案例</h4>
+<ol>
+<li>
+<p><strong>医疗诊断系统</strong>：</p>
+<ul>
+<li>某医疗诊断系统在优化分类模型时，使用ROC曲线评估不同模型的性能。通过对比不同模型的ROC曲线，选择在低假阳性率下仍能保持高真阳性率的模型，提升诊断的准确性。</li>
+</ul>
+</li>
+<li>
+<p><strong>金融风控系统</strong>：</p>
+<ul>
+<li>某金融风控系统在信用评分和欺诈检测中，使用ROC曲线分析分类结果的真阳性率和假阳性率。通过调整评分阈值，找到最佳的风控策略，确保信用评分和欺诈检测的可靠性。</li>
+</ul>
+</li>
+<li>
+<p><strong>邮件过滤系统</strong>：</p>
+<ul>
+<li>某邮件过滤系统在垃圾邮件分类中，使用ROC曲线评估分类模型的性能。通过分析ROC曲线，优化分类算法，提高垃圾邮件的识别率，减少误报率。</li>
+</ul>
+</li>
+</ol>
+<h3>总结</h3>
+<p>ROC曲线是评估二分类模型性能的重要工具，通过展示真阳性率和假阳性率在不同阈值下的变化关系，帮助工程师全面了解模型的表现。通过分析ROC曲线的形状和AUC值，可以优化分类算法，提升分类模型的性能。在未来，随着分类模型技术的发展，ROC曲线将继续在评估和优化分类模型中发挥重要作用。</p>
+<hr>
+<h3>ROC曲线与P-R曲线对比详细表格</h3>
+<table>
+<thead>
+<tr>
+<th><strong>指标</strong></th>
+<th><strong>ROC曲线</strong></th>
+<th><strong>P-R曲线</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>定义</strong></td>
+<td>受试者工作特征曲线（Receiver Operating Characteristic Curve），展示TPR和FPR的关系。</td>
+<td>精确率-召回率曲线（Precision-Recall Curve），展示精确率和召回率的关系。</td>
+</tr>
+<tr>
+<td><strong>横轴</strong></td>
+<td>假阳性率（False Positive Rate, FPR）</td>
+<td>召回率（Recall）</td>
+</tr>
+<tr>
+<td><strong>纵轴</strong></td>
+<td>真阳性率（True Positive Rate, TPR）</td>
+<td>精确率（Precision）</td>
+</tr>
+<tr>
+<td><strong>重点关注</strong></td>
+<td>模型区分正负样本的能力</td>
+<td>模型在实际相关样本中的表现</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>负类样本较多，正类样本较少的情况（如医疗诊断、信用评分）</td>
+<td>正类样本较多或不平衡数据集的情况（如信息检索、推荐系统）</td>
+</tr>
+<tr>
+<td><strong>曲线特点</strong></td>
+<td>曲线越接近左上角，表示模型性能越好。</td>
+<td>曲线越接近右上角，表示模型性能越好。</td>
+</tr>
+<tr>
+<td><strong>AUC解释</strong></td>
+<td>ROC曲线下的面积（AUC）越大，表示模型综合性能越好。</td>
+<td>P-R曲线下的面积（AUC）越大，表示模型综合性能越好。</td>
+</tr>
+<tr>
+<td><strong>优势</strong></td>
+<td>1. 在所有分类阈值上都能提供模型性能的全貌。                                       2. 易于比较不同模型的性能。</td>
+<td>1. 更关注正类样本的性能，适用于不平衡数据集。                                      2. 对于相关样本的表现评估更直观。</td>
+</tr>
+<tr>
+<td><strong>劣势</strong></td>
+<td>1. 在不平衡数据集上可能会产生误导性结论。                                        2. 对正类样本较少的情况敏感度较低。</td>
+<td>1. 在负类样本较多时，曲线可能不够直观。                                          2. 不能全面反映模型的区分能力。</td>
+</tr>
+<tr>
+<td><strong>计算复杂度</strong></td>
+<td>需要计算TPR和FPR，复杂度较高。</td>
+<td>需要计算精确率和召回率，复杂度较高。</td>
+</tr>
+<tr>
+<td><strong>适用性</strong></td>
+<td>适用于评价二分类模型的整体性能，特别是在处理正负样本分布均衡的数据集时表现优异。</td>
+<td>适用于评价二分类模型的实际相关样本性能，特别是在处理正负样本分布不均衡的数据集时表现优异。</td>
+</tr>
+<tr>
+<td><strong>典型应用</strong></td>
+<td>医疗诊断、信用评分、欺诈检测</td>
+<td>信息检索、推荐系统、文本分类</td>
+</tr>
+<tr>
+<td><strong>阈值调整</strong></td>
+<td>通过调整阈值可以观察模型在不同假阳性率下的表现。</td>
+<td>通过调整阈值可以观察模型在不同召回率下的表现。</td>
+</tr>
+<tr>
+<td><strong>结果解读</strong></td>
+<td>TPR越高、FPR越低，表示模型性能越好。</td>
+<td>精确率越高、召回率越高，表示模型性能越好。</td>
+</tr>
+<tr>
+<td><strong>主要评估指标</strong></td>
+<td>真阳性率（TPR）、假阳性率（FPR）、AUC</td>
+<td>精确率（Precision）、召回率（Recall）、F1值、AUC</td>
+</tr>
+<tr>
+<td><strong>曲线斜率解释</strong></td>
+<td>斜率越陡，表示模型在正负样本区分上的性能越好。</td>
+<td>斜率越陡，表示模型在正类样本识别上的性能越好。</td>
+</tr>
+<tr>
+<td><strong>对极端值的敏感性</strong></td>
+<td>对极端值不敏感，适用于不同类别样本比例变化的情况。</td>
+<td>对极端值敏感，适用于相关样本比例变化较大的情况。</td>
+</tr>
+<tr>
+<td><strong>真实案例</strong></td>
+<td>用于评估癌症诊断模型，观察在不同阈值下的TPR和FPR变化，选择最佳诊断阈值。</td>
+<td>用于评估商品推荐系统，观察在不同阈值下的精确率和召回率变化，优化推荐算法。</td>
+</tr>
+<tr>
+<td><strong>理解难度</strong></td>
+<td>理解相对简单，广泛使用于机器学习和统计学领域。</td>
+<td>理解相对复杂，需要对精确率和召回率的关系有深入理解。</td>
+</tr>
+<tr>
+<td><strong>可视化效果</strong></td>
+<td>图形直观，易于解释和对比不同模型。</td>
+<td>图形直观，易于解释和对比不同模型，特别是在不平衡数据集上。</td>
+</tr>
+<tr>
+<td><strong>偏好模型类型</strong></td>
+<td>偏好能够区分正负样本的模型，如Logistic回归、SVM。</td>
+<td>偏好能够提高正类样本识别率的模型，如神经网络、决策树。</td>
+</tr>
+</tbody>
+</table>
+<h3>表格字段解释</h3>
+<ul>
+<li><strong>指标</strong>：对比的具体项目或方面。</li>
+<li><strong>ROC曲线</strong>：ROC曲线在该项目或方面的特性和表现。</li>
+<li><strong>P-R曲线</strong>：P-R曲线在该项目或方面的特性和表现。</li>
+</ul>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

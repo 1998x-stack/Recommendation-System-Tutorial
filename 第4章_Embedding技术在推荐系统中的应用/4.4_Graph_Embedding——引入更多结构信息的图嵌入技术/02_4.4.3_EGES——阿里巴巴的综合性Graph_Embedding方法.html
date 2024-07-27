@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_4.4.3_EGES——阿里巴巴的综合性Graph_Embedding方法</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_4.4.3 EGES——阿里巴巴的综合性Graph Embedding方法</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第4章 Embedding技术在推荐系统中的应用/4.4 Graph Embedding——引入更多结构信息的图嵌入技术
+Content: 02_4.4.3 EGES——阿里巴巴的综合性Graph Embedding方法
+&quot;&quot;&quot;</p>
+<h3>4.4.3 EGES——阿里巴巴的综合性Graph Embedding方法</h3>
+<h4>背景与概述</h4>
+<p>EGES（Enhanced Graph Embedding with Side Information）是阿里巴巴在2018年提出的一种综合性Graph Embedding方法，旨在解决推荐系统中冷启动问题。EGES的核心思想是在DeepWalk生成的Graph Embedding基础上引入补充信息（side information），通过融合多种信息源来生成更加准确和全面的物品嵌入向量。</p>
+<h4>方法原理</h4>
+<p>EGES方法的基本流程包括以下几个步骤：</p>
+<ol>
+<li><strong>生成物品关系图</strong>：通过用户行为序列生成物品关系图。例如，用户的购买、点击、浏览等行为可以看作是图中的边，物品可以看作是图中的节点。</li>
+<li><strong>引入补充信息</strong>：为了应对冷启动问题，EGES方法引入了更多的补充信息（如物品的属性、类别等）来丰富物品的嵌入信息。基于这些补充信息，可以生成多个补充信息嵌入向量。</li>
+<li><strong>融合多种嵌入向量</strong>：通过在深度神经网络中加入加权平均层，将不同类型的嵌入向量融合为最终的物品嵌入向量。每个嵌入向量被赋予一个权重，这些权重可以通过模型训练来优化。</li>
+</ol>
+<h4>算法细节</h4>
+<p><strong>1. 生成物品关系图：</strong>
+物品关系图的生成可以基于用户的行为数据。例如，如果用户A购买了物品1和物品2，则在物品关系图中，物品1和物品2之间会有一条边。边的权重可以根据用户行为的频次或强度来设定。</p>
+<p><strong>2. 引入补充信息：</strong>
+补充信息可以包括物品的各种属性，如类别、品牌、价格等。这些信息可以通过知识图谱或其他数据源获取。对于每种补充信息，生成一个对应的嵌入向量。</p>
+<p><strong>3. 融合多种嵌入向量：</strong>
+为了融合多种嵌入向量，EGES方法在深度神经网络中引入了加权平均层。具体来说，对于每个物品，将其多种嵌入向量通过加权平均的方式融合为一个最终的嵌入向量。权重的优化可以通过反向传播算法来实现。在实际应用中，为了防止权重为零，采用了softmax函数对权重进行归一化处理。</p>
+<p>公式如下：</p>
+\text{Final\_Embedding} = \sum_{i=1}^{n} \alpha_i \cdot \text{Embedding}_i 
+
+<p>其中，$ \alpha_i $ 是第 $ i $ 种补充信息的权重，$ \text{Embedding}_i $ 是对应的嵌入向量。</p>
+<h4>优势与局限性</h4>
+<p><strong>优势：</strong></p>
+<ol>
+<li><strong>解决冷启动问题</strong>：通过引入补充信息，使得没有历史行为记录的物品也能获得较合理的初始嵌入向量，缓解了冷启动问题。</li>
+<li><strong>信息融合</strong>：EGES方法能够融合多种信息源，生成更加全面和准确的物品嵌入向量。</li>
+<li><strong>灵活性高</strong>：可以根据不同的应用场景，选择不同的补充信息进行融合，具有较高的灵活性。</li>
+</ol>
+<p><strong>局限性：</strong></p>
+<ol>
+<li><strong>依赖补充信息的质量</strong>：补充信息的质量直接影响嵌入向量的准确性，如果补充信息不准确或不完整，会影响最终的推荐效果。</li>
+<li><strong>计算复杂度较高</strong>：需要同时处理多种补充信息，计算复杂度较高，尤其在大规模数据集上，计算资源消耗较大。</li>
+</ol>
+<h4>应用案例</h4>
+<p>阿里巴巴在其电商平台上成功应用了EGES方法，通过引入商品的属性、类别等补充信息，生成更加准确的商品嵌入向量，从而实现个性化推荐。在实际应用中，EGES方法显著提升了推荐系统的准确性和用户满意度。</p>
+<h3>结论</h3>
+<p>EGES方法通过引入多种补充信息，解决了推荐系统中的冷启动问题，并通过融合多种嵌入向量生成更加准确的物品嵌入向量。虽然存在依赖补充信息质量和计算复杂度较高的局限性，但其在实际应用中表现出了显著的效果，是一种灵活且高效的综合性Graph Embedding方法   。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

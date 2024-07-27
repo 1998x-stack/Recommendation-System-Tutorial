@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04_8.2.5_Airbnb的实时搜索排序模型及其特征工程</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>04_8.2.5 Airbnb的实时搜索排序模型及其特征工程</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.2 Airbnb基于Embedding的实时搜索推荐系统
+Content: 04_8.2.5 Airbnb的实时搜索排序模型及其特征工程
+&quot;&quot;&quot;</p>
+<h3>8.2.5 Airbnb的实时搜索排序模型及其特征工程</h3>
+<h4>引言</h4>
+<p>Airbnb的实时搜索推荐系统通过Embedding技术将用户和房源的短期和长期兴趣进行编码，再结合搜索词Embedding，实现了个性化的实时推荐。此章节深入探讨了实时搜索排序模型的构建及其特征工程  。</p>
+<h4>实时搜索排序模型</h4>
+<ol>
+<li>
+<p><strong>模型构建</strong>：</p>
+<ul>
+<li><strong>Embedding特征</strong>：Airbnb没有直接使用Embedding的相似度排名作为最终的搜索结果，而是基于Embedding生成了不同的用户-房源相关特征（user-listing pair features），这些特征再输入搜索排序模型。</li>
+<li><strong>特征种类</strong>：表8-4列出了基于Embedding生成的所有特征，其中包括用户属性和房源属性的相似度特征，如UserTypeListingTypeSim，这个特征通过长期兴趣Embedding计算得到；短期兴趣Embedding特征，如EmbClickSim，表示候选房源与用户最近点击过的房源的相似度  。</li>
+</ul>
+</li>
+<li>
+<p><strong>实时性</strong>：</p>
+<ul>
+<li><strong>实时特征设计</strong>：实时系统的“实时”体现在Embedding相关的特征设计上，如“最近点击房源的相似度（EmbClickSim）”和“最后点击房源的相似度（EmbLastLongClickSim）”，这些特征使得用户在点击浏览的过程中可以得到实时反馈，搜索结果也可以实时地根据用户的点击行为而改变  。</li>
+</ul>
+</li>
+</ol>
+<h4>特征工程</h4>
+<ol>
+<li>
+<p><strong>特征生成</strong>：</p>
+<ul>
+<li><strong>用户特征</strong>：包括用户的历史行为数据（如点击、预订等）、用户属性（如年龄、性别、设备类型等）和用户的短期和长期兴趣Embedding。</li>
+<li><strong>房源特征</strong>：包括房源的属性数据（如位置、价格、类型等）、房源的短期和长期兴趣Embedding。</li>
+<li><strong>搜索词特征</strong>：通过搜索词Embedding生成搜索词的语义特征，与房源Embedding进行相似度计算。</li>
+</ul>
+</li>
+<li>
+<p><strong>特征组合</strong>：</p>
+<ul>
+<li><strong>交叉特征</strong>：通过将用户、房源和搜索词的特征进行交叉组合，生成新的特征。例如，用户的短期兴趣Embedding与房源的属性特征结合，生成用户-房源的交叉特征。</li>
+<li><strong>特征选择</strong>：利用特征选择算法，筛选出对模型影响最大的特征，确保模型的训练效率和预测准确性  。</li>
+</ul>
+</li>
+</ol>
+<h4>排序模型训练</h4>
+<ol>
+<li>
+<p><strong>模型选择</strong>：</p>
+<ul>
+<li><strong>Pairwise Lambda Rank的GBDT模型</strong>：Airbnb采用了支持Pairwise Lambda Rank的GBDT模型进行排序，这种模型能够处理大量的特征，并且能够有效地提升排序的精度。</li>
+<li><strong>模型开源</strong>：Airbnb的工程师已经将这个排序模型开源，供其他开发者学习和使用  。</li>
+</ul>
+</li>
+<li>
+<p><strong>训练过程</strong>：</p>
+<ul>
+<li><strong>数据准备</strong>：将所有Embedding特征与其他特征一起输入模型进行训练，生成排序模型。</li>
+<li><strong>模型验证</strong>：利用验证数据集对模型进行验证，确保模型的泛化能力和预测准确性。</li>
+</ul>
+</li>
+</ol>
+<h4>特征重要度评估</h4>
+<p>表8-5显示了Airbnb对各特征重要度的评估结果，评估结果表明，不同特征在模型中的贡献度不同，通过对特征重要度的分析，可以进一步优化模型，提高推荐结果的精准度和个性化  。</p>
+<h4>总结</h4>
+<p>Airbnb的实时搜索排序模型通过Embedding技术和特征工程的结合，实现了用户兴趣的精准捕捉和个性化推荐。模型的实时性设计和特征选择算法确保了推荐结果的实时反馈和高效预测。通过这些方法，Airbnb在推荐系统领域展现了深度学习的强大应用潜力，为其他推荐系统的开发提供了宝贵的经验和参考  。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

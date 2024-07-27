@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01_3.9.2_DIEN模型的架构</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>01_3.9.2 DIEN模型的架构</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第3章 浪潮之巅——深度学习在推荐系统中的应用/3.9 DIEN——序列模型与推荐系统的结合
+Content: 01_3.9.2 DIEN模型的架构
+&quot;&quot;&quot;</p>
+<h3>01_3.9.2 DIEN模型的架构</h3>
+<h4>1. DIEN模型概述</h4>
+<p>DIEN（Deep Interest Evolution Network）模型是阿里巴巴在DIN（Deep Interest Network）模型基础上进行改进的一种深度学习推荐模型。DIEN模型通过引入序列模型，能够更好地模拟和捕捉用户兴趣的动态变化，其整体架构如图3-25所示，包括输入层、Embedding层、连接层、多层全连接神经网络和输出层  。</p>
+<h4>2. DIEN模型的创新点</h4>
+<p>DIEN模型的核心创新在于“兴趣进化网络”，这是模拟用户兴趣动态变化的关键部分。兴趣进化网络分为三层，从下至上依次是：</p>
+<ol>
+<li><strong>行为序列层（Behavior Layer）</strong>：将原始的ID类行为序列转换为Embedding行为序列。</li>
+<li><strong>兴趣抽取层（Interest Extractor Layer）</strong>：通过模拟用户兴趣迁移过程，抽取用户的兴趣向量。</li>
+<li><strong>兴趣进化层（Interest Evolving Layer）</strong>：在兴趣抽取层的基础上加入注意力机制，模拟与当前目标广告相关的兴趣进化过程  。</li>
+</ol>
+<h4>3. 行为序列层</h4>
+<p>行为序列层的主要作用是将用户的原始行为数据（如点击、浏览、购买等）转换为对应的Embedding向量序列。通过Embedding层，将高维稀疏的ID类特征转换为低维稠密的向量表示，便于后续神经网络处理 。</p>
+<h4>4. 兴趣抽取层</h4>
+<p>兴趣抽取层采用GRU（Gated Recurrent Unit）网络来模拟用户的兴趣迁移过程。GRU网络通过门控机制控制信息流动，能够有效解决传统RNN中的梯度消失问题，并具有更快的训练速度。具体来说，GRU通过更新门（Update Gate）和重置门（Reset Gate）来决定当前时刻的隐藏状态向量如何更新，从而抽取出用户的兴趣状态向量  。</p>
+<h4>5. 兴趣进化层</h4>
+<p>兴趣进化层在兴趣抽取层的基础上引入了注意力机制，通过AUGRU（GRU with Attentional Update Gate）结构来模拟与当前目标广告相关的兴趣进化过程。AUGRU在GRU的更新门上加入了注意力得分，使得每个时刻的隐藏状态更新更加灵活和准确。具体来说，AUGRU的注意力得分生成过程与DIN模型中的注意力激活单元类似，通过计算当前兴趣状态向量与目标广告向量的匹配得分来生成注意力权重  。</p>
+<h4>6. DIEN模型的优势</h4>
+<p>相比传统的推荐模型，DIEN模型具有以下优势：</p>
+<ol>
+<li><strong>捕捉用户兴趣的动态变化</strong>：通过序列模型和注意力机制，DIEN模型能够更好地捕捉用户兴趣的变化，提高推荐的准确性和相关性。</li>
+<li><strong>增强模型的表达能力</strong>：引入GRU和AUGRU结构，使得模型在处理用户行为序列时具有更强的表达能力。</li>
+<li><strong>提高模型的训练效率</strong>：GRU相对于LSTM参数更少，训练速度更快，同时AUGRU的注意力机制使得模型能够更加高效地更新隐藏状态  。</li>
+</ol>
+<h4>7. 总结</h4>
+<p>DIEN模型通过引入序列模型和注意力机制，实现了对用户兴趣动态变化的模拟和捕捉。其创新点在于兴趣进化网络的设计，包括行为序列层、兴趣抽取层和兴趣进化层。这一系列改进使得DIEN模型在推荐系统中具有更强的表达能力和预测精度，为推荐系统的发展提供了新的思路和方法  。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

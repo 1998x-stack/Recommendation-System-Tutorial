@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_7.2.3_平均精度均值</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_7.2.3 平均精度均值</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第7章 推荐系统的评估/7.2 直接评估推荐序列的离线指标
+Content: 02_7.2.3 平均精度均值
+&quot;&quot;&quot;</p>
+<h3>7.2.3 平均精度均值</h3>
+<h4>概述</h4>
+<p>平均精度均值（Mean Average Precision, MAP）是评估信息检索和推荐系统性能的重要指标。MAP通过计算多个查询或推荐结果的平均精度值，综合衡量模型的整体性能。相比于单一的精度或召回率指标，MAP能够更全面地反映模型在不同查询或推荐任务中的表现。</p>
+<h4>平均精度（Average Precision, AP）</h4>
+<ol>
+<li>
+<p><strong>定义</strong>：</p>
+<ul>
+<li>平均精度是针对单个查询或推荐结果的评估指标，反映了在不同截断位置的精度值的平均值。</li>
+</ul>
+</li>
+<li>
+<p><strong>计算步骤</strong>：</p>
+<ul>
+<li><strong>计算每个相关结果的精度</strong>：
+对于每个相关结果，计算其在推荐列表中的位置，并计算截至该位置的精度值。</li>
+<li><strong>取平均值</strong>：
+将所有相关结果的精度值取平均，得到平均精度。</li>
+</ul>
+</li>
+<li>
+<p><strong>公式</strong>：</p>
+AP = \frac{1}{|\text{相关结果}|} \sum_{k=1}^{n} (P(k) \times \text{rel}(k))
+
+<p>其中，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><mi>k</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">P(k)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mclose">)</span></span></span></span>表示截至位置<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span></span></span></span>的精度值，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">l</mi></mtext><mo>(</mo><mi>k</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\text{rel}(k)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="text mord textstyle uncramped"><span class="mord mathrm">r</span><span class="mord mathrm">e</span><span class="mord mathrm">l</span></span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mclose">)</span></span></span></span>表示位置<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span></span></span></span>上的结果是否相关，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">n</span></span></span></span>为推荐列表的长度。</p>
+</li>
+</ol>
+<h4>平均精度均值（MAP）</h4>
+<ol>
+<li>
+<p><strong>定义</strong>：</p>
+<ul>
+<li>平均精度均值是针对多个查询或推荐结果的评估指标，反映了所有查询或推荐结果的平均精度值。</li>
+</ul>
+</li>
+<li>
+<p><strong>计算步骤</strong>：</p>
+<ul>
+<li><strong>计算每个查询或推荐结果的AP值</strong>：
+对每个查询或推荐结果，分别计算其平均精度（AP）。</li>
+<li><strong>取所有AP值的平均</strong>：
+将所有查询或推荐结果的AP值取平均，得到平均精度均值（MAP）。</li>
+</ul>
+</li>
+<li>
+<p><strong>公式</strong>：</p>
+MAP = \frac{1}{|\text{查询}|} \sum_{i=1}^{|\text{查询}|} AP_i
+
+<p>其中，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><msub><mi>P</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">AP_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord mathit">A</span><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>表示第<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.65952em;"></span><span class="strut bottom" style="height:0.65952em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">i</span></span></span></span>个查询或推荐结果的平均精度值。</p>
+</li>
+</ol>
+<h4>评估示例</h4>
+<ol>
+<li>
+<p><strong>信息检索</strong>：</p>
+<ul>
+<li>在信息检索系统中，针对每个查询，计算返回结果的平均精度值（AP），再取所有查询的平均精度均值（MAP），评估检索系统的整体性能。</li>
+</ul>
+</li>
+<li>
+<p><strong>推荐系统</strong>：</p>
+<ul>
+<li>在推荐系统中，针对每个用户的推荐列表，计算平均精度值（AP），再取所有用户的平均精度均值（MAP），评估推荐系统的整体性能。</li>
+</ul>
+</li>
+</ol>
+<h4>实际应用案例</h4>
+<ol>
+<li>
+<p><strong>电商平台</strong>：</p>
+<ul>
+<li>某电商平台在评估商品推荐系统时，使用MAP评估推荐结果的整体性能。通过计算每个用户推荐列表的平均精度值（AP），再取所有用户的平均精度均值（MAP），优化推荐算法，提高推荐结果的相关性和用户满意度。</li>
+</ul>
+</li>
+<li>
+<p><strong>搜索引擎</strong>：</p>
+<ul>
+<li>某搜索引擎在评估搜索结果的相关性时，使用MAP评估不同查询的整体性能。通过计算每个查询的平均精度值（AP），再取所有查询的平均精度均值（MAP），优化搜索算法，提高搜索结果的准确性和用户体验。</li>
+</ul>
+</li>
+<li>
+<p><strong>社交网络</strong>：</p>
+<ul>
+<li>某社交网络平台在评估好友推荐系统时，使用MAP评估推荐结果的整体性能。通过计算每个用户推荐列表的平均精度值（AP），再取所有用户的平均精度均值（MAP），优化推荐算法，提高好友推荐的准确性和用户互动率。</li>
+</ul>
+</li>
+</ol>
+<h3>优缺点分析</h3>
+<h4>优点</h4>
+<ol>
+<li><strong>全面性</strong>：MAP通过综合多个查询或推荐结果的平均精度值，全面评估模型的整体性能。</li>
+<li><strong>灵活性</strong>：MAP能够适用于各种信息检索和推荐系统的评估需求，具有较强的通用性。</li>
+<li><strong>细粒度</strong>：MAP能够细致地反映每个查询或推荐结果的表现，帮助发现模型的优劣之处。</li>
+</ol>
+<h4>缺点</h4>
+<ol>
+<li><strong>计算复杂</strong>：MAP的计算过程较为复杂，特别是对于大规模数据集，需要较高的计算资源和时间成本。</li>
+<li><strong>依赖相关性</strong>：MAP高度依赖于相关性判断，主观性较强，可能受到标注质量的影响。</li>
+<li><strong>不适用极端情况</strong>：对于相关结果较少或不存在的查询，MAP可能无法有效评估模型性能。</li>
+</ol>
+<h3>总结</h3>
+<p>平均精度均值（MAP）是评估信息检索和推荐系统性能的重要指标，通过计算多个查询或推荐结果的平均精度值，综合衡量模型的整体性能。MAP具有全面性和灵活性的优点，能够细致地反映模型的表现，帮助优化推荐算法和搜索算法。然而，MAP的计算过程较为复杂，且依赖于相关性判断，需要在实际应用中综合考虑其优缺点，合理使用。</p>
+<hr>
+<h3>AUC与MAP对比详细表格</h3>
+<table>
+<thead>
+<tr>
+<th><strong>指标</strong></th>
+<th><strong>AUC（ROC曲线下面积）</strong></th>
+<th><strong>MAP（平均精度均值）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>定义</strong></td>
+<td>ROC曲线下的面积，用于衡量分类模型的整体性能。</td>
+<td>多个查询或推荐结果的平均精度值，用于评估信息检索和推荐系统的整体性能。</td>
+</tr>
+<tr>
+<td><strong>公式</strong></td>
+<td>$$AUC = \int_{0}^{1} TPR , dFPR$$</td>
+<td>$$MAP = \frac{1}{Q} \sum_{i=1}^{Q} AP_i$$</td>
+</tr>
+<tr>
+<td><strong>计算步骤</strong></td>
+<td>1. 绘制ROC曲线。                                                          2. 计算曲线下的面积。</td>
+<td>1. 计算每个查询或推荐结果的平均精度（AP）。                          2. 取所有AP的平均值。</td>
+</tr>
+<tr>
+<td><strong>适用模型类型</strong></td>
+<td>二分类模型。</td>
+<td>信息检索模型和推荐系统。</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>二分类任务，如医疗诊断、信用评分、欺诈检测等。</td>
+<td>信息检索和推荐任务，如搜索引擎、推荐系统等。</td>
+</tr>
+<tr>
+<td><strong>优点</strong></td>
+<td>1. 提供模型整体性能的全面视图。                                              2. 适用于不同分类阈值的评估。</td>
+<td>1. 更加注重模型在相关样本上的表现。                                    2. 适用于不平衡数据集。</td>
+</tr>
+<tr>
+<td><strong>缺点</strong></td>
+<td>1. 在不平衡数据集上可能产生误导性结论。                                        2. 对正类样本少的情况敏感度较低。</td>
+<td>1. 计算复杂度高。                                                       2. 依赖于相关性判断，主观性较强。</td>
+</tr>
+<tr>
+<td><strong>评价重点</strong></td>
+<td>模型区分正负样本的能力。</td>
+<td>模型对相关样本的识别能力。</td>
+</tr>
+<tr>
+<td><strong>结果解读</strong></td>
+<td>AUC值越大，模型整体性能越好。</td>
+<td>MAP值越大，模型在相关样本上的表现越好。</td>
+</tr>
+<tr>
+<td><strong>计算复杂度</strong></td>
+<td>需要计算TPR和FPR，复杂度较高。</td>
+<td>需要计算多个AP值并取平均，复杂度较高。</td>
+</tr>
+<tr>
+<td><strong>主要评估指标</strong></td>
+<td>真阳性率（TPR）、假阳性率（FPR）。</td>
+<td>精确率（Precision）、召回率（Recall）、平均精度（AP）。</td>
+</tr>
+<tr>
+<td><strong>典型应用</strong></td>
+<td>医疗诊断：评估诊断模型的整体性能，选择最佳诊断阈值。</td>
+<td>搜索引擎：评估搜索结果的相关性和用户满意度。</td>
+</tr>
+<tr>
+<td><strong>曲线形状</strong></td>
+<td>曲线越接近左上角，模型性能越好。</td>
+<td>曲线越接近右上角，模型性能越好。</td>
+</tr>
+<tr>
+<td><strong>对极端值的敏感性</strong></td>
+<td>对极端值不敏感，适用于不同类别样本比例变化的情况。</td>
+<td>对极端值敏感，适用于相关样本比例变化较大的情况。</td>
+</tr>
+<tr>
+<td><strong>理解难度</strong></td>
+<td>理解相对简单，广泛使用于机器学习和统计学领域。</td>
+<td>理解相对复杂，需要对精确率和召回率的关系有深入理解。</td>
+</tr>
+<tr>
+<td><strong>真实案例</strong></td>
+<td>用于评估癌症诊断模型，观察在不同阈值下的TPR和FPR变化，选择最佳诊断阈值。</td>
+<td>用于评估商品推荐系统，观察在不同阈值下的精确率和召回率变化，优化推荐算法。</td>
+</tr>
+<tr>
+<td><strong>可视化效果</strong></td>
+<td>图形直观，易于解释和对比不同模型。</td>
+<td>图形直观，易于解释和对比不同模型，特别是在不平衡数据集上。</td>
+</tr>
+<tr>
+<td><strong>评价的全面性</strong></td>
+<td>提供了模型在不同阈值下的整体性能。</td>
+<td>提供了模型在相关样本上的综合表现。</td>
+</tr>
+<tr>
+<td><strong>阈值调整</strong></td>
+<td>通过调整阈值可以观察模型在不同假阳性率下的表现。</td>
+<td>通过调整阈值可以观察模型在不同召回率下的表现。</td>
+</tr>
+<tr>
+<td><strong>理论基础</strong></td>
+<td>基于统计学中的受试者工作特征曲线理论。</td>
+<td>基于信息检索和推荐系统的评估方法论。</td>
+</tr>
+<tr>
+<td><strong>历史发展</strong></td>
+<td>广泛应用于二分类问题的性能评估，历史悠久。</td>
+<td>主要用于信息检索和推荐系统的性能评估，发展较晚但逐渐广泛应用。</td>
+</tr>
+<tr>
+<td><strong>工具支持</strong></td>
+<td>广泛支持于各种机器学习和数据分析工具（如scikit-learn）。</td>
+<td>在信息检索和推荐系统工具中得到广泛支持（如IR评估工具）。</td>
+</tr>
+</tbody>
+</table>
+<h3>表格字段解释</h3>
+<ul>
+<li><strong>指标</strong>：对比的具体项目或方面。</li>
+<li><strong>AUC</strong>：AUC在该项目或方面的特性和表现。</li>
+<li><strong>MAP</strong>：MAP在该项目或方面的特性和表现。</li>
+</ul>
+<h3>总结</h3>
+<p>通过比较AUC和MAP，可以发现它们在评估模型性能时各有优势。AUC适用于评估二分类模型的整体性能，特别是在处理正负样本分布均衡的数据集时表现优异。而MAP适用于评估信息检索和推荐系统的性能，特别是在不平衡数据集中更具优势。选择合适的评估指标，可以帮助工程师更好地理解和优化模型的表现。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

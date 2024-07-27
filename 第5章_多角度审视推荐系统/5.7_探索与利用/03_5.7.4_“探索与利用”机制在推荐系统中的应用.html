@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03_5.7.4_“探索与利用”机制在推荐系统中的应用</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>03_5.7.4 “探索与利用”机制在推荐系统中的应用</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第5章 多角度审视推荐系统/5.7 探索与利用
+Content: 03_5.7.4 “探索与利用”机制在推荐系统中的应用
+&quot;&quot;&quot;</p>
+<h3>5.7.4 “探索与利用”机制在推荐系统中的应用</h3>
+<h4>背景</h4>
+<p>在推荐系统中，“探索与利用”机制是非常重要的。这一机制不仅能解决冷启动问题，还能发掘用户的潜在兴趣，增加推荐结果的多样性，从而提升系统的整体性能和用户体验。</p>
+<h4>主要应用场景</h4>
+<ol>
+<li>
+<p><strong>物品冷启动</strong>：</p>
+<ul>
+<li><strong>问题描述</strong>：新加入的物品或长期没有互动信息的长尾物品由于缺乏用户反馈数据，推荐系统难以评估其受欢迎程度。</li>
+<li><strong>解决方案</strong>：探索与利用算法对新物品和长尾物品有天然的倾向性，可以帮助这类物品快速收集用户反馈，快速度过冷启动期。在较少伤害系统整体收益的前提下，快速找到有潜力的物品，丰富优质的物品候选集。</li>
+</ul>
+</li>
+<li>
+<p><strong>发掘用户新兴趣</strong>：</p>
+<ul>
+<li><strong>问题描述</strong>：如果推荐系统总是利用现有数据为用户推荐物品，相当于对用户的已发掘兴趣进行“涸泽而渔”的利用，短期内用户可能满足于当前的推荐结果，但很可能快速疲倦并离开。</li>
+<li><strong>解决方案</strong>：推荐系统需要进行一定程度的探索，维持用户的长期兴趣。通过探索，不断抓住用户兴趣改变的趋势，保持推荐结果的新颖性和多样性。</li>
+</ul>
+</li>
+<li>
+<p><strong>增加结果多样性</strong>：</p>
+<ul>
+<li><strong>问题描述</strong>：推荐结果的多样性对于提升用户体验至关重要，过于同质化的推荐结果容易导致用户厌倦。</li>
+<li><strong>解决方案</strong>：通过引入探索与利用机制，推荐系统可以动态调整推荐策略，增加推荐结果的多样性。例如，可以定期推荐一些新颖或冷门的物品，以保持用户的兴趣和参与度。</li>
+</ul>
+</li>
+</ol>
+<h4>算法应用</h4>
+<ol>
+<li>
+<p><strong>Upper Confidence Bound (UCB)</strong>：</p>
+<ul>
+<li><strong>算法原理</strong>：UCB算法通过计算物品的得分进行推荐，得分公式如下：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext><mi mathvariant="normal">U</mi><mi mathvariant="normal">C</mi><mi mathvariant="normal">B</mi></mtext><mo>(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>)</mo><mo>=</mo><msub><mover accent="true"><mrow><mi>μ</mi></mrow><mo>^</mo></mover><mi>j</mi></msub><mo>+</mo><msqrt><mrow><mfrac><mrow><mn>2</mn><mi>ln</mi><mi>n</mi></mrow><mrow><msub><mi>n</mi><mi>j</mi></msub></mrow></mfrac></mrow></msqrt></mrow><annotation encoding="application/x-tex">\text{UCB}(x_j) = \hat{\mu}_j + \sqrt{\frac{2\ln n}{n_j}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.8335560000000002em;"></span><span class="strut bottom" style="height:3.0400300000000007em;vertical-align:-1.2064740000000003em;"></span><span class="base displaystyle textstyle uncramped"><span class="text mord displaystyle textstyle uncramped"><span class="mord mathrm">U</span><span class="mord mathrm">C</span><span class="mord mathrm">B</span></span><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mrel">=</span><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle cramped"><span class="mord mathit">μ</span></span></span><span style="top:0em;margin-left:0.05556em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="sqrt mord"><span class="sqrt-sign" style="top:-0.043555999999999706em;"><span class="style-wrap reset-textstyle textstyle uncramped"><span class="delimsizing size4">√</span></span></span><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span><span class="mord displaystyle textstyle cramped"><span class="mord reset-textstyle displaystyle textstyle cramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.6859999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathrm">2</span><span class="mop">ln</span><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span><span style="top:-1.7535560000000001em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span><span class="reset-textstyle textstyle uncramped sqrt-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span>​</span></span></span></span></span></span></span></p>
+其中，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mover accent="true"><mrow><mi>μ</mi></mrow><mo>^</mo></mover><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\hat{\mu}_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit">μ</span></span></span><span style="top:0em;margin-left:0.05556em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>为物品<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.65952em;"></span><span class="strut bottom" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span>的平均回报，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>n</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">n_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>为物品<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.65952em;"></span><span class="strut bottom" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span>被推荐的次数，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">n</span></span></span></span>为所有物品被推荐的总次数。UCB算法在选择推荐物品时，既考虑了当前的平均回报，也考虑了物品被推荐的次数，具有较强的探索能力。</li>
+</ul>
+</li>
+<li>
+<p><strong>Thompson Sampling</strong>：</p>
+<ul>
+<li><strong>算法原理</strong>：Thompson Sampling算法基于贝叶斯原理，通过对每个物品的回报率进行采样，然后选择采样值最高的物品进行推荐。每次采样后，根据实际回报更新物品的回报率分布，从而平衡探索与利用。</li>
+<li><strong>应用效果</strong>：在实践中，Thompson Sampling在处理探索与利用的权衡时，表现优异，特别是在需要实时反馈和更新的场景下，效果显著。</li>
+</ul>
+</li>
+<li>
+<p><strong>深度强化学习模型（如DRN模型）</strong>：</p>
+<ul>
+<li><strong>算法原理</strong>：DRN模型通过对深度学习模型参数添加随机扰动，生成多个探索网络，并通过实时反馈决定保留哪个网络。具体方法是对当前网络参数W添加随机扰动<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>W</mi></mrow><annotation encoding="application/x-tex">\Delta W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">Δ</span><span class="mord mathit" style="margin-right:0.13889em;">W</span></span></span></span>，得到新的探索网络参数<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>W</mi><mo>+</mo><mi mathvariant="normal">Δ</mi><mi>W</mi></mrow><annotation encoding="application/x-tex">W + \Delta W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">W</span><span class="mbin">+</span><span class="mord mathrm">Δ</span><span class="mord mathit" style="margin-right:0.13889em;">W</span></span></span></span>，根据实时效果反馈决定是否保留新的探索网络。</li>
+<li><strong>应用效果</strong>：能够在深度学习模型的基础上进行探索与利用，提高推荐的多样性和新颖性。尤其适用于动态变化的推荐场景，如新闻推荐、视频推荐等。</li>
+</ul>
+</li>
+</ol>
+<h4>实践案例</h4>
+<ol>
+<li>
+<p><strong>电商平台的个性化推荐</strong>：</p>
+<ul>
+<li><strong>应用场景</strong>：在电商平台中，通过引入探索与利用机制，可以在用户浏览商品的过程中动态调整推荐策略。例如，可以通过Thompson Sampling算法，在推荐过程中引入一定的随机性，推荐一些用户未浏览过的新品或长尾商品，提高用户的购买转化率和复购率。</li>
+</ul>
+</li>
+<li>
+<p><strong>视频推荐系统</strong>：</p>
+<ul>
+<li><strong>应用场景</strong>：在视频推荐系统中，通过使用DRN模型，可以在用户观看视频的过程中实时调整推荐策略。根据用户的观看行为和反馈，不断优化推荐模型，提高用户的观看时长和满意度。</li>
+</ul>
+</li>
+<li>
+<p><strong>广告推荐系统</strong>：</p>
+<ul>
+<li><strong>应用场景</strong>：在广告推荐系统中，通过UCB算法，可以在用户浏览网页的过程中动态调整广告展示策略。既可以提高广告的点击率和转化率，又可以避免因频繁展示相同广告导致的用户疲劳。</li>
+</ul>
+</li>
+</ol>
+<h4>结论</h4>
+<p>“探索与利用”机制在推荐系统中的应用，不仅能够解决冷启动问题，还能发掘用户的潜在兴趣，增加推荐结果的多样性。通过引入UCB、Thompson Sampling、深度强化学习等算法，推荐系统能够更好地平衡探索与利用，不断优化推荐效果，提升用户体验和系统整体性能。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

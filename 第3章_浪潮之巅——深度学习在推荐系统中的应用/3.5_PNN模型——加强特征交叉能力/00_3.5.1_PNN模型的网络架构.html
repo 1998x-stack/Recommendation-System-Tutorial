@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_3.5.1_PNN模型的网络架构</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_3.5.1 PNN模型的网络架构</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第3章 浪潮之巅——深度学习在推荐系统中的应用/3.5 PNN模型——加强特征交叉能力
+Content: 00_3.5.1 PNN模型的网络架构
+&quot;&quot;&quot;</p>
+<h3>PNN模型的网络架构</h3>
+<h4>一、引言</h4>
+<p>PNN（Product-based Neural Network）模型是上海交通大学的研究人员于2016年提出的，旨在解决CTR（Click-Through Rate）预估和推荐系统中的特征交叉问题。PNN模型通过引入乘积层（Product Layer），有效地捕捉了不同特征之间的交叉信息。以下将详细分析PNN模型的网络架构。</p>
+<h4>二、PNN模型的网络架构</h4>
+<h5>1. 输入层和Embedding层</h5>
+<p><strong>1.1 输入层：</strong></p>
+<ul>
+<li>输入层包括用户ID、物品ID以及其他可能的辅助特征（如上下文信息等）。这些输入特征通常是类别型特征，需要通过Embedding层进行稠密化处理。</li>
+</ul>
+<p><strong>1.2 Embedding层：</strong></p>
+<ul>
+<li>将类别型特征转换为稠密的低维向量，即Embedding向量。每个类别型特征都有一个独立的Embedding矩阵，将类别ID映射到稠密向量。</li>
+</ul>
+<h5>2. 乘积层（Product Layer）</h5>
+<p><strong>2.1 乘积层的定义：</strong></p>
+<ul>
+<li>乘积层是PNN模型的核心创新部分，用于捕捉特征之间的交叉信息。乘积层包括内积操作和外积操作，分别生成内积向量和外积矩阵。</li>
+</ul>
+<p><strong>2.2 内积操作：</strong></p>
+<ul>
+<li>内积操作计算特征向量之间的内积，生成一个新的向量。假设特征向量为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mrow><mi mathvariant="bold">f</mi></mrow><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{f}_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class=""><span class="mord textstyle uncramped"><span class="mord mathbf" style="margin-right:0.10903em;">f</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mrow><mi mathvariant="bold">f</mi></mrow><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{f}_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class=""><span class="mord textstyle uncramped"><span class="mord mathbf" style="margin-right:0.10903em;">f</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>，内积操作定义为：$$ g_{\text{inner}}(\mathbf{f}_i, \mathbf{f}_j) = \mathbf{f}_i \cdot \mathbf{f}_j $$</li>
+</ul>
+<p><strong>2.3 外积操作：</strong></p>
+<ul>
+<li>外积操作计算特征向量之间的外积，生成一个新的矩阵。假设特征向量为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mrow><mi mathvariant="bold">f</mi></mrow><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{f}_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class=""><span class="mord textstyle uncramped"><span class="mord mathbf" style="margin-right:0.10903em;">f</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mrow><mi mathvariant="bold">f</mi></mrow><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{f}_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class=""><span class="mord textstyle uncramped"><span class="mord mathbf" style="margin-right:0.10903em;">f</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>，外积操作定义为：$$ g_{\text{outer}}(\mathbf{f}_i, \mathbf{f}_j) = \mathbf{f}_i \otimes \mathbf{f}_j $$</li>
+</ul>
+<p><strong>2.4 降维处理：</strong></p>
+<ul>
+<li>为了减小外积操作带来的计算复杂度，PNN模型对外积结果进行了降维处理，将所有两两特征向量的外积结果叠加形成一个叠加外积向量。</li>
+</ul>
+<h5>3. 隐藏层</h5>
+<p><strong>3.1 全连接层：</strong></p>
+<ul>
+<li>乘积层的输出向量和原始特征向量一起输入到全连接层。全连接层由多层神经网络组成，每层神经网络由线性变换和非线性激活函数（如ReLU）组成。</li>
+</ul>
+<p><strong>3.2 局部全连接层：</strong></p>
+<ul>
+<li>在乘积层内部，PNN模型对内积和外积结果进行了局部全连接层的转换，将内积部分<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi mathvariant="bold">z</mi></mrow></mrow><annotation encoding="application/x-tex">\mathbf{z}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.44444em;"></span><span class="strut bottom" style="height:0.44444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathbf">z</span></span></span></span></span>和外积部分<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi mathvariant="bold">p</mi></mrow></mrow><annotation encoding="application/x-tex">\mathbf{p}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.44444em;"></span><span class="strut bottom" style="height:0.63888em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathbf">p</span></span></span></span></span>映射成新的向量<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mrow><mi mathvariant="bold">l</mi></mrow><mi>z</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{l}_z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class=""><span class="mord textstyle uncramped"><span class="mord mathbf">l</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.04398em;">z</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mrow><mi mathvariant="bold">l</mi></mrow><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{l}_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class=""><span class="mord textstyle uncramped"><span class="mord mathbf">l</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">p</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>，然后将<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mrow><mi mathvariant="bold">l</mi></mrow><mi>z</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{l}_z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class=""><span class="mord textstyle uncramped"><span class="mord mathbf">l</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.04398em;">z</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mrow><mi mathvariant="bold">l</mi></mrow><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{l}_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class=""><span class="mord textstyle uncramped"><span class="mord mathbf">l</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">p</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>叠加输入到隐藏层。</li>
+</ul>
+<h5>4. 输出层</h5>
+<p><strong>4.1 预测层：</strong></p>
+<ul>
+<li>最后的输出层用于预测用户对物品的点击率或评分。输出层通常使用Sigmoid函数，将输出值映射到[0,1]区间内，表示预测的点击概率。</li>
+</ul>
+<p><strong>4.2 损失函数：</strong></p>
+<ul>
+<li>对于点击率预估任务，常用的损失函数是交叉熵损失函数。对于评分预测任务，常用的损失函数是均方误差（MSE）损失函数。</li>
+</ul>
+<h4>三、PNN模型的应用实例</h4>
+<p><strong>3.1 CTR预估：</strong></p>
+<ul>
+<li>在广告推荐中，PNN模型可以用于预估用户对广告的点击率。通过捕捉用户和广告特征之间的交叉信息，提高了点击率预估的准确性。</li>
+</ul>
+<p><strong>3.2 推荐系统：</strong></p>
+<ul>
+<li>在推荐系统中，PNN模型可以用于预测用户对商品的评分或点击概率，提供个性化推荐服务。</li>
+</ul>
+<h4>四、总结</h4>
+<p>PNN模型通过引入乘积层，有效地捕捉了不同特征之间的交叉信息，增强了模型的表达能力。其创新的内积和外积操作，使得PNN模型在CTR预估和推荐系统中表现出色。尽管PNN模型在特征交叉上具有优势，但在计算复杂度上需要进行合理的降维处理，以保证模型的训练效率。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

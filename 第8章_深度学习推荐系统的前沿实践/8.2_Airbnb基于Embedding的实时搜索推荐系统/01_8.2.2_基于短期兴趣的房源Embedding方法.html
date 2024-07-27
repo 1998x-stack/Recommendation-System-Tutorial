@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01_8.2.2_基于短期兴趣的房源Embedding方法</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>01_8.2.2 基于短期兴趣的房源Embedding方法</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.2 Airbnb基于Embedding的实时搜索推荐系统
+Content: 01_8.2.2 基于短期兴趣的房源Embedding方法
+&quot;&quot;&quot;</p>
+<h3>8.2.2 基于短期兴趣的房源Embedding方法</h3>
+<h4>1. 引言</h4>
+<p>Airbnb的推荐系统通过对用户的短期兴趣进行建模，利用会话内的点击数据生成房源的Embedding。这种方法能够捕捉用户在一次搜索过程中的即时需求，从而在会话内提供更加精准的推荐  。</p>
+<h4>2. Session内点击数据的定义</h4>
+<p>为了准确地捕捉用户的短期兴趣，Airbnb对Session内点击数据进行了严格的定义：</p>
+<ul>
+<li><strong>数据点条件</strong>：只有在房源详情页停留超过30秒的点击才算作一个数据点，这样做是为了清洗掉噪声点和负反馈信号。</li>
+<li><strong>会话条件</strong>：如果用户在超过30分钟内没有操作，这个点击序列就会被打断，不再被视为一个连续的会话。这样可以避免非相关序列的产生  。</li>
+</ul>
+<h4>3. Embedding方法选择</h4>
+<p>Airbnb选择了Word2vec的skip-gram模型作为Embedding方法的框架，通过修改Word2vec的目标函数，使其更贴近Airbnb的业务目标。具体过程如下：</p>
+<ul>
+<li><strong>点击序列转换为“句子”样本</strong>：将Session内点击的房源序列当作一个“句子”样本，利用Word2vec模型进行Embedding。</li>
+<li><strong>目标函数</strong>：在Word2vec的目标函数基础上，加入负采样的方法，使得模型能够更好地捕捉房源之间的相似度  。</li>
+</ul>
+<h4>4. 引入预订信息</h4>
+<p>为了使推荐系统不仅能捕捉用户的点击行为，还能反映用户的预订偏好，Airbnb在Embedding过程中引入了预订信息：</p>
+<ul>
+<li><strong>预订会话与探索性会话</strong>：将会话点击序列分为两类：预订会话和探索性会话。预订会话中，最后一个房源是被预订的房源。</li>
+<li><strong>全局上下文</strong>：假设被预订房源与滑动窗口中的中心房源相关，将其引入目标函数，形成全局上下文。这使得目标函数不仅考虑了会话内的点击关系，还包括了预订行为的影响  。</li>
+</ul>
+<h4>5. 冷启动问题的解决</h4>
+<p>对于新的房源，由于缺乏足够的点击和预订数据，难以生成有效的Embedding。Airbnb采用了一种工程化的解决方案：</p>
+<ul>
+<li><strong>相似房源平均</strong>：对于缺少Embedding向量的新房源，通过找到附近的3个同类型、相似价格的房源向量进行平均，生成新的Embedding向量  。</li>
+</ul>
+<h4>6. Embedding效果的检验</h4>
+<p>为了检验Embedding方法的效果，Airbnb实现了一个内部工具网站，通过Embedding搜索相似房源。测试结果显示，Embedding不仅编码了房源的价格、类型等信息，甚至能够捕捉到房源的建筑风格。这说明，即使不利用图片信息，Embedding也能从用户的点击序列中挖掘出相似建筑风格的房源  。</p>
+<h3>总结</h3>
+<p>Airbnb基于短期兴趣的房源Embedding方法，通过会话内点击数据的定义、Word2vec模型的应用、预订信息的引入以及冷启动问题的解决，构建了一个高效的实时推荐系统。这个系统不仅能够提高推荐的精准度，还能增强用户的个性化体验，为其他推荐系统的开发提供了宝贵的经验和参考  。</p>
+<hr>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

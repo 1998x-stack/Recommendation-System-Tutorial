@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_7.1.1_离线评估的主要方法</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_7.1.1 离线评估的主要方法</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第7章 推荐系统的评估/7.1 离线评估方法与基本评价指标
+Content: 00_7.1.1 离线评估的主要方法
+&quot;&quot;&quot;</p>
+<h3>7.1.1 离线评估的主要方法</h3>
+<h4>概述</h4>
+<p>在推荐系统的评估中，离线评估是一种常用且重要的方法。离线评估通过对历史数据的分析和模拟，评估推荐算法和模型的性能。与在线评估相比，离线评估具有成本低、周期短、风险小等优点，是推荐系统开发和优化过程中不可或缺的一部分。</p>
+<h4>离线评估的主要方法</h4>
+<ol>
+<li>
+<p><strong>训练集和测试集划分</strong>：</p>
+<ul>
+<li><strong>定义</strong>：将历史数据划分为训练集和测试集，训练集用于训练推荐模型，测试集用于评估模型性能。</li>
+<li><strong>常用划分方法</strong>：随机划分、时间划分、用户划分等。</li>
+<li><strong>优点</strong>：简单易行，能够有效评估模型在不同数据集上的性能。</li>
+</ul>
+</li>
+<li>
+<p><strong>交叉验证</strong>：</p>
+<ul>
+<li><strong>定义</strong>：将数据集分为k个子集，依次使用每个子集作为测试集，其他子集作为训练集，进行k次训练和评估。</li>
+<li><strong>k折交叉验证</strong>：常用的k折交叉验证（k-fold cross-validation）方法。</li>
+<li><strong>优点</strong>：能够充分利用数据，提高评估结果的稳定性和可靠性。</li>
+</ul>
+</li>
+<li>
+<p><strong>留一法验证</strong>：</p>
+<ul>
+<li><strong>定义</strong>：对于每个用户，将其一部分行为数据作为测试集，剩余数据作为训练集，评估模型在单个用户上的推荐效果。</li>
+<li><strong>优点</strong>：能够评估模型在个体用户上的性能，适用于数据量较小的情况。</li>
+<li><strong>缺点</strong>：计算复杂度高，适用性有限。</li>
+</ul>
+</li>
+<li>
+<p><strong>A/B测试模拟</strong>：</p>
+<ul>
+<li><strong>定义</strong>：模拟A/B测试环境，将用户分为不同组别，使用不同的推荐算法进行离线评估。</li>
+<li><strong>优点</strong>：能够评估不同推荐算法在模拟环境下的相对性能。</li>
+<li><strong>缺点</strong>：无法完全替代真实的A/B测试结果。</li>
+</ul>
+</li>
+<li>
+<p><strong>离线仿真</strong>：</p>
+<ul>
+<li><strong>定义</strong>：通过模拟用户行为和交互环境，评估推荐算法的性能。</li>
+<li><strong>优点</strong>：能够在离线环境中模拟复杂的用户行为，提高评估的真实性。</li>
+<li><strong>缺点</strong>：需要构建复杂的仿真环境，具有一定的实现难度。</li>
+</ul>
+</li>
+</ol>
+<h4>离线评估的评价指标</h4>
+<ol>
+<li>
+<p><strong>准确性指标</strong>：</p>
+<ul>
+<li><strong>精确率（Precision）</strong>：推荐结果中正确推荐的比例。<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>r</mi><mi>e</mi><mi>c</mi><mi>i</mi><mi>s</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>=</mo><mfrac><mrow><mi>T</mi><mi>P</mi></mrow><mrow><mi>T</mi><mi>P</mi><mo>+</mo><mi>F</mi><mi>P</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">Precision = \frac{TP}{TP + FP}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.36033em;"></span><span class="strut bottom" style="height:2.1296600000000003em;vertical-align:-0.7693300000000001em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">e</span><span class="mord mathit">c</span><span class="mord mathit">i</span><span class="mord mathit">s</span><span class="mord mathit">i</span><span class="mord mathit">o</span><span class="mord mathit">n</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mbin">+</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit" style="margin-right:0.13889em;">P</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mord mathit" style="margin-right:0.13889em;">P</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
+其中，TP为真正例数，FP为假正例数。</li>
+<li><strong>召回率（Recall）</strong>：实际相关项目中被正确推荐的比例。<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>R</mi><mi>e</mi><mi>c</mi><mi>a</mi><mi>l</mi><mi>l</mi><mo>=</mo><mfrac><mrow><mi>T</mi><mi>P</mi></mrow><mrow><mi>T</mi><mi>P</mi><mo>+</mo><mi>F</mi><mi>N</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">Recall = \frac{TP}{TP + FN}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.36033em;"></span><span class="strut bottom" style="height:2.1296600000000003em;vertical-align:-0.7693300000000001em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.00773em;">R</span><span class="mord mathit">e</span><span class="mord mathit">c</span><span class="mord mathit">a</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mbin">+</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit" style="margin-right:0.10903em;">N</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mord mathit" style="margin-right:0.13889em;">P</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
+其中，TP为真正例数，FN为假负例数。</li>
+<li><strong>F1值（F1-score）</strong>：精确率和召回率的调和平均数。<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>F</mi><mn>1</mn><mo>=</mo><mn>2</mn><mo>×</mo><mfrac><mrow><mi>P</mi><mi>r</mi><mi>e</mi><mi>c</mi><mi>i</mi><mi>s</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>×</mo><mi>R</mi><mi>e</mi><mi>c</mi><mi>a</mi><mi>l</mi><mi>l</mi></mrow><mrow><mi>P</mi><mi>r</mi><mi>e</mi><mi>c</mi><mi>i</mi><mi>s</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>+</mo><mi>R</mi><mi>e</mi><mi>c</mi><mi>a</mi><mi>l</mi><mi>l</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.37144em;"></span><span class="strut bottom" style="height:2.14077em;vertical-align:-0.7693300000000001em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathrm">1</span><span class="mrel">=</span><span class="mord mathrm">2</span><span class="mbin">×</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">e</span><span class="mord mathit">c</span><span class="mord mathit">i</span><span class="mord mathit">s</span><span class="mord mathit">i</span><span class="mord mathit">o</span><span class="mord mathit">n</span><span class="mbin">+</span><span class="mord mathit" style="margin-right:0.00773em;">R</span><span class="mord mathit">e</span><span class="mord mathit">c</span><span class="mord mathit">a</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.01968em;">l</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">e</span><span class="mord mathit">c</span><span class="mord mathit">i</span><span class="mord mathit">s</span><span class="mord mathit">i</span><span class="mord mathit">o</span><span class="mord mathit">n</span><span class="mbin">×</span><span class="mord mathit" style="margin-right:0.00773em;">R</span><span class="mord mathit">e</span><span class="mord mathit">c</span><span class="mord mathit">a</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.01968em;">l</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>排序指标</strong>：</p>
+<ul>
+<li><strong>平均排名（Mean Rank）</strong>：推荐结果中相关项目的平均排名。</li>
+<li><strong>平均倒数排名（Mean Reciprocal Rank, MRR）</strong>：推荐结果中第一个相关项目排名的倒数平均值。<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>M</mi><mi>R</mi><mi>R</mi><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mi>N</mi></mrow></mfrac><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>N</mi></mrow></msubsup><mfrac><mrow><mn>1</mn></mrow><mrow><mi>R</mi><mi>a</mi><mi>n</mi><msub><mi>k</mi><mi>i</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">MRR = \frac{1}{N} \sum_{i=1}^{N} \frac{1}{Rank_i}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.8283360000000002em;"></span><span class="strut bottom" style="height:3.106005em;vertical-align:-1.277669em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.10903em;">M</span><span class="mord mathit" style="margin-right:0.00773em;">R</span><span class="mord mathit" style="margin-right:0.00773em;">R</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.10903em;">N</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.10903em;">N</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.00773em;">R</span><span class="mord mathit">a</span><span class="mord mathit">n</span><span class="mord"><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03148em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
+其中，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>R</mi><mi>a</mi><mi>n</mi><msub><mi>k</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">Rank_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.00773em;">R</span><span class="mord mathit">a</span><span class="mord mathit">n</span><span class="mord"><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03148em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>为第i个用户推荐结果中第一个相关项目的排名。</li>
+</ul>
+</li>
+<li>
+<p><strong>覆盖率指标</strong>：</p>
+<ul>
+<li><strong>覆盖率（Coverage）</strong>：推荐系统能够推荐的项目占所有项目的比例。Coverage = \frac{|\text{推荐的项目}|}{|\text{所有项目}|}
+
+</li>
+</ul>
+</li>
+<li>
+<p><strong>多样性指标</strong>：</p>
+<ul>
+<li><strong>多样性（Diversity）</strong>：推荐结果中项目的多样性程度，通常通过计算推荐项目之间的相似度来评估。<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>D</mi><mi>i</mi><mi>v</mi><mi>e</mi><mi>r</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mi>N</mi><mo>(</mo><mi>N</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow></mfrac><msub><mo>∑</mo><mrow><mi>i</mi><mo>≠</mo><mi>j</mi></mrow></msub><mtext><mi mathvariant="normal">S</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi></mtext><mo>(</mo><mi>i</mi><mo separator="true">,</mo><mi>j</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">Diversity = 1 - \frac{1}{N(N-1)} \sum_{i \neq j} \text{Sim}(i, j)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.32144em;"></span><span class="strut bottom" style="height:2.789145em;vertical-align:-1.467705em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.02778em;">D</span><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">s</span><span class="mord mathit">i</span><span class="mord mathit">t</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord mathrm">1</span><span class="mbin">−</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.10903em;">N</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.10903em;">N</span><span class="mbin">−</span><span class="mord mathrm">1</span><span class="mclose">)</span></span></span></span><span style="top:-0.2300000000000001em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="mop op-limits"><span class="vlist"><span style="top:1.2172049999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">≠</span><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span><span style="top:-0.000005000000000032756em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="text mord displaystyle textstyle uncramped"><span class="mord mathrm">S</span><span class="mord mathrm">i</span><span class="mord mathrm">m</span></span><span class="mopen">(</span><span class="mord mathit">i</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.05724em;">j</span><span class="mclose">)</span></span></span></span></span></p>
+其中，$ \text{Sim}(i, j) $为项目i和项目j之间的相似度。</li>
+</ul>
+</li>
+<li>
+<p><strong>新颖性指标</strong>：</p>
+<ul>
+<li><strong>新颖性（Novelty）</strong>：推荐结果中新颖项目的比例，通常通过计算推荐项目的流行度来评估。<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi><mi>o</mi><mi>v</mi><mi>e</mi><mi>l</mi><mi>t</mi><mi>y</mi><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mi>N</mi></mrow></mfrac><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>N</mi></mrow></msubsup><mtext><mi mathvariant="normal">P</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">y</mi></mtext><mo>(</mo><mi>i</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">Novelty = 1 - \frac{1}{N} \sum_{i=1}^{N} \text{Popularity}(i)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.8283360000000002em;"></span><span class="strut bottom" style="height:3.106005em;vertical-align:-1.277669em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.10903em;">N</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">t</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord mathrm">1</span><span class="mbin">−</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.10903em;">N</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.10903em;">N</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="text mord displaystyle textstyle uncramped"><span class="mord mathrm">P</span><span class="mord mathrm">o</span><span class="mord mathrm">p</span><span class="mord mathrm">u</span><span class="mord mathrm">l</span><span class="mord mathrm">a</span><span class="mord mathrm">r</span><span class="mord mathrm">i</span><span class="mord mathrm">t</span><span class="mord mathrm" style="margin-right:0.01389em;">y</span></span><span class="mopen">(</span><span class="mord mathit">i</span><span class="mclose">)</span></span></span></span></span></p>
+其中，$ \text{Popularity}(i) $为项目i的流行度。</li>
+</ul>
+</li>
+</ol>
+<h4>实际应用案例</h4>
+<ol>
+<li>
+<p><strong>电商推荐系统</strong>：</p>
+<ul>
+<li>某电商平台在进行推荐算法优化时，采用交叉验证和A/B测试模拟进行离线评估。通过评估精确率、召回率和F1值，选择最优的推荐算法，并在实际环境中进行上线测试。</li>
+</ul>
+</li>
+<li>
+<p><strong>内容推荐系统</strong>：</p>
+<ul>
+<li>某内容平台在引入新的推荐模型前，进行离线仿真和留一法验证。通过评估排序指标、覆盖率和多样性，优化推荐结果的排序和内容多样性，提升用户满意度。</li>
+</ul>
+</li>
+<li>
+<p><strong>社交网络推荐系统</strong>：</p>
+<ul>
+<li>某社交网络平台在用户好友推荐算法评估中，采用训练集和测试集划分方法。通过评估新颖性和覆盖率，提升推荐结果的质量和用户体验。</li>
+</ul>
+</li>
+</ol>
+<h3>总结</h3>
+<p>离线评估是推荐系统开发和优化过程中不可或缺的一部分。通过训练集和测试集划分、交叉验证、留一法验证、A/B测试模拟和离线仿真等主要方法，可以有效评估推荐算法和模型的性能。结合准确性、排序、覆盖率、多样性和新颖性等评价指标，工程师可以全面了解推荐系统的表现，并进行针对性的优化和改进。在未来，随着推荐系统技术的发展，离线评估方法和指标将进一步完善，为推荐系统的高效开发和优化提供更有力的支持。</p>
+<hr>
+<h3>离线评估的主要方法极详细表格</h3>
+<table>
+<thead>
+<tr>
+<th><strong>方法名称</strong></th>
+<th><strong>定义</strong></th>
+<th><strong>划分方式</strong></th>
+<th><strong>优点</strong></th>
+<th><strong>缺点</strong></th>
+<th><strong>应用场景</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>训练集和测试集划分</td>
+<td>将历史数据划分为训练集和测试集，训练集用于训练模型，测试集用于评估模型性能。</td>
+<td>随机划分、时间划分、用户划分</td>
+<td>简单易行，能够有效评估模型在不同数据集上的性能。</td>
+<td>可能导致评估结果对数据划分方式敏感。</td>
+<td>数据量较大，适用于一般推荐系统开发。</td>
+</tr>
+<tr>
+<td>交叉验证</td>
+<td>将数据集分为k个子集，依次使用每个子集作为测试集，其他子集作为训练集，进行k次训练和评估。</td>
+<td>k折交叉验证</td>
+<td>能够充分利用数据，提高评估结果的稳定性和可靠性。</td>
+<td>计算复杂度高，尤其是对于大规模数据集。</td>
+<td>数据量适中，需要稳定性高的评估结果。</td>
+</tr>
+<tr>
+<td>留一法验证</td>
+<td>对于每个用户，将其一部分行为数据作为测试集，剩余数据作为训练集，评估模型在单个用户上的推荐效果。</td>
+<td>用户行为数据划分</td>
+<td>能够评估模型在个体用户上的性能，适用于数据量较小的情况。</td>
+<td>计算复杂度高，适用性有限。</td>
+<td>小规模数据集，需要评估个体用户效果。</td>
+</tr>
+<tr>
+<td>A/B测试模拟</td>
+<td>模拟A/B测试环境，将用户分为不同组别，使用不同的推荐算法进行离线评估。</td>
+<td>用户分组</td>
+<td>能够评估不同推荐算法在模拟环境下的相对性能。</td>
+<td>无法完全替代真实的A/B测试结果。</td>
+<td>需要比较不同算法效果，实际A/B测试前的评估。</td>
+</tr>
+<tr>
+<td>离线仿真</td>
+<td>通过模拟用户行为和交互环境，评估推荐算法的性能。</td>
+<td>仿真用户行为和交互环境</td>
+<td>能够在离线环境中模拟复杂的用户行为，提高评估的真实性。</td>
+<td>需要构建复杂的仿真环境，具有一定的实现难度。</td>
+<td>复杂系统开发，需要模拟真实环境的评估。</td>
+</tr>
+</tbody>
+</table>
+<h4>表格字段详细解释：</h4>
+<ul>
+<li><strong>方法名称</strong>：评估方法的名称。</li>
+<li><strong>定义</strong>：方法的具体描述和操作步骤。</li>
+<li><strong>划分方式</strong>：数据划分的具体方式。</li>
+<li><strong>优点</strong>：使用该方法进行评估的主要优势。</li>
+<li><strong>缺点</strong>：使用该方法进行评估的主要劣势。</li>
+<li><strong>应用场景</strong>：适用该方法的具体应用场景。</li>
+</ul>
+<h4>具体应用示例：</h4>
+<ol>
+<li>
+<p><strong>训练集和测试集划分</strong>：</p>
+<ul>
+<li>在某电商平台进行推荐系统的开发过程中，使用随机划分的方式，将历史用户行为数据分为80%的训练集和20%的测试集。通过在训练集上训练模型，在测试集上评估模型的准确率和召回率。</li>
+</ul>
+</li>
+<li>
+<p><strong>交叉验证</strong>：</p>
+<ul>
+<li>某内容推荐系统采用5折交叉验证，将历史数据分为5个子集，依次使用每个子集作为测试集，其他子集作为训练集。通过评估每次训练的精确率和F1值，选择最佳的推荐算法。</li>
+</ul>
+</li>
+<li>
+<p><strong>留一法验证</strong>：</p>
+<ul>
+<li>在某小型社交网络平台，针对每个用户，将其最近一次的行为数据作为测试集，其余数据作为训练集，评估推荐模型在每个用户上的推荐效果，确保个体用户的推荐准确性。</li>
+</ul>
+</li>
+<li>
+<p><strong>A/B测试模拟</strong>：</p>
+<ul>
+<li>某视频推荐平台在上线新推荐算法前，模拟A/B测试环境，将用户分为两组，分别使用旧算法和新算法进行离线评估。通过比较两组用户的点击率和观看时长，评估新算法的性能提升。</li>
+</ul>
+</li>
+<li>
+<p><strong>离线仿真</strong>：</p>
+<ul>
+<li>某大型电商平台在开发新推荐系统时，构建了一个离线仿真环境，模拟用户的浏览、点击和购买行为，通过仿真环境评估新推荐算法的推荐准确性和用户满意度。</li>
+</ul>
+</li>
+</ol>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

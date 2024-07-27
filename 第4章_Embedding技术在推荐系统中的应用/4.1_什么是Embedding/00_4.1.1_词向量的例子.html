@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_4.1.1_词向量的例子</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_4.1.1 词向量的例子</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第4章 Embedding技术在推荐系统中的应用/4.1 什么是Embedding
+Content: 00_4.1.1 词向量的例子
+&quot;&quot;&quot;</p>
+<h3>4.1.1 词向量的例子</h3>
+<h4>一、词向量的基本概念</h4>
+<p>词向量（Word Embedding）是自然语言处理（NLP）领域中一种将词语表示为实数向量的技术。这种表示方法的核心思想是将高维稀疏的词语表示转换为低维稠密的向量表示，使得相似语义的词在向量空间中距离较近，而语义相反或不相关的词距离较远。</p>
+<h4>二、Word2Vec模型</h4>
+<p>Word2Vec模型是Google于2013年提出的一种生成词向量的算法，它有两种主要的模型架构：连续词袋模型（CBOW，Continuous Bag of Words）和跳跃模型（Skip-Gram）。</p>
+<ol>
+<li>
+<p><strong>CBOW模型</strong>：</p>
+<ul>
+<li>目标：通过上下文词来预测中心词。</li>
+<li>示例：在句子&quot;The cat sits on the mat&quot;中，假设窗口大小为2，上下文词为[&quot;The&quot;, &quot;cat&quot;, &quot;on&quot;, &quot;the&quot;]，中心词为&quot;sits&quot;。</li>
+<li>原理：CBOW模型的输入是上下文词，输出是中心词，通过最大化预测中心词的概率来训练模型。</li>
+</ul>
+</li>
+<li>
+<p><strong>Skip-Gram模型</strong>：</p>
+<ul>
+<li>目标：通过中心词来预测上下文词。</li>
+<li>示例：在句子&quot;The cat sits on the mat&quot;中，假设窗口大小为2，中心词为&quot;sits&quot;，上下文词为[&quot;The&quot;, &quot;cat&quot;, &quot;on&quot;, &quot;the&quot;]。</li>
+<li>原理：Skip-Gram模型的输入是中心词，输出是上下文词，通过最大化预测上下文词的概率来训练模型。</li>
+</ul>
+</li>
+</ol>
+<p>Skip-Gram模型在处理大规模语料库时效果较好，因此在实际应用中较为常用。</p>
+<h4>三、词向量的数学表示</h4>
+<p>词向量的生成过程可以分为以下几个步骤：</p>
+<ol>
+<li>
+<p><strong>构建训练样本</strong>：</p>
+<ul>
+<li>从语料库中抽取句子，使用滑动窗口提取训练样本。</li>
+<li>示例：对于句子&quot;The cat sits on the mat&quot;，滑动窗口大小为3，生成的训练样本为[(&quot;The&quot;, &quot;cat&quot;), (&quot;cat&quot;, &quot;sits&quot;), (&quot;sits&quot;, &quot;on&quot;), (&quot;on&quot;, &quot;the&quot;), (&quot;the&quot;, &quot;mat&quot;)]。</li>
+</ul>
+</li>
+<li>
+<p><strong>定义优化目标</strong>：</p>
+<ul>
+<li>采用极大似然估计的方法，目标是最大化所有训练样本的条件概率之积。</li>
+<li>优化目标公式：![](https://latex.codecogs.com/png.latex?\sum_{t=1}^{T}\sum_{-c\leq j\leq c, j\neq 0}\log{p(w_{t+j}|w_t)})</li>
+</ul>
+</li>
+<li>
+<p><strong>计算条件概率</strong>：</p>
+<ul>
+<li>使用softmax函数计算条件概率。</li>
+<li>条件概率公式：![](https://latex.codecogs.com/png.latex?p(w_O|w_I)=\frac{exp(v_{w_O}^T\cdot v_{w_I})}{\sum_{w=1}^{W}exp(v_w^T\cdot v_{w_I})})</li>
+<li>其中，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>v</mi><mrow><msub><mi>w</mi><mi>O</mi></msub></mrow></msub></mrow><annotation encoding="application/x-tex">v_{w_O}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.68556em;vertical-align:-0.255em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="vlist"><span style="top:0.15000000000000002em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">O</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>v</mi><mrow><msub><mi>w</mi><mi>I</mi></msub></mrow></msub></mrow><annotation encoding="application/x-tex">v_{w_I}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.68556em;vertical-align:-0.255em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="vlist"><span style="top:0.15000000000000002em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.07847em;">I</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>分别为输出词和输入词的向量表示。</li>
+</ul>
+</li>
+</ol>
+<h4>四、词向量的训练方法</h4>
+<ol>
+<li>
+<p><strong>负采样（Negative Sampling）</strong>：</p>
+<ul>
+<li>目的：简化softmax计算的复杂度。</li>
+<li>方法：对每个正样本，随机选择一定数量的负样本，并通过最大化正样本的概率和最小化负样本的概率来训练模型。</li>
+</ul>
+</li>
+<li>
+<p><strong>层次softmax（Hierarchical Softmax）</strong>：</p>
+<ul>
+<li>目的：进一步提高计算效率。</li>
+<li>方法：将softmax层次化，将词汇表构建成霍夫曼树，通过计算路径上的概率来近似整个词汇表的softmax。</li>
+</ul>
+</li>
+</ol>
+<h4>五、词向量的应用</h4>
+<ol>
+<li>
+<p><strong>文本分类</strong>：</p>
+<ul>
+<li>通过将句子中的词转换为词向量，然后将词向量输入到分类模型中进行文本分类任务。</li>
+<li>应用示例：垃圾邮件分类、情感分析。</li>
+</ul>
+</li>
+<li>
+<p><strong>情感分析</strong>：</p>
+<ul>
+<li>通过词向量表示的文本数据，可以更好地捕捉文本中的情感倾向。</li>
+<li>应用示例：电影评论情感分类、社交媒体情感分析。</li>
+</ul>
+</li>
+<li>
+<p><strong>机器翻译</strong>：</p>
+<ul>
+<li>通过将源语言的词向量转换为目标语言的词向量，从而实现跨语言的文本转换。</li>
+<li>应用示例：Google翻译、Bing翻译。</li>
+</ul>
+</li>
+</ol>
+<h4>六、词向量的例子分析</h4>
+<ol>
+<li>
+<p><strong>性别特征</strong>：</p>
+<ul>
+<li>示例：向量&quot;king&quot;减去&quot;man&quot;加上&quot;woman&quot;的结果接近于向量&quot;queen&quot;。</li>
+<li>解释：这表明词向量可以表达性别特征，并能够在向量空间中体现出词汇之间的性别关系。</li>
+</ul>
+</li>
+<li>
+<p><strong>词性关系</strong>：</p>
+<ul>
+<li>示例：向量&quot;walking&quot;到&quot;walked&quot;、向量&quot;swimming&quot;到&quot;swam&quot;的距离向量一致。</li>
+<li>解释：这表明词向量能够表达词汇的词性变化，并且在向量空间中保持一致的变换关系。</li>
+</ul>
+</li>
+<li>
+<p><strong>地理关系</strong>：</p>
+<ul>
+<li>示例：向量&quot;Madrid&quot;-&quot;Spain&quot;≈&quot;Beijing&quot;-&quot;China&quot;。</li>
+<li>解释：这表明词向量可以挖掘出“首都-国家”这类关系，并能够在向量空间中体现出地理位置之间的关系。</li>
+</ul>
+</li>
+</ol>
+<h4>七、词向量在推荐系统中的应用</h4>
+<ol>
+<li>
+<p><strong>商品推荐</strong>：</p>
+<ul>
+<li>通过将商品描述转换为词向量，可以捕捉商品之间的语义相似性，从而提高推荐的准确性。</li>
+<li>应用示例：电商平台中的个性化推荐。</li>
+</ul>
+</li>
+<li>
+<p><strong>用户兴趣建模</strong>：</p>
+<ul>
+<li>通过分析用户的历史浏览记录，将用户兴趣转换为词向量表示，从而更准确地预测用户的潜在兴趣。</li>
+<li>应用示例：新闻推荐、视频推荐。</li>
+</ul>
+</li>
+<li>
+<p><strong>上下文推荐</strong>：</p>
+<ul>
+<li>通过将上下文信息转换为词向量，可以更好地捕捉用户在不同情境下的需求，从而提供更个性化的推荐。</li>
+<li>应用示例：基于位置的服务推荐、实时推荐系统。</li>
+</ul>
+</li>
+</ol>
+<h3>总结</h3>
+<p>词向量作为自然语言处理中的一种基础技术，其核心思想是将高维稀疏的词语表示转换为低维稠密的向量表示，从而使计算机能够更好地理解和处理文本数据。通过Word2Vec等模型，可以生成高质量的词向量，并将其应用于文本分类、情感分析、机器翻译等任务中。此外，词向量在推荐系统中也具有广泛的应用前景，通过将商品描述、用户兴趣和上下文信息转换为词向量，可以显著提高推荐的准确性和个性化程度。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

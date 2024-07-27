@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04_8.1.5_Facebook_GBDT+LR组合模型的工程实践</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>04_8.1.5 Facebook GBDT+LR组合模型的工程实践</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.1 Facebook的深度学习推荐系统
+Content: 04_8.1.5 Facebook GBDT+LR组合模型的工程实践
+&quot;&quot;&quot;</p>
+<h3>8.1.5 Facebook GBDT+LR组合模型的工程实践</h3>
+<h4>背景与概述</h4>
+<p>Facebook的GBDT+LR组合模型应用于其广告推荐系统，尽管这项工作早在2014年就已开展，但其工程实践和经验仍然值得我们学习和借鉴。以下是该工程实践中的三大亮点：特征工程模型化、模型复杂性与实效性的权衡、数据验证的重要性。</p>
+<h4>特征工程模型化</h4>
+<p><strong>1. 创新性思路</strong>：</p>
+<ul>
+<li>2014年，当许多从业者还在通过调参经验尝试各种特征组合时，Facebook利用模型进行特征自动组合和筛选，这种创新思路大大提高了特征工程的效率。</li>
+<li>自此，各种深度学习和Embedding的思想开始爆发，推动了特征工程模型化的发展。</li>
+</ul>
+<p><strong>2. 特征筛选与组合</strong>：</p>
+<ul>
+<li>GBDT模型在特征筛选和组合方面表现出色，通过构建决策树，自动生成新的离散特征向量，这些特征向量被输入到LR模型中进行CTR预估。</li>
+</ul>
+<h4>模型复杂性与实效性的权衡</h4>
+<p><strong>1. 更新频率的优化</strong>：</p>
+<ul>
+<li>Facebook采用不同的更新频率来权衡GBDT和LR模型的复杂性与实效性。GBDT部分几天更新一次，而LR部分则实现准实时更新。</li>
+<li>这种策略充分利用了GBDT在特征处理上的优势，同时保持了LR模型的实时性和敏捷性。</li>
+</ul>
+<p><strong>2. 模型结构与损失优化</strong>：</p>
+<ul>
+<li>在GBDT+LR组合模型中，Facebook通过实验确定了最优的GBDT子树规模。实验结果表明，当子树规模超过500棵时，增加子树的数量对模型损失的改善微乎其微，因此实际应用中选择了600棵子树作为标准。</li>
+</ul>
+<h4>数据验证的重要性</h4>
+<p><strong>1. 实验验证</strong>：</p>
+<ul>
+<li>Facebook强调了通过数据验证直觉结论的重要性。无论是数据和模型实时性的影响、GBDT子树的设置数量，还是采样方法的选择，所有决定都应通过数据验证。</li>
+<li>这种严谨的工作态度和方法确保了模型的可靠性和有效性。</li>
+</ul>
+<p><strong>2. 实际应用</strong>：</p>
+<ul>
+<li>在实际工作中，Facebook通过大量实验和数据分析确定了最佳的模型参数和训练策略。这种数据驱动的方法极大地提高了模型的性能和效果。</li>
+</ul>
+<h4>实际应用案例</h4>
+<p><strong>1. 广告推荐</strong>：</p>
+<ul>
+<li>Facebook的广告推荐系统通过GBDT+LR组合模型实现了高效的CTR预估。GBDT自动进行特征筛选和组合，生成新的离散特征向量，LR模型根据这些特征向量进行CTR预测，提高了广告的点击率和转化率。</li>
+</ul>
+<p><strong>2. 推荐系统优化</strong>：</p>
+<ul>
+<li>通过对GBDT+LR模型的不断优化和调整，Facebook实现了推荐系统的持续改进和性能提升，为用户提供了更精准和个性化的推荐服务。</li>
+</ul>
+<h4>优势与挑战</h4>
+<p><strong>优势</strong>：</p>
+<ol>
+<li><strong>特征工程自动化</strong>：通过GBDT进行特征筛选和组合，大大减少了人工干预，提高了特征工程的效率和效果。</li>
+<li><strong>模型复杂性与实效性的平衡</strong>：通过不同频率的模型更新，既保持了特征处理的复杂性，又保证了预测的实时性。</li>
+<li><strong>数据驱动决策</strong>：通过数据验证直觉结论，确保了模型的可靠性和有效性。</li>
+</ol>
+<p><strong>挑战</strong>：</p>
+<ol>
+<li><strong>模型更新的复杂性</strong>：需要合理设定GBDT和LR模型的更新频率，平衡模型的复杂性与实效性。</li>
+<li><strong>特征工程的持续优化</strong>：随着数据规模和应用场景的变化，特征工程需要不断优化和调整，以保持模型的高效性和准确性。</li>
+</ol>
+<h4>结论</h4>
+<p>Facebook的GBDT+LR组合模型通过特征工程模型化、模型复杂性与实效性的权衡以及数据验证的重要性，为广告推荐系统提供了高效的CTR预估方案。这一实践经验在广告推荐、新闻推荐等多个应用场景中表现出色，为其他平台提供了宝贵的参考和借鉴。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

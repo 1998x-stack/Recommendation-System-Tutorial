@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_5.3.1_为什么说推荐系统的实时性是重要的</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_5.3.1 为什么说推荐系统的实时性是重要的</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第5章 多角度审视推荐系统/5.3 推荐系统的实时性
+Content: 00_5.3.1 为什么说推荐系统的实时性是重要的
+&quot;&quot;&quot;</p>
+<h3>5.3.1 为什么说推荐系统的实时性是重要的</h3>
+<p>推荐系统的实时性在很大程度上决定了推荐效果和用户体验。以下是对推荐系统实时性重要性的详细分析。</p>
+<h4>一、推荐系统实时性的重要性</h4>
+<ol>
+<li>
+<p><strong>用户体验的提升</strong>：</p>
+<ul>
+<li><strong>即时反馈</strong>：用户在使用个性化新闻、短视频、在线购物等应用时，期望能够迅速找到符合自己兴趣的内容。如果推荐系统能够实时感知用户的行为，并即时调整推荐内容，将显著提升用户满意度。</li>
+<li><strong>案例分析</strong>：在新闻推荐系统中，如果用户刚刚阅读了一篇关于科技的文章，系统能够实时推荐更多科技类的文章，会使用户体验更加流畅和满意  。</li>
+</ul>
+</li>
+<li>
+<p><strong>提高推荐精度</strong>：</p>
+<ul>
+<li><strong>最新数据模式捕捉</strong>：推荐系统的实时性使得模型能够及时更新，捕捉到最新的用户行为和数据模式。例如，在电商平台上，能够实时推荐最新的热门商品或正在进行的促销活动，可以提高用户的购买率。</li>
+<li><strong>模型的持续优化</strong>：实时性使得推荐模型能够不断地进行增量更新，保持对用户兴趣和行为变化的敏感度，从而提高推荐的精度和相关性 。</li>
+</ul>
+</li>
+</ol>
+<h4>二、实时性对推荐系统的影响</h4>
+<ol>
+<li>
+<p><strong>特征的实时性</strong>：</p>
+<ul>
+<li><strong>定义</strong>：推荐系统特征的实时性指的是能够实时地收集和更新推荐模型的输入特征，使系统总能使用最新的特征进行预测和推荐。</li>
+<li><strong>应用场景</strong>：在短视频应用中，用户观看某个视频的行为可以立即反馈给系统，使其在用户观看完视频后立即推荐相关内容。例如，如果用户观看了一个关于烹饪的视频，系统可以立即推荐更多的烹饪视频  。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型的实时性</strong>：</p>
+<ul>
+<li><strong>定义</strong>：推荐系统模型的实时性指的是能够实时更新模型参数，使模型能够及时反映最新的数据模式和用户行为。</li>
+<li><strong>应用场景</strong>：在电商平台上，实时更新模型可以帮助系统快速捕捉到用户的最新购买偏好和市场流行趋势。例如，在“双11”促销活动期间，实时更新模型能够及时推荐正在热卖的商品和最新的优惠信息 。</li>
+</ul>
+</li>
+</ol>
+<h4>三、提升推荐系统实时性的技术手段</h4>
+<ol>
+<li>
+<p><strong>客户端实时特征采集</strong>：</p>
+<ul>
+<li><strong>方法</strong>：通过客户端实时采集用户的会话行为和上下文特征，及时将这些特征传输到服务器进行实时推荐。</li>
+<li><strong>优势</strong>：能够快速获取用户的即时兴趣，提升推荐系统的响应速度和推荐精度。例如，在新闻应用中，客户端可以实时记录用户的点击和阅读行为，立即调整推荐内容 。</li>
+</ul>
+</li>
+<li>
+<p><strong>流计算平台的应用</strong>：</p>
+<ul>
+<li><strong>方法</strong>：利用流计算平台（如Storm、Spark Streaming、Flink）进行准实时的特征处理和计算，将日志以流的形式进行微批处理。</li>
+<li><strong>优势</strong>：能够在分钟级别的延迟内处理用户行为数据，保证推荐系统能够引入用户的近期行为，提高推荐的实时性和精度。例如，在电商平台上，流计算平台可以实时计算商品的点击率和购买率，并及时调整推荐策略 。</li>
+</ul>
+</li>
+<li>
+<p><strong>分布式批处理平台的优化</strong>：</p>
+<ul>
+<li><strong>方法</strong>：利用分布式批处理平台（如Spark）进行全量特征计算和数据联结，将不同时间到达的数据进行整合和处理。</li>
+<li><strong>优势</strong>：能够保证推荐系统特征的全面性和准确性，为模型训练和离线评估提供高质量的数据支持。例如，在电商平台上，分布式批处理平台可以整合用户的浏览、点击、购买等行为数据，为推荐系统提供更全面的特征。</li>
+</ul>
+</li>
+</ol>
+<h4>四、实例分析</h4>
+<ol>
+<li>
+<p><strong>Facebook的实验</strong>：</p>
+<ul>
+<li><strong>实验内容</strong>：Facebook通过“GBDT+LR”模型进行实时性实验，验证了推荐系统实时性对推荐效果的重要性。</li>
+<li><strong>实验结果</strong>：实验表明，模型更新延迟越长，推荐系统的效果越差；反之，模型更新越频繁，实时性越好，推荐效果越佳。具体表现为损失函数Normalized Entropy的值随着模型更新延迟时间的增加而增加  。</li>
+</ul>
+</li>
+<li>
+<p><strong>实际应用场景</strong>：</p>
+<ul>
+<li><strong>新闻推荐系统</strong>：用户在新闻应用中希望快速找到感兴趣的文章，系统需要实时更新用户的阅读历史和兴趣偏好，提供个性化推荐 。</li>
+<li><strong>电商推荐系统</strong>：用户在购物过程中希望快速找到心仪的商品，系统需要实时更新用户的浏览和购买行为，推荐最新的促销商品和热卖商品 。</li>
+</ul>
+</li>
+</ol>
+<h4>总结</h4>
+<p>推荐系统的实时性对于提升用户体验和推荐效果具有至关重要的作用。通过实时采集用户行为、使用流计算平台和分布式批处理平台进行特征处理和模型更新，可以显著提高推荐系统的实时性和推荐效果。未来，随着技术的不断发展，推荐系统的实时性将进一步得到优化和提升，为用户提供更好的个性化服务。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

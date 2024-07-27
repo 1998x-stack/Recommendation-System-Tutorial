@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_2.6.1_GBDT+LR组合模型的结构</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_2.6.1 GBDT+LR组合模型的结构</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第2章 前深度学习时代——推荐系统的进化之路/2.6 GBDT+LR——特征工程模型化的开端
+Content: 00_2.6.1 GBDT+LR组合模型的结构
+&quot;&quot;&quot;</p>
+<h3>2.6.1 GBDT+LR组合模型的结构</h3>
+<h4>背景介绍</h4>
+<p>推荐系统的发展过程中，如何进行有效的特征工程一直是一个关键问题。特征工程的质量直接影响到模型的表现。2014年，Facebook提出了一种结合梯度提升决策树（GBDT）和逻辑回归（LR）的组合模型，通过GBDT自动进行特征筛选和组合，生成新的离散特征向量，再将该特征向量作为LR模型的输入，预估点击率（CTR）。这种方法有效地解决了传统方法中的特征工程难题，被认为是特征工程模型化的开端。</p>
+<h4>GBDT+LR组合模型的基本原理</h4>
+<p>GBDT+LR组合模型结构图如图2-15所示。</p>
+<ol>
+<li>
+<p><strong>GBDT部分</strong>:</p>
+<ul>
+<li><strong>GBDT（Gradient Boosting Decision Tree）</strong> 是由多棵决策树组成的集成模型。其基本思想是通过逐一生成决策子树，并利用当前模型与目标值之间的残差来训练新的子树。</li>
+<li><strong>特征工程</strong>: GBDT通过自动进行特征选择和组合生成新的特征向量。具体过程如下：一个训练样本输入GBDT的某一子树后，根据节点规则最终落入某一叶子节点，把该叶子节点置为1，其他叶子节点置为0，所有叶子节点组成的向量即形成该棵树的特征向量。连接所有子树的特征向量，即形成后续LR模型输入的离散型特征向量。</li>
+</ul>
+</li>
+<li>
+<p><strong>LR部分</strong>:</p>
+<ul>
+<li><strong>LR（Logistic Regression）</strong> 负责预估CTR。LR是一种线性模型，通过最大化似然函数来训练，旨在找到最优参数以最大化训练数据的概率。</li>
+<li><strong>模型训练</strong>: 用GBDT生成的特征向量作为输入，LR模型进行训练和预测。LR模型的梯度回传不涉及GBDT部分，因此这两部分是独立训练的，简化了模型的复杂性。</li>
+</ul>
+</li>
+</ol>
+<h4>GBDT模型的详细解析</h4>
+<ol>
+<li>
+<p><strong>GBDT模型的基本结构</strong>:</p>
+<ul>
+<li><strong>决策树组成的树林</strong>: GBDT由多棵回归树组成，每棵树是一个标准的回归树，预测方式是所有子树的结果加起来。</li>
+<li><strong>残差训练</strong>: 生成新子树的过程是利用样本标签值与当前树林预测值之间的残差构建新的子树。例如，假设已经生成了3棵子树，当前的预测值为 $ D(x) $，希望构建第4棵子树使预测结果 $ D(x) + dtree4(x) $ 能进一步逼近理论上的拟合函数 $ f(x) $。因此，第4棵子树生成的过程是以目标拟合函数和已有树林预测结果的残差 $ R(x) $ 为目标。</li>
+</ul>
+</li>
+<li>
+<p><strong>特征转换过程</strong>:</p>
+<ul>
+<li><strong>离散特征生成</strong>: 利用训练好的GBDT模型，将原始特征向量转换为新的离散特征向量。例如，GBDT由三棵子树构成，每棵子树有4个叶子节点，输入一个训练样本后，分别落入各子树的不同叶节点，形成对应的特征向量。连接所有特征向量即为新的离散特征向量。</li>
+</ul>
+</li>
+</ol>
+<h4>组合模型的优势</h4>
+<ol>
+<li>
+<p><strong>自动化特征工程</strong>:</p>
+<ul>
+<li>通过GBDT自动进行特征选择和组合，减少了人工特征工程的复杂度和工作量，提高了模型的表现和效率。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型独立性</strong>:</p>
+<ul>
+<li>GBDT和LR部分独立训练，无需考虑复杂的梯度回传问题，简化了模型的实现和调试。</li>
+</ul>
+</li>
+<li>
+<p><strong>提高预测性能</strong>:</p>
+<ul>
+<li>相比单独使用LR或GBDT，组合模型显著提高了CTR预测的准确性。例如，Facebook的研究显示，GBDT+LR模型在损失（Loss）上减少了约3%。</li>
+</ul>
+</li>
+</ol>
+<h4>实际应用与挑战</h4>
+<ol>
+<li>
+<p><strong>超参数调节</strong>:</p>
+<ul>
+<li>在GBDT+LR组合模型中，GBDT子树的规模是一个关键的超参数。Facebook的研究显示，当子树规模超过500棵时，增加子树规模对损失下降的贡献微乎其微。最终，Facebook在实际应用中选择了600作为子树规模。</li>
+</ul>
+</li>
+<li>
+<p><strong>计算资源</strong>:</p>
+<ul>
+<li>尽管GBDT在特征选择和组合方面表现优异，但其训练复杂度较高，尤其是大规模数据集上的应用，需要大量计算资源和优化策略来提高效率。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型实时性</strong>:</p>
+<ul>
+<li>为了兼顾模型的实时性和复杂度，Facebook采取了“GBDT部分几天更新一次，LR部分准实时更新”的策略。这种局部更新的方法既能充分利用GBDT的特征处理能力，又能快速捕捉数据的动态变化。</li>
+</ul>
+</li>
+</ol>
+<h4>总结</h4>
+<p>GBDT+LR组合模型通过自动化特征工程和独立训练的方式，有效解决了特征选择和组合的难题，提高了推荐系统的性能。尽管存在一定的计算复杂度和实时性挑战，但通过合理的超参数调节和优化策略，可以在实际应用中获得显著的效果。未来，随着计算资源的不断提升和模型优化技术的进步，GBDT+LR组合模型有望在更多的推荐系统中得到广泛应用。</p>
+<hr>
+<h3>GBDT详解</h3>
+<h4>背景介绍</h4>
+<p>GBDT（Gradient Boosting Decision Tree），中文名称为梯度提升决策树，是一种集成学习方法。它通过集成多个决策树来提高模型的预测精度。GBDT的核心思想是通过逐步减少误差来构建模型，每一步生成的树都是为了减少前一步的残差。它在回归和分类问题中表现出色，广泛应用于各种机器学习任务。</p>
+<h4>GBDT的基本原理</h4>
+<p>GBDT是基于梯度提升（Gradient Boosting）思想的集成模型。梯度提升是一种迭代优化算法，每一步的模型都是在前一步的基础上，通过对残差（误差）的学习来提升模型性能。</p>
+<h4>1. 集成学习</h4>
+<p>集成学习通过组合多个基学习器来提升整体模型的性能。GBDT的基学习器是决策树。具体来说，GBDT通过以下步骤进行模型训练：</p>
+<ol>
+<li>
+<p><strong>初始化模型</strong>:</p>
+<ul>
+<li>初始模型 $ F_0(x) $ 通常设定为目标值的均值：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>F</mi><mn>0</mn></msub><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mi>arg</mi><msub><mi>min</mi><mrow><mi>c</mi></mrow></msub><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mi>L</mi><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>c</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">F_0(x) = \arg \min_{c} \sum_{i=1}^{n} L(y_i, c)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.6513970000000002em;"></span><span class="strut bottom" style="height:2.929066em;vertical-align:-1.277669em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mop">ar<span style="margin-right:0.01389em;">g</span></span><span class="mop op-limits"><span class="vlist"><span style="top:0.6em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">c</span></span></span></span><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="mop">min</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathit">L</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord mathit">c</span><span class="mclose">)</span></span></span></span></span></p>
+其中 $ L $ 是损失函数，$ y_i $ 是样本的真实值，$ c $ 是常数。</li>
+</ul>
+</li>
+<li>
+<p><strong>迭代训练</strong>:</p>
+<ul>
+<li>对于第 $ m $ 轮迭代，计算前一步模型的残差（即负梯度）：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>r</mi><mrow><mi>i</mi><mi>m</mi></mrow></msub><mo>=</mo><mo>−</mo><msub><mrow><mo fence="true">[</mo><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>L</mi><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>F</mi><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>)</mo><mo>)</mo></mrow><mrow><mi mathvariant="normal">∂</mi><mi>F</mi><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>)</mo></mrow></mfrac><mo fence="true">]</mo></mrow><mrow><mi>F</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><msub><mi>F</mi><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>(</mo><mi>x</mi><mo>)</mo></mrow></msub></mrow><annotation encoding="application/x-tex">r_{im} = -\left[ \frac{\partial L(y_i, F(x_i))}{\partial F(x_i)} \right]_{F(x)=F_{m-1}(x)}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.45em;"></span><span class="strut bottom" style="height:2.6250299999999998em;vertical-align:-1.17503em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit">m</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord">−</span><span class="minner"><span class="minner displaystyle textstyle uncramped"><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathrm" style="margin-right:0.05556em;">∂</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span><span style="top:-0.2300000000000001em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathrm" style="margin-right:0.05556em;">∂</span><span class="mord mathit">L</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mclose">)</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">]</span></span></span><span class="vlist"><span style="top:1.00003em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="vlist"><span style="top:0.15000000000000002em;margin-right:0.07142857142857144em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord scriptscriptstyle cramped"><span class="mord mathit">m</span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+</li>
+<li>以残差为目标，训练一个新的决策树（基学习器）$ h_m(x) $：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>h</mi><mi>m</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mi>arg</mi><msub><mi>min</mi><mrow><mi>h</mi></mrow></msub><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mi>L</mi><mo>(</mo><msub><mi>r</mi><mrow><mi>i</mi><mi>m</mi></mrow></msub><mo separator="true">,</mo><mi>h</mi><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>)</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">h_m(x) = \arg \min_{h} \sum_{i=1}^{n} L(r_{im}, h(x_i))
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.6513970000000002em;"></span><span class="strut bottom" style="height:2.929066em;vertical-align:-1.277669em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit">h</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">m</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mop">ar<span style="margin-right:0.01389em;">g</span></span><span class="mop op-limits"><span class="vlist"><span style="top:0.6521079999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">h</span></span></span></span><span style="top:-2.7755575615628914e-17em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="mop">min</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathit">L</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit">m</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord mathit">h</span><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mclose">)</span></span></span></span></span></p>
+</li>
+<li>更新模型：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>F</mi><mi>m</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><msub><mi>F</mi><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>(</mo><mi>x</mi><mo>)</mo><mo>+</mo><mi>η</mi><msub><mi>h</mi><mi>m</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">F_m(x) = F_{m-1}(x) + \eta h_m(x)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">m</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">m</span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mbin">+</span><span class="mord mathit" style="margin-right:0.03588em;">η</span><span class="mord"><span class="mord mathit">h</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">m</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span></span></p>
+其中 $ \eta $ 是学习率，用于控制每棵树对模型的贡献。</li>
+</ul>
+</li>
+</ol>
+<h4>2. 决策树</h4>
+<p>GBDT中的基学习器是决策树，通常是深度较浅的回归树。决策树通过递归地将数据划分为不同的子集，直至满足停止条件。树的每个节点表示一个决策规则，每个叶子节点表示一个预测值。</p>
+<h4>3. 损失函数</h4>
+<p>GBDT可以灵活地选择损失函数，常见的损失函数有：</p>
+<ul>
+<li><strong>平方误差（MSE）</strong>: 用于回归问题。<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>L</mi><mo>(</mo><mi>y</mi><mo separator="true">,</mo><mi>F</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>)</mo><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac><mo>(</mo><mi>y</mi><mo>−</mo><mi>F</mi><mo>(</mo><mi>x</mi><mo>)</mo><msup><mo>)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">L(y, F(x)) = \frac{1}{2}(y - F(x))^2
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.32144em;"></span><span class="strut bottom" style="height:2.00744em;vertical-align:-0.686em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">L</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathrm">2</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mbin">−</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mclose"><span class="mclose">)</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+</li>
+<li><strong>交叉熵（Log Loss）</strong>: 用于分类问题。<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>L</mi><mo>(</mo><mi>y</mi><mo separator="true">,</mo><mi>F</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>)</mo><mo>=</mo><mo>−</mo><mi>y</mi><mi>log</mi><mo>(</mo><mi>p</mi><mo>)</mo><mo>−</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo>)</mo><mi>log</mi><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">L(y, F(x)) = -y \log(p) - (1-y) \log(1-p)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">L</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord">−</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mopen">(</span><span class="mord mathit">p</span><span class="mclose">)</span><span class="mbin">−</span><span class="mopen">(</span><span class="mord mathrm">1</span><span class="mbin">−</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mopen">(</span><span class="mord mathrm">1</span><span class="mbin">−</span><span class="mord mathit">p</span><span class="mclose">)</span></span></span></span></span></p>
+其中 $ p $ 是样本预测为正类的概率。</li>
+</ul>
+<h4>GBDT的优点</h4>
+<ol>
+<li><strong>强大的学习能力</strong>: 通过迭代地学习残差，GBDT能够捕捉复杂的非线性关系。</li>
+<li><strong>灵活的损失函数</strong>: 可以根据具体任务选择合适的损失函数，适应性强。</li>
+<li><strong>高精度</strong>: 在处理高维数据和稀疏数据时，GBDT表现出色，常用于Kaggle竞赛和工业界。</li>
+</ol>
+<h4>GBDT的缺点</h4>
+<ol>
+<li><strong>训练时间长</strong>: 由于每一轮迭代都需要训练新的决策树，GBDT的训练时间较长。</li>
+<li><strong>难以并行化</strong>: GBDT的迭代过程是串行的，难以并行化处理。</li>
+<li><strong>过拟合风险</strong>: 如果基学习器（决策树）的数量过多或树的深度过大，模型容易过拟合。</li>
+</ol>
+<h4>GBDT的参数</h4>
+<p>GBDT的性能依赖于多个参数的调节，常见参数包括：</p>
+<ul>
+<li><strong>树的数量（n_estimators）</strong>: 树的数量越多，模型的拟合能力越强，但也容易过拟合。</li>
+<li><strong>树的深度（max_depth）</strong>: 控制每棵树的最大深度，防止过拟合。</li>
+<li><strong>学习率（learning_rate）</strong>: 控制每棵树对模型的贡献，学习率越小，模型越稳健，但需要更多的树。</li>
+<li><strong>子样本比例（subsample）</strong>: 每次迭代训练树时使用的样本比例，降低该值可以增加模型的偏差，减少方差。</li>
+</ul>
+<h4>实际应用中的优化策略</h4>
+<ol>
+<li>
+<p><strong>早停法（Early Stopping）</strong>:</p>
+<ul>
+<li>在验证集上监控模型的性能，如果在若干轮迭代内性能不再提升，则停止训练，防止过拟合。</li>
+</ul>
+</li>
+<li>
+<p><strong>随机森林与GBDT结合</strong>:</p>
+<ul>
+<li>在某些情况下，结合随机森林和GBDT可以取得更好的效果。随机森林通过随机选择特征和样本来训练多棵树，增加了模型的多样性，减少了过拟合风险。</li>
+</ul>
+</li>
+<li>
+<p><strong>特征工程</strong>:</p>
+<ul>
+<li>尽管GBDT能够自动进行特征选择，但进行合理的特征工程仍然可以显著提升模型性能。例如，特征的标准化、离散化和交叉特征的构造都可以提升GBDT的效果。</li>
+</ul>
+</li>
+</ol>
+<h4>总结</h4>
+<p>GBDT作为一种强大的集成学习算法，通过逐步减少误差，能够有效地提升模型的预测能力。尽管其训练时间较长且难以并行化，但通过合理的参数调节和优化策略，可以在多种机器学习任务中取得优秀的表现。未来的发展方向可能包括结合深度学习模型，进一步提升GBDT在复杂任务中的表现。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

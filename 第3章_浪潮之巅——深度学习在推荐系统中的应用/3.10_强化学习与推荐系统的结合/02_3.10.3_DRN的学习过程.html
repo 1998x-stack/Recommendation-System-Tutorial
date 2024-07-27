@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_3.10.3_DRN的学习过程</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_3.10.3 DRN的学习过程</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第3章 浪潮之巅——深度学习在推荐系统中的应用/3.10 强化学习与推荐系统的结合
+Content: 02_3.10.3 DRN的学习过程
+&quot;&quot;&quot;</p>
+<h3>3.10.3 DRN的学习过程详细解析</h3>
+<h4>1. 引言</h4>
+<p>在强化学习推荐系统中，DRN（Deep Reinforcement Learning Network，深度强化学习网络）的学习过程是其核心优势所在。与传统的深度学习模型不同，DRN可以在线更新模型，使其具备更强的实时性和适应性。图3-28以时间轴的形式展示了DRN的学习过程。</p>
+<h4>2. 学习过程概述</h4>
+<p>DRN的学习过程可以分为离线训练和在线更新两个主要阶段：</p>
+<h5>2.1 离线训练</h5>
+<p>在离线训练阶段，系统根据历史数据训练DQN（Deep Q-Network，深度Q网络）模型。这一步骤相当于初始化智能体，使其具备初步的推荐能力。离线训练的目的是为在线学习提供一个稳定的基础模型。</p>
+<h5>2.2 在线更新</h5>
+<p>在线更新是DRN区别于传统模型的关键步骤。在线更新分为两个阶段：微更新和主更新。</p>
+<ol>
+<li>
+<p><strong>t1→t2阶段</strong>：</p>
+<ul>
+<li><strong>推送服务</strong>：利用初始化模型进行推荐推送，收集用户的反馈数据。</li>
+<li><strong>反馈积累</strong>：系统记录用户的点击、浏览等行为数据。</li>
+</ul>
+</li>
+<li>
+<p><strong>t2时间点</strong>：</p>
+<ul>
+<li><strong>微更新</strong>：利用t1→t2阶段积累的用户点击数据，进行模型的微调。微更新通常涉及较小规模的数据调整和模型参数更新，以保持模型的适应性。</li>
+</ul>
+</li>
+<li>
+<p><strong>t3→t4阶段</strong>：</p>
+<ul>
+<li><strong>持续推送</strong>：继续推送推荐内容，积累更多的反馈数据。</li>
+<li><strong>数据收集</strong>：除点击数据外，还收集用户的活跃度等其他反馈信息。</li>
+</ul>
+</li>
+<li>
+<p><strong>t4时间点</strong>：</p>
+<ul>
+<li><strong>主更新</strong>：利用t1→t4阶段的所有用户数据进行模型的主更新。主更新是一个较为全面的模型训练过程，通常会重新训练模型以替换现有模型，确保模型能够充分适应最新的用户行为和兴趣变化。</li>
+</ul>
+</li>
+</ol>
+<h4>3. 竞争梯度下降算法</h4>
+<p>在DRN的学习过程中，竞争梯度下降算法（Dueling Bandit Gradient Descent Algorithm）被用来实现在线学习和模型更新。</p>
+<h5>3.1 微更新操作</h5>
+<p>在微更新阶段，竞争梯度下降算法通过以下步骤进行模型调整：</p>
+<ol>
+<li>
+<p><strong>随机扰动</strong>：</p>
+<ul>
+<li>在当前模型参数W的基础上，添加一个较小的随机扰动ΔW，生成新的模型参数W'，对应的新模型称为探索网络（Exploration Network）。</li>
+</ul>
+</li>
+<li>
+<p><strong>生成推荐列表</strong>：</p>
+<ul>
+<li>当前网络和探索网络分别生成推荐列表L和L'。</li>
+<li>使用交错法（Interleaving）将两个推荐列表组合成一个新的推荐列表推送给用户。</li>
+</ul>
+</li>
+<li>
+<p><strong>用户反馈</strong>：</p>
+<ul>
+<li>实时收集用户对推荐列表的反馈。</li>
+<li>如果探索网络生成的推荐列表效果好于当前网络，则用探索网络替代当前网络，进入下一轮迭代；反之则保留当前网络。</li>
+</ul>
+</li>
+</ol>
+<h4>4. 在线学习的优势</h4>
+<p>DRN通过在线学习和实时更新模型，具备以下几个优势：</p>
+<ul>
+<li><strong>实时适应</strong>：能够迅速适应用户兴趣和行为的变化，提高推荐的精准度和用户满意度。</li>
+<li><strong>持续优化</strong>：通过不断的探索和利用平衡，DRN可以在长期内保持模型的优化状态。</li>
+<li><strong>高效学习</strong>：在线学习过程类似于随机梯度下降，尽管单次样本可能带来随机扰动，但总的优化趋势是正确的，通过大量的尝试最终达到最优状态。</li>
+</ul>
+<h4>5. 实践意义</h4>
+<p>DRN的学习过程展示了将强化学习应用于推荐系统的巨大潜力。与传统的深度学习模型相比，DRN能够动态调整和优化推荐策略，更好地满足用户的需求和偏好。这种实时更新和在线学习的能力，使得DRN在实际应用中具备更高的灵活性和适应性。</p>
+<h3>结论</h3>
+<p>通过对DRN学习过程的详细解析，可以看出，在线更新和实时学习是DRN的核心优势所在。通过竞争梯度下降算法，DRN能够不断探索和优化模型参数，确保推荐系统在动态变化的环境中始终保持最佳性能。未来，随着技术的不断进步，DRN有望在更多的推荐系统场景中得到广泛应用。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

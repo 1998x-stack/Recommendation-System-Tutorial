@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01_2.5.2_FM模型——隐向量特征交叉</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>01_2.5.2 FM模型——隐向量特征交叉</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第2章 前深度学习时代——推荐系统的进化之路/2.5 从FM到FFM——自动特征交叉的解决方案
+Content: 01_2.5.2 FM模型——隐向量特征交叉
+&quot;&quot;&quot;</p>
+<h3>2.5.2 FM模型——隐向量特征交叉</h3>
+<h4>背景介绍</h4>
+<p>在推荐系统的发展过程中，特征交叉是提升模型表达能力的重要手段。然而，传统的特征交叉方法（如POLY2模型）存在数据稀疏和训练复杂度高的问题。为了解决这些问题，Rendle在2010年提出了因子分解机（Factorization Machines, FM）模型。</p>
+<h4>FM模型的基本原理</h4>
+<p>FM模型通过引入隐向量（latent vector），将特征交叉的权重从显式的特征组合转化为隐向量之间的内积。具体来说，FM为每个特征学习一个隐向量 $ \mathbf{v}_i $，在特征交叉时，使用两个特征的隐向量内积作为交叉特征的权重。其数学表达式如下：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi><mo>=</mo><msub><mi>w</mi><mn>0</mn></msub><mo>+</mo><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msub><mi>w</mi><mi>i</mi></msub><msub><mi>x</mi><mi>i</mi></msub><mo>+</mo><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mi>i</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo>⟨</mo><msub><mrow><mi mathvariant="bold">v</mi></mrow><mi>i</mi></msub><mo separator="true">,</mo><msub><mrow><mi mathvariant="bold">v</mi></mrow><mi>j</mi></msub><mo>⟩</mo><msub><mi>x</mi><mi>i</mi></msub><msub><mi>x</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">y = w_0 + \sum_{i=1}^{n} w_i x_i + \sum_{i=1}^{n} \sum_{j=i+1}^{n} \langle \mathbf{v}_i, \mathbf{v}_j \rangle x_i x_j 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.6513970000000007em;"></span><span class="strut bottom" style="height:3.0651740000000007em;vertical-align:-1.4137769999999998em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span><span class="mrel">=</span><span class="mord mathit">i</span><span class="mbin">+</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000254801em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000005em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">⟨</span><span class=""><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf" style="margin-right:0.01597em;">v</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class=""><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf" style="margin-right:0.01597em;">v</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">⟩</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+<p>其中，$ y $ 为输出，$ w_0 $ 为偏置，$ w_i $ 为特征 $ x_i $ 的权重，$ \mathbf{v}_i $ 为特征 $ x_i $ 的隐向量，$ \langle \mathbf{v}_i, \mathbf{v}_j \rangle $ 为隐向量之间的内积。</p>
+<h4>特征交叉的必要性</h4>
+<p>特征交叉的主要目的是捕捉特征之间的交互信息，提升模型的表达能力。在推荐系统中，用户的行为受到多种因素的共同影响，这些因素之间的相互作用对用户行为的预测至关重要。例如，用户的购买决策可能受到性别、年龄、历史购买记录等多个因素的共同影响。</p>
+<h4>FM模型的优点</h4>
+<ol>
+<li><strong>减少参数数量</strong>：相比于POLY2模型中显式的二次特征组合，FM模型通过引入隐向量，将参数数量从 $ n^2 $ 级别减少到 $ nk $ 级别（其中 $ k $ 为隐向量的维度）。这显著降低了模型的复杂度。</li>
+<li><strong>处理稀疏数据</strong>：FM模型通过隐向量内积的方式实现特征交叉，即使在数据稀疏的情况下，依然能够有效地学习特征之间的关系。例如，即使某两个特征的组合在训练数据中很少出现，FM模型仍然可以通过各自的隐向量进行有效的交互学习。</li>
+<li><strong>良好的泛化能力</strong>：由于FM模型通过隐向量的内积捕捉特征交互信息，模型具有较强的泛化能力。即使在未见过的特征组合上，模型也能够通过隐向量的学习得到合理的预测结果。</li>
+</ol>
+<h4>FM模型的实现细节</h4>
+<ol>
+<li><strong>隐向量的学习</strong>：FM模型为每个特征学习一个隐向量。假设特征 $ x_i $ 的隐向量为 $ \mathbf{v}_i $，其维度为 $ k $。在训练过程中，通过优化目标函数来更新这些隐向量，使得模型能够更好地捕捉特征之间的交互信息。</li>
+<li><strong>梯度下降优化</strong>：在训练FM模型时，常用的优化方法是梯度下降。通过最小化损失函数，逐步更新模型参数（包括偏置 $ w_0 $，权重 $ w_i $ 以及隐向量 $ \mathbf{v}_i $）。梯度下降方法的复杂度为 $ O(nk) $，显著低于POLY2模型的 $ O(n^2) $ 复杂度。</li>
+</ol>
+<h4>FM模型的实际应用</h4>
+<p>在实际应用中，FM模型广泛用于推荐系统、点击率预测等领域。其主要优势在于能够有效处理高维稀疏数据，并通过隐向量捕捉特征之间的交互信息。例如，在电商推荐系统中，FM模型可以利用用户和商品的隐向量，通过内积计算用户对商品的兴趣度，从而实现个性化推荐。</p>
+<h4>例子解析</h4>
+<p>举例来说，在某电商平台的推荐系统中，用户和商品分别作为特征输入FM模型。假设用户特征包括性别、年龄、历史购买记录等，商品特征包括类别、价格、品牌等。通过FM模型，用户和商品的隐向量可以捕捉到其各自特征之间的交互信息，从而提高推荐的准确性。</p>
+<p>假设某用户的隐向量为 $ \mathbf{v}<em>{\text{user}} $，某商品的隐向量为 $ \mathbf{v}</em>{\text{item}} $。通过计算这两个隐向量的内积 $ \langle \mathbf{v}<em>{\text{user}}, \mathbf{v}</em>{\text{item}} \rangle $，可以得到该用户对该商品的兴趣度评分。模型通过优化这一评分，使其与用户的实际行为更为一致，从而实现精准推荐。</p>
+<h4>总结</h4>
+<p>FM模型通过引入隐向量，实现了高效的特征交叉，解决了POLY2模型在数据稀疏和训练复杂度方面的不足。其在推荐系统中的广泛应用，展示了其在处理高维稀疏数据和捕捉特征交互信息方面的优势。尽管FM模型已经取得了显著的效果，但在实际应用中仍需进一步优化和改进，以应对更复杂的推荐场景和更大规模的数据集。</p>
+<p>通过以上详细的分析，了解了FM模型的基本原理、优缺点及其在特征交叉中的应用。尽管FM模型具有良好的泛化能力和处理稀疏数据的优势，但在实际工程中仍需结合具体场景进行优化，以充分发挥其优势。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

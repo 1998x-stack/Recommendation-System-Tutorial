@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_2.4.3_逻辑回归模型的训练方法</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_2.4.3 逻辑回归模型的训练方法</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第2章 前深度学习时代——推荐系统的进化之路/2.4 逻辑回归——融合多种特征的推荐模型
+Content: 02_2.4.3 逻辑回归模型的训练方法
+&quot;&quot;&quot;</p>
+<h3>2.4.3 逻辑回归模型的训练方法</h3>
+<h4>概述</h4>
+<p>逻辑回归模型是一种常用的分类算法，广泛应用于推荐系统中。其训练方法主要包括数据准备、特征工程、模型训练和模型评估等步骤。通过对输入特征进行加权求和，并应用sigmoid函数将结果映射到0到1之间，从而输出用户点击某个物品的概率。</p>
+<h4>训练流程</h4>
+<ol>
+<li>
+<p><strong>数据准备</strong></p>
+<ul>
+<li><strong>数据收集</strong>：从多种数据源收集用户行为数据、物品属性数据和上下文数据。</li>
+<li><strong>数据清洗</strong>：处理缺失值、异常值和重复数据，确保数据质量。</li>
+</ul>
+</li>
+<li>
+<p><strong>特征工程</strong></p>
+<ul>
+<li><strong>特征选择</strong>：选择对模型预测有重要影响的特征，去除冗余或无关的特征。</li>
+<li><strong>特征转换</strong>：将分类特征转换为数值特征，对数值特征进行归一化或标准化处理。</li>
+<li><strong>特征交互</strong>：构建特征交互项，以捕捉特征之间的非线性关系。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型训练</strong></p>
+<ul>
+<li><strong>确定优化目标</strong>：逻辑回归模型的优化目标通常是最大化点击率（CTR）。我们通过已有样本数据来训练模型，确定逻辑回归模型的内部参数。</li>
+<li><strong>定义损失函数</strong>：逻辑回归模型的损失函数通常为对数似然损失函数，公式如下：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>L</mi><mo>(</mo><mrow><mi mathvariant="bold">w</mi></mrow><mo separator="true">,</mo><mi>b</mi><mo>)</mo><mo>=</mo><mo>−</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mi>m</mi></mrow></mfrac><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></msubsup><mrow><mo fence="true">[</mo><msub><mi>y</mi><mi>i</mi></msub><mi>log</mi><mo>(</mo><msub><mover accent="true"><mrow><mi>y</mi></mrow><mo>^</mo></mover><mi>i</mi></msub><mo>)</mo><mo>+</mo><mo>(</mo><mn>1</mn><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub><mo>)</mo><mi>log</mi><mo>(</mo><mn>1</mn><mo>−</mo><msub><mover accent="true"><mrow><mi>y</mi></mrow><mo>^</mo></mover><mi>i</mi></msub><mo>)</mo><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">L(\mathbf{w}, b) = - \frac{1}{m} \sum_{i=1}^m \left[ y_i \log(\hat{y}_i) + (1 - y_i) \log(1 - \hat{y}_i) \right]
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.6513970000000002em;"></span><span class="strut bottom" style="height:2.929066em;vertical-align:-1.277669em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">L</span><span class="mopen">(</span><span class="mord displaystyle textstyle uncramped"><span class="mord mathbf" style="margin-right:0.01597em;">w</span></span><span class="mpunct">,</span><span class="mord mathit">b</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord">−</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit">m</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∑</span></span></span><span style="top:-1.2500050000000003em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit">m</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="minner displaystyle textstyle uncramped"><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;">[</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mopen">(</span><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span style="top:0em;margin-left:0.11112em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mbin">+</span><span class="mopen">(</span><span class="mord mathrm">1</span><span class="mbin">−</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mopen">(</span><span class="mord mathrm">1</span><span class="mbin">−</span><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span style="top:0em;margin-left:0.11112em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;">]</span></span></span></span></span></span></p>
+其中，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mover accent="true"><mrow><mi>y</mi></mrow><mo>^</mo></mover><mi>i</mi></msub><mo>=</mo><mi>σ</mi><mo>(</mo><msup><mrow><mi mathvariant="bold">w</mi></mrow><mi>T</mi></msup><msub><mrow><mi mathvariant="bold">x</mi></mrow><mi>i</mi></msub><mo>+</mo><mi>b</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\hat{y}_i = \sigma(\mathbf{w}^T \mathbf{x}_i + b)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8413309999999999em;"></span><span class="strut bottom" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span style="top:0em;margin-left:0.11112em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class=""><span class="mord textstyle uncramped"><span class="mord mathbf" style="margin-right:0.01597em;">w</span></span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class=""><span class="mord textstyle uncramped"><span class="mord mathbf">x</span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathit">b</span><span class="mclose">)</span></span></span></span>。</li>
+<li><strong>梯度下降法</strong>：使用梯度下降法优化模型参数，更新公式如下：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>w</mi><mi>j</mi></msub><mo>:</mo><mo>=</mo><msub><mi>w</mi><mi>j</mi></msub><mo>−</mo><mi>α</mi><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>L</mi></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>w</mi><mi>j</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">w_j := w_j - \alpha \frac{\partial L}{\partial w_j}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.37144em;"></span><span class="strut bottom" style="height:2.343548em;vertical-align:-0.972108em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">:</span><span class="mrel">=</span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">−</span><span class="mord mathit" style="margin-right:0.0037em;">α</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.6859999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathrm" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathrm" style="margin-right:0.05556em;">∂</span><span class="mord mathit">L</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi><mo>:</mo><mo>=</mo><mi>b</mi><mo>−</mo><mi>α</mi><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>L</mi></mrow><mrow><mi mathvariant="normal">∂</mi><mi>b</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">b := b - \alpha \frac{\partial L}{\partial b}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.37144em;"></span><span class="strut bottom" style="height:2.05744em;vertical-align:-0.686em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">b</span><span class="mrel">:</span><span class="mrel">=</span><span class="mord mathit">b</span><span class="mbin">−</span><span class="mord mathit" style="margin-right:0.0037em;">α</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathrm" style="margin-right:0.05556em;">∂</span><span class="mord mathit">b</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathrm" style="margin-right:0.05556em;">∂</span><span class="mord mathit">L</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
+其中，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.0037em;">α</span></span></span></span> 为学习率，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>L</mi></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>w</mi><mi>j</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial w_j}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8801079999999999em;"></span><span class="strut bottom" style="height:1.427328em;vertical-align:-0.54722em;"></span><span class="base textstyle uncramped"><span class="mord reset-textstyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.34500000000000003em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathrm" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15000000000000002em;margin-right:0.07142857142857144em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.394em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm" style="margin-right:0.05556em;">∂</span><span class="mord mathit">L</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>L</mi></mrow><mrow><mi mathvariant="normal">∂</mi><mi>b</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial b}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8801079999999999em;"></span><span class="strut bottom" style="height:1.2251079999999999em;vertical-align:-0.345em;"></span><span class="base textstyle uncramped"><span class="mord reset-textstyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.345em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathrm" style="margin-right:0.05556em;">∂</span><span class="mord mathit">b</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.394em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm" style="margin-right:0.05556em;">∂</span><span class="mord mathit">L</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span> 为损失函数的梯度。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型评估</strong></p>
+<ul>
+<li><strong>训练集和验证集划分</strong>：将数据集划分为训练集和验证集，用于模型训练和性能评估。</li>
+<li><strong>评估指标</strong>：使用准确率（Accuracy）、精确率（Precision）、召回率（Recall）和F1值等指标评估模型性能。</li>
+<li><strong>交叉验证</strong>：通过交叉验证进一步验证模型的稳定性和泛化能力。</li>
+</ul>
+</li>
+</ol>
+<h4>详细步骤</h4>
+<ol>
+<li>
+<p><strong>数据准备</strong></p>
+<ul>
+<li><strong>数据收集</strong>：从日志文件、用户行为记录、物品属性数据库等多种数据源中收集用户点击、浏览、购买等行为数据。</li>
+<li><strong>数据清洗</strong>：处理缺失值和异常值，删除重复数据，确保数据的完整性和一致性。例如，对于缺失值，可以使用均值填充或删除包含缺失值的样本。</li>
+</ul>
+</li>
+<li>
+<p><strong>特征工程</strong></p>
+<ul>
+<li><strong>特征选择</strong>：选择与用户点击行为相关的特征，如用户的年龄、性别、历史行为，物品的类别、价格、评分等。</li>
+<li><strong>特征转换</strong>：将分类特征转换为数值特征，例如将用户的性别（男/女）转换为二元变量（0/1）。对数值特征进行归一化处理，将特征值缩放到[0,1]范围内，以消除不同量纲对模型训练的影响。</li>
+<li><strong>特征交互</strong>：构建特征交互项，例如用户年龄与物品价格的乘积，以捕捉特征之间的非线性关系，提高模型的预测能力。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型训练</strong></p>
+<ul>
+<li><strong>确定优化目标</strong>：逻辑回归模型的优化目标是最大化对数似然函数，通过极大似然估计法确定模型参数。</li>
+<li><strong>定义损失函数</strong>：逻辑回归模型的损失函数为对数似然损失函数，用于衡量模型预测值与实际值之间的差异。目标是最小化损失函数的值。</li>
+<li><strong>梯度下降法</strong>：使用梯度下降法迭代更新模型参数。通过计算损失函数的梯度，按照梯度的方向调整模型参数，使损失函数逐渐收敛到最小值。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型评估</strong></p>
+<ul>
+<li><strong>训练集和验证集划分</strong>：将数据集随机划分为训练集和验证集，通常按8:2的比例划分。训练集用于模型训练，验证集用于评估模型性能。</li>
+<li><strong>评估指标</strong>：使用多种评估指标全面评估模型性能。例如，准确率用于衡量模型的整体预测准确性，精确率和召回率用于衡量模型对正样本的识别能力，F1值综合考虑精确率和召回率，反映模型的综合性能。</li>
+<li><strong>交叉验证</strong>：通过交叉验证方法进一步验证模型的稳定性和泛化能力。将数据集分为若干个子集，每次选择一个子集作为验证集，其余子集作为训练集，重复多次，取平均值作为最终评估结果。</li>
+</ul>
+</li>
+</ol>
+<h4>实例分析</h4>
+<ol>
+<li>
+<p><strong>在线广告推荐</strong></p>
+<ul>
+<li><strong>数据准备</strong>：从广告展示日志中收集用户点击、浏览行为数据，以及广告的展示时间、位置等上下文信息。</li>
+<li><strong>特征工程</strong>：选择用户的年龄、性别、历史点击行为，广告的类型、内容、展示时间等特征，进行特征转换和交互。</li>
+<li><strong>模型训练</strong>：使用训练集数据训练逻辑回归模型，优化模型参数。</li>
+<li><strong>模型评估</strong>：使用验证集评估模型性能，确保模型能够准确预测用户点击广告的概率。</li>
+</ul>
+</li>
+<li>
+<p><strong>视频推荐</strong></p>
+<ul>
+<li><strong>数据准备</strong>：从视频平台的用户观看记录中收集用户观看行为数据，以及视频的发布时间、分类等信息。</li>
+<li><strong>特征工程</strong>：选择用户的历史观看记录、视频的类型、内容、发布时间等特征，进行特征转换和交互。</li>
+<li><strong>模型训练</strong>：使用训练集数据训练逻辑回归模型，优化模型参数。</li>
+<li><strong>模型评估</strong>：使用验证集评估模型性能，确保模型能够准确预测用户观看视频的概率。</li>
+</ul>
+</li>
+</ol>
+<h4>优点</h4>
+<ol>
+<li>
+<p><strong>特征融合能力强</strong></p>
+<ul>
+<li>逻辑回归模型能够综合利用多种特征，使推荐结果更全面。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型简单，易于实现</strong></p>
+<ul>
+<li>逻辑回归模型的数学形式简单，计算效率高，易于在大规模数据上实现。</li>
+</ul>
+</li>
+<li>
+<p><strong>可解释性强</strong></p>
+<ul>
+<li>逻辑回归模型的输出可以解释为特征对预测结果的贡献，便于理解和调试。</li>
+</ul>
+</li>
+</ol>
+<h4>局限性</h4>
+<ol>
+<li>
+<p><strong>线性模型，表达能力有限</strong></p>
+<ul>
+<li>逻辑回归模型是线性模型，难以捕捉复杂的非线性关系。</li>
+</ul>
+</li>
+<li>
+<p><strong>特征工程依赖</strong></p>
+<ul>
+<li>模型性能高度依赖于特征工程，特征选择和处理不当会影响模型效果。</li>
+</ul>
+</li>
+<li>
+<p><strong>数据偏斜问题</strong></p>
+<ul>
+<li>在正负样本不平衡的情况下，逻辑回归模型可能会偏向多数类，需要通过调整损失函数或采样策略来平衡数据。</li>
+</ul>
+</li>
+</ol>
+<h3>结论</h3>
+<p>逻辑回归模型通过简单的数学形式和强大的特征融合能力，成为推荐系统中的重要方法。尽管其表达能力有限，但由于其简单性和高效性，依然广泛应用于各种推荐场景。未来，通过结合深度学习等技术，可以进一步提升逻辑回归模型的推荐效果。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02_2.7.3_从深度学习的角度重新审视LS_PLM模型</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>02_2.7.3 从深度学习的角度重新审视LS-PLM模型</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第2章 前深度学习时代——推荐系统的进化之路/2.7 LS-PLM——阿里巴巴曾经的主流推荐模型
+Content: 02_2.7.3 从深度学习的角度重新审视LS-PLM模型
+&quot;&quot;&quot;</p>
+<h3>从深度学习的角度重新审视LS-PLM模型</h3>
+<h4>背景介绍</h4>
+<p>LS-PLM（Large Scale Piece-wise Linear Model），即大规模分段线性模型，是阿里巴巴曾经的主流推荐模型。该模型早在2012年就已经应用于阿里巴巴的广告推荐场景，并在2017年被正式公布。LS-PLM模型在大规模稀疏数据场景下表现出色，具有显著的优势  。</p>
+<h4>深度学习视角下的LS-PLM模型</h4>
+<p>在LS-PLM模型刚投用的2012年，距离深度学习在推荐系统领域的成功应用还很遥远。但如果站在当今的时间节点上，从深度学习的角度重新审视LS-PLM模型，某种意义上讲，LS-PLM模型已经有了浓厚的深度学习的“味道”  。</p>
+<h4>LS-PLM模型的深度学习元素</h4>
+<ol>
+<li>
+<p><strong>三层神经网络结构</strong>：</p>
+<ul>
+<li>LS-PLM可以看作一个加入了注意力（Attention）机制的三层神经网络模型。其中输入层是样本的特征向量，中间层是由多个神经元组成的隐层，每个神经元对应一个分片（segment）。对于一个CTR预估问题，LS-PLM的最后一层自然是由单一神经元组成的输出层  。</li>
+</ul>
+</li>
+<li>
+<p><strong>注意力机制</strong>：</p>
+<ul>
+<li>在LS-PLM模型中，注意力机制被应用在隐层和输出层之间。神经元之间的权重由分片函数得出的注意力得分来确定。也就是说，样本属于哪个分片的概率就是其注意力得分  。</li>
+</ul>
+</li>
+<li>
+<p><strong>样本分片</strong>：</p>
+<ul>
+<li>样本分片是LS-PLM模型的核心思想，通过softmax函数对样本进行多分类，将样本分配到不同的分片中，每个分片对应一个独立的逻辑回归模型。这种分片方式使得模型能够更好地捕捉数据中的非线性模式，提升模型的预测能力  。</li>
+</ul>
+</li>
+</ol>
+<h4>从深度学习视角的重新描述</h4>
+<ol>
+<li>
+<p><strong>模型结构层面的理解</strong>：</p>
+<ul>
+<li>虽然在具体细节上，LS-PLM模型与现代经典的深度学习模型有所区别，但从模型结构层面来看，LS-PLM模型已经具备了深度学习模型的一些关键特性。早在2012年，LS-PLM模型就已经用自己的方式接近了深度学习的大门  。</li>
+</ul>
+</li>
+<li>
+<p><strong>对深度学习模型的启发</strong>：</p>
+<ul>
+<li>LS-PLM模型的成功应用为后续深度学习模型在推荐系统中的发展提供了重要启发。通过对LS-PLM模型的深度学习视角的重新审视，可以更好地理解深度学习模型在推荐系统中的应用和发展路径  。</li>
+</ul>
+</li>
+</ol>
+<h4>总结</h4>
+<p>从深度学习的角度重新审视LS-PLM模型，可以发现其已经具备了许多深度学习的特性，包括三层神经网络结构和注意力机制等。尽管在具体实现上与现代深度学习模型有所不同，但LS-PLM模型的设计思想和应用方式为后续深度学习模型在推荐系统中的应用奠定了基础。通过这种重新审视，可以更好地理解LS-PLM模型的优点和其在推荐系统领域的重要性  。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

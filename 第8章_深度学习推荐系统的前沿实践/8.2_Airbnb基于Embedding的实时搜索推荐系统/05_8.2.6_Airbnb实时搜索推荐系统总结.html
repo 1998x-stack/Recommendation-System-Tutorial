@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05_8.2.6_Airbnb实时搜索推荐系统总结</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>05_8.2.6 Airbnb实时搜索推荐系统总结</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.2 Airbnb基于Embedding的实时搜索推荐系统
+Content: 05_8.2.6 Airbnb实时搜索推荐系统总结
+&quot;&quot;&quot;</p>
+<h3>8.2.6 Airbnb实时搜索推荐系统总结</h3>
+<h4>引言</h4>
+<p>在本章节中，我们将总结Airbnb实时搜索推荐系统的核心要点和成功经验。通过对系统的架构、特征工程、模型选择和实际应用效果的全面回顾，可以更好地理解如何构建一个高效、精准的推荐系统。</p>
+<h4>工程与理论的结合</h4>
+<p>Airbnb在其实时搜索推荐系统中，成功地将工程实践与理论研究紧密结合。以下是一些值得借鉴的要点：</p>
+<ol>
+<li>
+<p><strong>经典方法的改造</strong>：</p>
+<ul>
+<li>Airbnb通过对经典的Word2vec方法进行改造，实现了对用户和房源的Embedding。</li>
+<li>针对数据稀疏的问题，利用用户属性和房源属性聚合稀疏数据，使得Embedding的效果更佳 。</li>
+</ul>
+</li>
+<li>
+<p><strong>业务与知识的结合</strong>：</p>
+<ul>
+<li>在Embedding目标函数的改造过程中，多次引入与业务紧密相关的目标项，使得算法的改造与公司业务和商业模型紧密结合 。</li>
+<li>这种结合使得推荐系统不仅具有理论上的创新性，还能在实际业务中产生显著效果。</li>
+</ul>
+</li>
+</ol>
+<h4>系统架构和特征工程</h4>
+<ol>
+<li>
+<p><strong>Embedding技术的应用</strong>：</p>
+<ul>
+<li>Airbnb充分利用Embedding技术，将大量稀疏特征转换为稠密特征，便于输入深度学习网络。</li>
+<li>通过Embedding将物品的语义特征进行编码，直接通过相似度的计算进行相似物品的搜索 。</li>
+</ul>
+</li>
+<li>
+<p><strong>特征工程</strong>：</p>
+<ul>
+<li>基于用户和房源的Embedding生成了不同的用户-房源相关特征（user-listing pair features），这些特征再输入到搜索排序模型中。</li>
+<li>特征设计上，包含了“最近点击房源的相似度（EmbClickSim）”和“最后点击房源的相似度（EmbLastLongClickSim）”等实时特征，使得系统能够实时响应用户的点击行为 。</li>
+</ul>
+</li>
+</ol>
+<h4>模型选择与优化</h4>
+<ol>
+<li>
+<p><strong>模型选择</strong>：</p>
+<ul>
+<li>Airbnb采用了支持Pairwise Lambda Rank的GBDT模型进行排序，这种模型能够处理大量特征，并有效提升排序的精度 。</li>
+<li>该模型已由Airbnb的工程师开源，供其他开发者学习和使用 。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型优化</strong>：</p>
+<ul>
+<li>通过对各特征重要度的评估，优化模型的特征选择，提高了推荐结果的精准度和个性化。</li>
+<li>实时系统的“实时”体现在Embedding相关的特征设计上，使得用户在点击浏览过程中可以得到实时反馈，搜索结果也可以实时改变 。</li>
+</ul>
+</li>
+</ol>
+<h4>实际应用效果</h4>
+<p>Airbnb的实时搜索推荐系统通过Embedding技术和特征工程的结合，实现了用户兴趣的精准捕捉和个性化推荐。以下是一些具体的应用效果：</p>
+<ol>
+<li>
+<p><strong>用户体验提升</strong>：</p>
+<ul>
+<li>通过捕捉用户的短期和长期兴趣，系统能够更好地满足用户的即时需求和长期偏好，显著提升了用户的搜索体验。</li>
+<li>实时排序和反馈机制使得用户的点击行为能够即时反映在搜索结果中，增强了用户的互动性和满意度 。</li>
+</ul>
+</li>
+<li>
+<p><strong>业务效率提高</strong>：</p>
+<ul>
+<li>推荐系统的精准性和实时性提升，使得用户更容易找到符合其需求的房源，从而提高了预订成功率和平台的整体运营效率 。</li>
+</ul>
+</li>
+</ol>
+<h3>总结</h3>
+<p>Airbnb通过对Embedding技术的深度应用和创新，实现了其实时搜索推荐系统的高效、精准和个性化。系统在工程实践和理论研究上的成功结合，为推荐系统领域提供了宝贵的经验和参考。通过这种方式，Airbnb不仅提升了用户体验，也提高了平台的运营效率，为其他推荐系统的开发提供了重要的借鉴和启示 。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

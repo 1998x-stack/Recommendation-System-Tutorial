@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01_4.6.2_局部敏感哈希的基本原理</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>01_4.6.2 局部敏感哈希的基本原理</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第4章 Embedding技术在推荐系统中的应用/4.6 局部敏感哈希——让Embedding插上翅膀的快速搜索方法
+Content: 01_4.6.2 局部敏感哈希的基本原理
+&quot;&quot;&quot;</p>
+<h3>4.6.2 局部敏感哈希的基本原理</h3>
+<h4>背景与概述</h4>
+<p>局部敏感哈希（Locality Sensitive Hashing，LSH）是一种高效的最近邻搜索算法，旨在解决高维空间中数据点的相似性搜索问题。传统的最近邻搜索算法，如暴力搜索和kd树，在高维空间中表现不佳，计算复杂度高，无法满足实际应用需求。LSH通过将高维空间中的点映射到低维空间，并利用哈希函数将相邻的点放入同一个桶中，从而加快搜索速度。</p>
+<h4>基本原理</h4>
+<p>LSH的基本思想是将高维空间中的点映射到低维空间，并利用哈希函数将相邻的点放入同一个桶中，从而实现快速的相似性搜索。LSH的核心在于构建哈希函数，并利用这些哈希函数对数据进行分桶。具体步骤如下：</p>
+<ol>
+<li>
+<p><strong>低维空间映射</strong>：</p>
+<ul>
+<li>将高维空间中的点映射到低维空间，确保原本相近的点在低维空间中仍然相近。</li>
+<li>例如，对于二维空间中的点，可以通过不同角度将其映射到一维空间，从而保留相近点的距离关系。</li>
+</ul>
+</li>
+<li>
+<p><strong>构建哈希函数</strong>：</p>
+<ul>
+<li>使用随机生成的向量来构建哈希函数，将高维向量映射到低维空间。</li>
+<li>公式如下：<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi><mo>(</mo><mi>v</mi><mo>)</mo><mo>=</mo><mrow><mo fence="true">⌊</mo><mfrac><mrow><mi>a</mi><mo>⋅</mo><mi>v</mi><mo>+</mo><mi>b</mi></mrow><mrow><mi>w</mi></mrow></mfrac><mo fence="true">⌋</mo></mrow></mrow><annotation encoding="application/x-tex">h(v) = \left\lfloor \frac{a \cdot v + b}{w} \right\rfloor 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.45em;"></span><span class="strut bottom" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">h</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mclose">)</span><span class="mrel">=</span><span class="minner displaystyle textstyle uncramped"><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">⌊</span></span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.02691em;">w</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathit">a</span><span class="mbin">⋅</span><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mbin">+</span><span class="mord mathit">b</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">⌋</span></span></span></span></span></span></span></p>
+其中，$ a $ 为从标准正态分布中采样的随机向量，$ b $ 为从 [0, w) 区间内均匀分布的随机数，$ w $ 为窗口大小。</li>
+</ul>
+</li>
+<li>
+<p><strong>分桶</strong>：</p>
+<ul>
+<li>通过哈希函数将数据点映射到不同的桶中。</li>
+<li>每个桶包含在低维空间中相近的点。</li>
+</ul>
+</li>
+<li>
+<p><strong>多哈希函数</strong>：</p>
+<ul>
+<li>为了提高准确率，可以使用多个哈希函数同时进行分桶。</li>
+<li>只有同时落入多个哈希函数的同一个桶中的点，才被认为是相似点。</li>
+<li>通过这种方式，可以减少误判，提高搜索的准确性。</li>
+</ul>
+</li>
+</ol>
+<h4>应用案例</h4>
+<p>在推荐系统中，LSH被广泛应用于快速搜索相似的Embedding向量。例如，YouTube推荐系统通过将用户和视频的Embedding向量存储到内存数据库中，利用LSH技术进行快速搜索，从而提高推荐效率和准确性。</p>
+<p>具体步骤如下：</p>
+<ol>
+<li><strong>Embedding向量预处理</strong>：将用户和物品的高维稀疏特征向量转换为低维稠密特征向量。</li>
+<li><strong>构建哈希函数</strong>：选择多个随机投影哈希函数，将高维Embedding向量映射到低维空间。</li>
+<li><strong>分桶</strong>：在低维空间中，通过固定间隔的超平面将空间分割成多个桶。</li>
+<li><strong>多哈希函数组合</strong>：采用多个哈希函数同时进行分桶，生成多个哈希值。</li>
+<li><strong>近邻搜索</strong>：在多个哈希桶中搜索与目标向量相似的Embedding向量，通过快速相似性计算，筛选出候选物品集合。</li>
+</ol>
+<h4>优势与局限性</h4>
+<p><strong>优势</strong>：</p>
+<ol>
+<li><strong>高效性</strong>：LSH通过低维映射和分桶技术，将相似度计算的时间复杂度降低到常数级别，显著提高搜索效率。</li>
+<li><strong>灵活性</strong>：LSH可以根据实际需求选择不同的哈希函数和分桶策略，灵活适应不同的应用场景。</li>
+<li><strong>扩展性</strong>：LSH可以处理大规模高维数据，适用于推荐系统中海量用户和物品的相似性搜索。</li>
+</ol>
+<p><strong>局限性</strong>：</p>
+<ol>
+<li><strong>精度有限</strong>：LSH的搜索精度依赖于哈希函数的选择和参数设置，可能会出现误判和漏检的情况。</li>
+<li><strong>空间开销</strong>：LSH需要存储多个哈希函数和分桶结果，可能会增加系统的空间开销。</li>
+</ol>
+<h4>结论</h4>
+<p>LSH通过低维映射和分桶技术，有效解决了推荐系统中相似Embedding向量的快速搜索问题。相比于传统的相似度计算方法，LSH不仅提高了搜索效率，还具有较高的灵活性和扩展性。在实际应用中，通过优化哈希函数和分桶策略，可以进一步提高LSH的搜索精度和性能，是推荐系统中重要的技术手段   。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

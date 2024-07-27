@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00_4.4.1_DeepWalk——基础的Graph_Embedding方法</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>00_4.4.1 DeepWalk——基础的Graph Embedding方法</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第4章 Embedding技术在推荐系统中的应用/4.4 Graph Embedding——引入更多结构信息的图嵌入技术
+Content: 00_4.4.1 DeepWalk——基础的Graph Embedding方法
+&quot;&quot;&quot;</p>
+<h3>4.4.1 DeepWalk——基础的Graph Embedding方法</h3>
+<h4>背景和概述</h4>
+<p>DeepWalk是一种基础的图嵌入（Graph Embedding）方法，由Perozzi等人在2014年提出。其主要思想是在图结构上进行随机游走，生成大量的节点序列，然后将这些节点序列作为训练样本输入Word2vec模型进行训练，从而得到节点的嵌入向量。DeepWalk方法将序列Embedding技术与图嵌入技术相结合，是一种连接序列Embedding和Graph Embedding的过渡方法。</p>
+<h4>方法原理</h4>
+<p>DeepWalk的算法流程包括以下几个步骤：</p>
+<ol>
+<li>
+<p><strong>构建图结构</strong>：从原始的用户行为序列中构建物品关系图。用户的行为（如购买、点击等）可以看作是图中的边，物品可以看作是图中的节点。物品之间的边权重表示用户行为的频率或强度。</p>
+</li>
+<li>
+<p><strong>随机游走</strong>：在构建的物品关系图上进行随机游走，生成大量物品序列。随机游走的过程类似于在图中进行深度优先搜索，每次从当前节点随机选择一个邻居节点继续游走。游走的长度和次数可以根据实际需求进行设置。</p>
+</li>
+<li>
+<p><strong>生成训练样本</strong>：将生成的物品序列作为训练样本输入Word2vec模型。Word2vec模型通过训练这些物品序列，生成每个物品的嵌入向量。嵌入向量能够捕捉物品之间的潜在关系和相似性。</p>
+</li>
+</ol>
+<h4>算法细节</h4>
+<p>在DeepWalk的算法流程中，随机游走的跳转概率是关键部分。如果物品关系图是有向有权图，从节点 $ v_i $ 跳转到节点 $ v_j $ 的概率定义为：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><msub><mi>v</mi><mi>i</mi></msub><mo>→</mo><msub><mi>v</mi><mi>j</mi></msub><mo>)</mo><mo>=</mo><mfrac><mrow><msub><mi>w</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><mrow><msub><mo>∑</mo><mrow><mi>k</mi><mo>∈</mo><msup><mi>N</mi><mo>+</mo></msup><mo>(</mo><msub><mi>v</mi><mi>i</mi></msub><mo>)</mo></mrow></msub><msub><mi>w</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">P(v_i \rightarrow v_j) = \frac{w_{ij}}{\sum_{k \in N^+(v_i)} w_{ik}} 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.10756em;"></span><span class="strut bottom" style="height:2.2685700000000004em;vertical-align:-1.16101em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">→</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.6860000000000002em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mop"><span class="op-symbol small-op mop" style="top:-0.0000050000000000050004em;">∑</span><span class="vlist"><span style="top:0.30001em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mrel">∈</span><span class="mord"><span class="mord mathit" style="margin-right:0.10903em;">N</span><span class="vlist"><span style="top:-0.289em;margin-right:0.07142857142857144em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord">+</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.03148em;">k</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02691em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
+<p>其中，$ w_{ij} $ 是节点 $ v_i $ 到节点 $ v_j $ 的边权重， $ N^+(v_i) $ 是节点 $ v_i $ 所有的出边集合。</p>
+<p>对于无向无权图，跳转概率将是上述公式的特例，即权重 $ w_{ij} $ 为常数1，且 $ N^+(v_i) $ 是节点 $ v_i $ 所有边的集合，而不是所有出边的集合。</p>
+<h4>优势</h4>
+<ol>
+<li><strong>无监督学习</strong>：DeepWalk不需要预先标注数据，通过随机游走和Word2vec模型即可生成高质量的节点嵌入向量。</li>
+<li><strong>灵活性强</strong>：DeepWalk可以应用于各种类型的图结构，适用于大规模图数据。</li>
+<li><strong>捕捉图结构信息</strong>：生成的节点嵌入向量能够捕捉图的结构信息和节点之间的局部相似性。</li>
+</ol>
+<h4>局限性</h4>
+<ol>
+<li><strong>计算复杂度高</strong>：对于大规模图数据，随机游走和Word2vec模型的训练过程可能需要大量的计算资源。</li>
+<li><strong>缺乏全局信息</strong>：随机游走仅能捕捉节点的局部信息，无法充分利用图的全局结构信息。</li>
+</ol>
+<h4>应用案例</h4>
+<p>阿里巴巴在其推荐系统中应用了DeepWalk方法，通过用户行为数据构建物品关系图，利用DeepWalk生成物品的嵌入向量，从而实现个性化推荐。DeepWalk方法在大规模用户数据下表现出了较高的准确性和效率。</p>
+<h3>结论</h3>
+<p>DeepWalk方法作为一种基础的图嵌入技术，通过随机游走和Word2vec模型结合，实现了从图结构到嵌入向量的转换。该方法具有灵活性强、无监督学习等优势，能够有效提升推荐系统的性能。然而，DeepWalk也存在计算复杂度高和缺乏全局信息的局限性。在实际应用中，可以结合其他图嵌入方法，如Node2vec、EGES等，进一步优化嵌入效果。</p>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  

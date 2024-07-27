@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05_8.3.6_训练和测试样本的处理</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>05_8.3.6 训练和测试样本的处理</h1>
+<p>&quot;&quot;&quot;
+Lecture: 第8章 深度学习推荐系统的前沿实践/8.3 YouTube深度学习视频推荐系统
+Content: 05_8.3.6 训练和测试样本的处理
+&quot;&quot;&quot;</p>
+<h3>8.3.6 训练和测试样本的处理</h3>
+<h4>引言</h4>
+<p>为了提高模型的训练效率和预测准确性，YouTube在处理训练和测试样本时采取了一系列工程措施。这些措施不仅提高了模型的训练速度和效果，也减少了模型在处理高活跃用户和长尾用户时的偏差问题 。</p>
+<h4>处理训练样本的方法</h4>
+<ol>
+<li>
+<p><strong>负采样（Negative Sampling）</strong>：</p>
+<ul>
+<li><strong>问题</strong>：候选集生成模型把推荐问题转换成多分类问题，每个备选视频都是一个分类，总分类数量达到数百万。使用Softmax进行训练效率低下 。</li>
+<li><strong>解决方案</strong>：YouTube采用了Word2vec中的负采样训练方法，减少每次预测的分类数量，加快模型收敛速度。此外，YouTube尝试了分层Softmax（Hierarchical Softmax），但效果不佳，最终选择了负采样方法 。</li>
+</ul>
+</li>
+<li>
+<p><strong>等数量的训练样本</strong>：</p>
+<ul>
+<li><strong>问题</strong>：如果使用原始的用户日志，高度活跃用户的数据量远超普通用户，可能导致模型过度拟合这些活跃用户，忽略长尾用户的行为模式 。</li>
+<li><strong>解决方案</strong>：YouTube在处理训练集时，对每个用户提取等数量的训练样本。这种方法减少了活跃用户对模型损失的过度影响，使模型能够更好地泛化到所有用户 。</li>
+</ul>
+</li>
+</ol>
+<h4>处理测试样本的方法</h4>
+<ol>
+<li><strong>避免未来信息（Future Information）</strong>：
+<ul>
+<li><strong>问题</strong>：经典的随机留一法（Random Holdout）在处理测试集时，可能引入未来信息，导致数据穿越问题，影响模型评估的准确性 。</li>
+<li><strong>解决方案</strong>：YouTube在处理测试集时，以用户最近一次观看的行为作为测试集。这种方法有效避免了未来信息的引入，确保了测试数据的真实性和模型评估的准确性 。</li>
+</ul>
+</li>
+</ol>
+<h4>具体实现与效果</h4>
+<ol>
+<li>
+<p><strong>负采样的实现</strong>：</p>
+<ul>
+<li><strong>步骤</strong>：在模型训练过程中，每次仅采样一小部分负样本，减少计算开销，加快训练速度。这样，模型的优化目标从多分类问题简化为近似的二分类问题，极大提高了训练效率 。</li>
+<li><strong>效果</strong>：负采样方法不仅加快了模型的收敛速度，还有效解决了正负样本不均衡的问题，提高了模型的预测准确性 。</li>
+</ul>
+</li>
+<li>
+<p><strong>等数量样本的提取</strong>：</p>
+<ul>
+<li><strong>步骤</strong>：在处理用户日志时，对每个用户提取相同数量的样本，确保训练集中不同用户的数据分布均衡 。</li>
+<li><strong>效果</strong>：这种方法减少了活跃用户对模型的过度影响，使模型能够更好地泛化到长尾用户，提高了推荐结果的全面性和公平性 。</li>
+</ul>
+</li>
+<li>
+<p><strong>测试集处理方法</strong>：</p>
+<ul>
+<li><strong>步骤</strong>：在划分测试集时，以用户最近一次的观看行为作为测试样本，确保测试数据真实反映用户的最新兴趣和行为模式 。</li>
+<li><strong>效果</strong>：这种方法避免了未来信息的引入，确保了模型评估结果的准确性和可靠性 。</li>
+</ul>
+</li>
+</ol>
+<h3>总结</h3>
+<p>YouTube在处理训练和测试样本时，通过负采样、等数量样本提取和避免未来信息的方法，有效提高了模型的训练效率和预测准确性。这些工程经验为推荐系统的开发和优化提供了宝贵的参考和借鉴 。</p>
+<hr>
+<h3>处理训练样本的方法具体实现与效果</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>问题</th>
+<th>解决方案</th>
+<th>具体实现</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>负采样（Negative Sampling）</strong></td>
+<td>候选集生成模型中多分类问题带来计算效率低下的问题</td>
+<td>使用负采样训练方法，减少每次预测的分类数量，加快模型收敛速度</td>
+<td>&lt;ul&gt;&lt;li&gt;在训练过程中，每次仅采样一小部分负样本，减少计算开销&lt;/li&gt;&lt;li&gt;模型的优化目标从多分类问题简化为近似的二分类问题&lt;/li&gt;&lt;/ul&gt;</td>
+<td>&lt;ul&gt;&lt;li&gt;显著提高了模型的训练速度&lt;/li&gt;&lt;li&gt;解决了正负样本不均衡的问题，提高了预测准确性&lt;/li&gt;&lt;/ul&gt;</td>
+</tr>
+<tr>
+<td><strong>等数量的训练样本</strong></td>
+<td>高度活跃用户的数据量远超普通用户，导致模型过度拟合活跃用户，忽略长尾用户</td>
+<td>对每个用户提取等数量的训练样本，减少活跃用户对模型的过度影响</td>
+<td>&lt;ul&gt;&lt;li&gt;在处理用户日志时，对每个用户提取相同数量的样本，确保训练集中不同用户的数据分布均衡&lt;/li&gt;&lt;/ul&gt;</td>
+<td>&lt;ul&gt;&lt;li&gt;减少了活跃用户对模型的过度影响&lt;/li&gt;&lt;li&gt;提高了模型的泛化能力，使其能更好地适应长尾用户&lt;/li&gt;&lt;li&gt;提高了推荐结果的全面性和公平性&lt;/li&gt;&lt;/ul&gt;</td>
+</tr>
+<tr>
+<td><strong>避免未来信息（Future Information）</strong></td>
+<td>随机留一法可能引入未来信息，导致数据穿越问题，影响模型评估的准确性</td>
+<td>以用户最近一次观看的行为作为测试集，避免未来信息的引入</td>
+<td>&lt;ul&gt;&lt;li&gt;在划分测试集时，以用户最近一次的观看行为作为测试样本，确保测试数据真实反映用户的最新兴趣和行为模式&lt;/li&gt;&lt;/ul&gt;</td>
+<td>&lt;ul&gt;&lt;li&gt;有效避免了未来信息的引入，确保了测试数据的真实性&lt;/li&gt;&lt;li&gt;提高了模型评估结果的准确性和可靠性&lt;/li&gt;&lt;/ul&gt;</td>
+</tr>
+</tbody>
+</table>
+<h3>详细说明</h3>
+<ol>
+<li>
+<p><strong>负采样（Negative Sampling）</strong></p>
+<ul>
+<li><strong>问题</strong>：候选集生成模型把推荐问题转换成多分类问题，每个备选视频都是一个分类，总分类数量达到数百万。使用Softmax进行训练效率低下。</li>
+<li><strong>解决方案</strong>：YouTube采用了负采样训练方法，减少每次预测的分类数量，加快模型收敛速度。</li>
+<li><strong>具体实现</strong>：
+<ul>
+<li>在模型训练过程中，每次仅采样一小部分负样本，减少计算开销。</li>
+<li>模型的优化目标从多分类问题简化为近似的二分类问题，极大提高了训练效率。</li>
+</ul>
+</li>
+<li><strong>效果</strong>：
+<ul>
+<li>负采样方法不仅加快了模型的收敛速度，还有效解决了正负样本不均衡的问题，提高了模型的预测准确性。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>等数量的训练样本</strong></p>
+<ul>
+<li><strong>问题</strong>：如果使用原始的用户日志，高度活跃用户的数据量远超普通用户，可能导致模型过度拟合这些活跃用户，忽略长尾用户的行为模式。</li>
+<li><strong>解决方案</strong>：YouTube在处理训练集时，对每个用户提取等数量的训练样本。这种方法减少了活跃用户对模型损失的过度影响，使模型能够更好地泛化到所有用户。</li>
+<li><strong>具体实现</strong>：
+<ul>
+<li>在处理用户日志时，对每个用户提取相同数量的样本，确保训练集中不同用户的数据分布均衡。</li>
+</ul>
+</li>
+<li><strong>效果</strong>：
+<ul>
+<li>这种方法减少了活跃用户对模型的过度影响，使模型能够更好地泛化到长尾用户，提高了推荐结果的全面性和公平性。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>避免未来信息（Future Information）</strong></p>
+<ul>
+<li><strong>问题</strong>：经典的随机留一法（Random Holdout）在处理测试集时，可能引入未来信息，导致数据穿越问题，影响模型评估的准确性。</li>
+<li><strong>解决方案</strong>：YouTube在处理测试集时，以用户最近一次观看的行为作为测试集。这种方法有效避免了未来信息的引入，确保了测试数据的真实性和模型评估的准确性。</li>
+<li><strong>具体实现</strong>：
+<ul>
+<li>在划分测试集时，以用户最近一次的观看行为作为测试样本，确保测试数据真实反映用户的最新兴趣和行为模式。</li>
+</ul>
+</li>
+<li><strong>效果</strong>：
+<ul>
+<li>这种方法避免了未来信息的引入，确保了模型评估结果的准确性和可靠性。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\(", right: "\)", display: false},
+          {left: "\[", right: "\]", display: true}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
+  
